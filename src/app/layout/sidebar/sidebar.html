@@ -1,0 +1,31 @@
+@
+<div class="d-flex flex-column h-100 bg-dark p-3" style="width: 250px;">
+  <div class="mb-4 text-center">
+    <h3 class="fw-bold text-white tracking-widest"><i class="bi bi-bank me-2"></i>MUTEXA</h3>
+    <small class="text-secondary">Banking Analytics</small>
+  </div>
+  <ul class="nav nav-pills flex-column mb-auto mt-4">
+    <li class="nav-item mb-2">
+      <a routerLink="/dashboard" routerLinkActive="active bg-primary text-white" class="nav-link text-white d-flex align-items-center"><i class="bi bi-grid-1x2-fill me-3"></i>Dashboard</a>
+    </li>
+    <li class="nav-item mb-2">
+      <a routerLink="/mutasi" routerLinkActive="active bg-primary text-white" class="nav-link text-white d-flex align-items-center"><i class="bi bi-card-list me-3"></i>Data Mutasi</a>
+    </li>
+    <li class="nav-item mb-2">
+      <a routerLink="/analisis" routerLinkActive="active bg-primary text-white" class="nav-link text-white d-flex align-items-center"><i class="bi bi-bar-chart-line-fill me-3"></i>Analisis & Anomali</a>
+    </li>
+  </ul>
+  <hr>
+  <div class="dropdown">
+    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+      <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+      <strong>Super Admin</strong>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+      <li><a class="dropdown-item" routerLink="/profil">Settings</a></li>
+      <li><a class="dropdown-item" routerLink="/profil">Profile</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item text-danger" href="#">Sign out</a></li>
+    </ul>
+  </div>
+</div>
