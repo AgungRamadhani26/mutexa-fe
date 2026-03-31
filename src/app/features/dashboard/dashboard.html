@@ -4,9 +4,6 @@
       <h3 class="fw-bold mb-1"><i class="bi bi-speedometer2 text-primary me-2"></i>Dashboard Analytics</h3>
       <p class="text-muted mb-0">Rangkuman 11 Indikator &amp; Metrik Transaksi Perbankan.</p>
     </div>
-    <div>
-      <button class="btn btn-primary shadow-sm"><i class="bi bi-download me-2"></i>Export Laporan</button>
-    </div>
   </div>
 
   <!-- 1. Ringkasan Saldo -->
@@ -374,17 +371,16 @@
       <h6 class="fw-bold text-uppercase text-secondary mb-0" style="letter-spacing: 0.5px;">
         <i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
       </h6>
-      <div class="input-group w-auto">
-        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-        <input type="text" class="form-control border-start-0 ps-0" placeholder="Cari transaksi...">
+      <div>
+        <a [href]="excelExportUrl" class="btn btn-success shadow-sm rounded-pill px-4 fw-medium"><i class="bi bi-file-earmark-excel me-2"></i>Export Excel</a>
       </div>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4">
       <div class="card-body p-0">
-        <div class="table-responsive">
+        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
           <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+            <thead class="table-light sticky-top">
               <tr>
                 <th class="ps-4">Tanggal</th>
                 <th>Keterangan</th>
@@ -393,42 +389,33 @@
               </tr>
             </thead>
             <tbody>
+              @for (tx of detailTransaksi(); track tx.tanggal + tx.keterangan + tx.jumlah) {
               <tr>
-                <td class="ps-4 text-muted small">28 Mar 2026</td>
-                <td class="fw-medium">SETORAN TUNAI CABANG SUDIRMAN</td>
-                <td class="text-center"><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1"><i class="bi bi-plus-circle me-1"></i>CR</span></td>
-                <td class="text-end pe-4 fw-semibold text-success">+ Rp 25.000.000</td>
+                <td class="ps-4 text-muted small">{{ tx.tanggal | date:'dd MMM yyyy' }}</td>
+                <td class="fw-medium">{{ tx.keterangan }}</td>
+                <td class="text-center">
+                  @if (tx.flag === 'CR') {
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1"><i class="bi bi-plus-circle me-1"></i>CR</span>
+                  } @else if (tx.flag === 'DB') {
+                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1"><i class="bi bi-dash-circle me-1"></i>DB</span>
+                  } @else {
+                    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1">{{ tx.flag }}</span>
+                  }
+                </td>
+                <td class="text-end pe-4 fw-semibold" [ngClass]="{'text-success': tx.flag === 'CR', 'text-danger': tx.flag === 'DB'}">
+                  {{ tx.flag === 'DB' ? '- ' : '+ ' }}
+                  {{ tx.jumlah | currency:'IDR':'symbol':'1.0-0' }}
+                </td>
               </tr>
+              }
+              @empty {
               <tr>
-                <td class="ps-4 text-muted small">27 Mar 2026</td>
-                <td class="fw-medium">PEMBELIAN ALAT TULIS KANTOR</td>
-                <td class="text-center"><span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1"><i class="bi bi-dash-circle me-1"></i>DB</span></td>
-                <td class="text-end pe-4 fw-semibold text-danger">- Rp 1.250.000</td>
+                <td colspan="4" class="text-center text-muted py-4">Belum ada data detail transaksi.</td>
               </tr>
-              <tr>
-                <td class="ps-4 text-muted small">27 Mar 2026</td>
-                <td class="fw-medium">BIAYA ADMIN BANK bulanan</td>
-                <td class="text-center"><span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1"><i class="bi bi-dash-circle me-1"></i>DB</span></td>
-                <td class="text-end pe-4 fw-semibold text-danger">- Rp 15.000</td>
-              </tr>
-              <tr>
-                <td class="ps-4 text-muted small">26 Mar 2026</td>
-                <td class="fw-medium">TRANSFER MASUK DR PT XYZ</td>
-                <td class="text-center"><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1"><i class="bi bi-plus-circle me-1"></i>CR</span></td>
-                <td class="text-end pe-4 fw-semibold text-success">+ Rp 15.000.000</td>
-              </tr>
+              }
             </tbody>
           </table>
         </div>
-      </div>
-      <div class="card-footer bg-white border-0 py-3 rounded-bottom-4">
-        <ul class="pagination pagination-sm justify-content-center mb-0">
-          <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
       </div>
     </div>
   </div>
