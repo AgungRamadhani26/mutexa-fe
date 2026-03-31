@@ -77,30 +77,21 @@
             </tr>
           </thead>
           <tbody>
+            @for (item of summaryPerbulan(); track item.periode) {
             <tr>
-              <td class="ps-4 fw-semibold">Januari 2026</td>
-              <td>Rp 800.000.000</td>
-              <td class="text-success fw-medium">Rp 120.000.000</td>
-              <td class="text-danger fw-medium">Rp 90.000.000</td>
-              <td class="text-center"><span class="badge bg-light text-dark border">45x</span></td>
-              <td class="text-center"><span class="badge bg-light text-dark border">112x</span></td>
+              <td class="ps-4 fw-semibold">{{ item.periode }}</td>
+              <td>{{ item.saldoAkhir | currency:'IDR':'symbol':'1.0-0' }}</td>
+              <td class="text-success fw-medium">{{ item.totalCredit | currency:'IDR':'symbol':'1.0-0' }}</td>
+              <td class="text-danger fw-medium">{{ item.totalDebit | currency:'IDR':'symbol':'1.0-0' }}</td>
+              <td class="text-center"><span class="badge bg-light text-dark border">{{ item.freqCredit }}x</span></td>
+              <td class="text-center"><span class="badge bg-light text-dark border">{{ item.freqDebit }}x</span></td>
             </tr>
+            }
+            @empty {
             <tr>
-              <td class="ps-4 fw-semibold">Februari 2026</td>
-              <td>Rp 950.000.000</td>
-              <td class="text-success fw-medium">Rp 200.000.000</td>
-              <td class="text-danger fw-medium">Rp 50.000.000</td>
-              <td class="text-center"><span class="badge bg-light text-dark border">52x</span></td>
-              <td class="text-center"><span class="badge bg-light text-dark border">98x</span></td>
+              <td colspan="6" class="text-center text-muted py-4">Belum ada data transaksi.</td>
             </tr>
-            <tr>
-              <td class="ps-4 fw-semibold border-bottom-0">Maret 2026</td>
-              <td class="border-bottom-0">Rp 1.100.000.000</td>
-              <td class="text-success fw-medium border-bottom-0">Rp 130.000.000</td>
-              <td class="text-danger fw-medium border-bottom-0">Rp 220.000.000</td>
-              <td class="text-center border-bottom-0"><span class="badge bg-light text-dark border">38x</span></td>
-              <td class="text-center border-bottom-0"><span class="badge bg-light text-dark border">145x</span></td>
-            </tr>
+            }
           </tbody>
         </table>
       </div>
