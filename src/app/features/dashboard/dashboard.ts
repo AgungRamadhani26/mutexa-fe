@@ -54,7 +54,11 @@ export class Dashboard implements OnInit {
   private dashboardService = inject(DashboardService);
 
   // ==========================================
-  // STATE MACHINE: 'accounts' | 'documents' | 'analytics'
+  // STATE MACHINE (PENGATUR TAMPILAN)
+  // Aplikasi ini menggunakan sistem 'Single Page' bergaya drill-down:
+  // 1. 'accounts'  : Menampilkan daftar rekening utama
+  // 2. 'documents' : Menampilkan daftar dokumen mutasi milik 1 rekening spesifik
+  // 3. 'analytics' : Menampilkan visualisasi data dari 1 dokumen spesifik
   // ==========================================
   currentView = signal<'accounts' | 'documents' | 'analytics'>('accounts');
   selectedAccount = signal<BankAccount | null>(null);
@@ -146,15 +150,21 @@ export class Dashboard implements OnInit {
   summaryPerbulan = signal<SummaryPerbulan[]>([]);
   detailTransaksi = signal<DetailTransaksi[]>([]);
 
+  // ==========================================
+  // FUNGSI INIT & PEMANGGILAN API PERTAMA
+  // ==========================================
   ngOnInit(): void {
+    // Saat komponen dashboard pertama kali dirender, panggil API untuk ambil daftar rekening
     this.fetchAccounts();
   }
 
   fetchAccounts() {
     this.isLoadingAccounts.set(true);
+    // Memanggil endpoint backend '/api/documents/by-account' via DocumentService
     this.documentService.getAccounts().subscribe({
       next: (res) => {
         if (res.success) {
+          // Simpan data rekening yang didapat ke dalam signal 'accounts'
           this.accounts.set(res.data as unknown as BankAccount[]);
         }
         this.isLoadingAccounts.set(false);
@@ -167,16 +177,18 @@ export class Dashboard implements OnInit {
   }
 
   // ==========================================
-  // NAVIGATION
+  // NAVIGASI (PINDAH-PINDAH TAMPILAN/LEVEL)
   // ==========================================
 
+  // Dipanggil ketika user mengklik tombol "Lihat Dokumen" pada sebuah baris rekening
   viewDocuments(account: BankAccount) {
-    this.selectedAccount.set(account);
-    this.currentView.set('documents');
+    this.selectedAccount.set(account);     // Ingat rekening mana yang sedang dipilih
+    this.currentView.set('documents');     // Ganti tampilan ke level 2 (Daftar Dokumen)
     this.docSearch.set('');
     this.docPage.set(1);
     
     this.isLoadingDocuments.set(true);
+    // Memanggil API backend untuk mengambil dokumen spesifik untuk rekening ini
     this.documentService.getDocumentsByAccount(account.id).subscribe({
       next: (res) => {
         if (res.success) {
@@ -191,14 +203,16 @@ export class Dashboard implements OnInit {
     });
   }
 
+  // Dipanggil ketika user mengklik "Lihat Rincian" pada sebuah dokumen sukses
   viewAnalytics(doc: MutationDocument) {
-    this.selectedDocument.set(doc);
-    this.currentView.set('analytics');
+    this.selectedDocument.set(doc);        // Ingat dokumen mana yang sedang dipilih
+    this.currentView.set('analytics');     // Ganti tampilan ke level 3 (Dashboard Analytics)
     this.txSearch.set('');
     this.txPage.set(1);
     
     this.isLoadingAnalytics.set(true);
 
+    // Ambil data visualisasi kotak-kotak dashboard dari backend untuk dokumen ini
     this.dashboardService.getSummaryPerbulan(doc.id).subscribe({
       next: (res) => {
         if (res.success) this.summaryPerbulan.set(res.data);
@@ -206,11 +220,12 @@ export class Dashboard implements OnInit {
       error: (err) => console.error(err)
     });
 
+    // Ambil isi rincian tabel transaksi mentah untuk ditampilkan di bagian bawah
     this.dashboardService.getDetailSemuaTransaksi(doc.id).subscribe({
       next: (res) => {
         if (res.success) {
           this.detailTransaksi.set(res.data);
-          this.isLoadingAnalytics.set(false);
+          this.isLoadingAnalytics.set(false); // Sembunyikan loading setelah selesai
         }
       },
       error: (err) => {
@@ -220,12 +235,14 @@ export class Dashboard implements OnInit {
     });
   }
 
+  // Fungsi tombol "Kembali" dari Level 2 ke Level 1
   backToAccounts() {
     this.selectedAccount.set(null);
     this.documents.set([]);
     this.currentView.set('accounts');
   }
 
+  // Fungsi tombol "Kembali" dari Level 3 ke Level 2
   backToDocuments() {
     this.selectedDocument.set(null);
     this.summaryPerbulan.set([]);

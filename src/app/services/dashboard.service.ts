@@ -12,16 +12,19 @@ export class DashboardService {
 
   constructor(private http: HttpClient) {}
 
+  // Mengambil ringkasan saldo dan total kredit/debit per bulan (difilter berdasarkan ID Dokumen)
   getSummaryPerbulan(documentId: number): Observable<ApiResponse<SummaryPerbulan[]>> {
     const params = new HttpParams().set('documentId', documentId.toString());
     return this.http.get<ApiResponse<SummaryPerbulan[]>>(`${this.apiUrl}/summary-perbulan`, { params });
   }
 
+  // Mengambil detail seluruh baris transaksi riwayat mutasi dari spesifik dokumen
   getDetailSemuaTransaksi(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
     const params = new HttpParams().set('documentId', documentId.toString());
     return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/detail-transaksi`, { params });
   }
 
+  // Menghasilkan URL download File Excel untuk rincian transaksi dokumen terkait
   exportExcelUrl(documentId: number): string {
     return `${this.apiUrl}/export-excel?documentId=${documentId}`;
   }

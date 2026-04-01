@@ -40,14 +40,17 @@ export class DocumentService {
   private http = inject(HttpClient);
   private apiUrl = '/api/documents';
 
+  // Endpoint: Ambil daftar rekening beserta jumlah dokumen masing-masing
   getAccounts(): Observable<ApiResponse<AccountWithDocumentsResponse[]>> {
     return this.http.get<ApiResponse<AccountWithDocumentsResponse[]>>(`${this.apiUrl}/by-account`);
   }
 
+  // Endpoint: Ambil daftar dokumen mutasi milik satu rekening berdasarkan ID
   getDocumentsByAccount(accountId: number): Observable<ApiResponse<DocumentListResponse[]>> {
     return this.http.get<ApiResponse<DocumentListResponse[]>>(`${this.apiUrl}/by-account/${accountId}`);
   }
 
+  // Endpoint: Upload file PDF mutasi baru ke server
   uploadDocument(formData: FormData): Observable<ApiResponse<DocumentUploadResponse>> {
     return this.http.post<ApiResponse<DocumentUploadResponse>>(`${this.apiUrl}/upload`, formData);
   }

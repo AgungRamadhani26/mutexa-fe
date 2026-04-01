@@ -1,15 +1,15 @@
 <div class="page-bg">
-  <div class="dashboard-container">
+  <div class="dashboard-container" [ngClass]="currentView()">
 
-  <!-- ============================================== -->
-  <!-- LEVEL 1: DAFTAR BANK ACCOUNT                   -->
-  <!-- ============================================== -->
-  @if (currentView() === 'accounts') {
+    <!-- ============================================== -->
+    <!-- LEVEL 1: DAFTAR BANK ACCOUNT                   -->
+    <!-- ============================================== -->
+    @if (currentView() === 'accounts') {
     <div class="fade-in">
       <!-- Header -->
-      <div class="d-flex justify-content-between align-items-center mb-4 page-header">
+      <div class="d-flex justify-content-between align-items-center mb-3 page-header">
         <div>
-          <h3 class="mb-1"><i class="bi bi-bank me-2" style="color: #1a56db;"></i>Daftar Rekening</h3>
+          <h3 class="mb-1"><i class="bi bi-bank me-2 text-mu-primary"></i>Daftar Rekening</h3>
           <p class="mb-0">Pilih rekening bank untuk melihat riwayat upload dan hasil analisis mutasi.</p>
         </div>
         <button class="btn btn-mu-primary" (click)="toggleUploadForm()">
@@ -19,52 +19,62 @@
 
       <!-- Upload Form -->
       @if (showUploadForm()) {
-        <div class="upload-card shadow-sm mb-4 p-4">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold mb-0" style="color: #0f172a;"><i class="bi bi-file-earmark-arrow-up me-2" style="color: #1a56db;"></i>Upload File Mutasi</h5>
-            <button class="btn btn-sm btn-light border rounded-circle" (click)="toggleUploadForm()"><i class="bi bi-x-lg"></i></button>
+      <div class="upload-card shadow-sm mb-3 p-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h5 class="fw-bold mb-0 text-mu-dark"><i class="bi bi-file-earmark-arrow-up me-2 text-mu-primary"></i>Upload
+            File Mutasi</h5>
+          <button class="btn btn-sm btn-light border rounded-circle" (click)="toggleUploadForm()"><i
+              class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-4">
+            <label class="form-label fw-medium small text-mu-slate">Nama Bank <span class="text-danger">*</span></label>
+            <select class="form-select mu-input-control" [(ngModel)]="uploadForm.bankName">
+              <option value="">Pilih Bank</option>
+              <option value="BCA">BCA</option>
+              <option value="BRI">BRI</option>
+              <option value="MANDIRI">MANDIRI</option>
+              <option value="UOB">UOB</option>
+            </select>
           </div>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label class="form-label fw-medium small" style="color: #334155;">Nama Bank <span class="text-danger">*</span></label>
-              <select class="form-select" [(ngModel)]="uploadForm.bankName" style="border-radius: 10px; border-color: #e2e8f0;">
-                <option value="">Pilih Bank</option>
-                <option value="BCA">BCA</option><option value="BRI">BRI</option><option value="MANDIRI">MANDIRI</option><option value="UOB">UOB</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-medium small" style="color: #334155;">Nomor Rekening <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" placeholder="Contoh: 1234567890" [(ngModel)]="uploadForm.accountNumber" style="border-radius: 10px; border-color: #e2e8f0;">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-medium small" style="color: #334155;">Nama Pemilik <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" placeholder="Contoh: PT MAJU BERSAMA" [(ngModel)]="uploadForm.accountName" style="border-radius: 10px; border-color: #e2e8f0;">
-            </div>
-            <div class="col-12">
-              <label class="form-label fw-medium small" style="color: #334155;">File Mutasi (PDF, JPG, PNG) <span class="text-danger">*</span></label>
-              <input type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileSelected($event)" style="border-radius: 10px; border-color: #e2e8f0;">
-            </div>
-            <div class="col-12 text-end">
-              <button class="btn btn-mu-back me-2" (click)="toggleUploadForm()">Batal</button>
-              <button class="btn btn-mu-primary" (click)="submitUpload()" [disabled]="isUploading()">
-                @if (isUploading()) {
-                  <span class="spinner-border spinner-border-sm me-2" role="status"></span>Mengunggah...
-                } @else {
-                  <i class="bi bi-upload me-2"></i>Upload & Proses
-                }
-              </button>
-            </div>
+          <div class="col-md-4">
+            <label class="form-label fw-medium small text-mu-slate">Nomor Rekening <span
+                class="text-danger">*</span></label>
+            <input type="text" class="form-control mu-input-control" placeholder="Contoh: 1234567890"
+              [(ngModel)]="uploadForm.accountNumber">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-medium small text-mu-slate">Nama Pemilik <span
+                class="text-danger">*</span></label>
+            <input type="text" class="form-control mu-input-control" placeholder="Contoh: PT MAJU BERSAMA"
+              [(ngModel)]="uploadForm.accountName">
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-medium small text-mu-slate">File Mutasi (PDF, JPG, PNG) <span
+                class="text-danger">*</span></label>
+            <input type="file" class="form-control mu-input-control" accept=".pdf,.jpg,.jpeg,.png"
+              (change)="onFileSelected($event)">
+          </div>
+          <div class="col-12 text-end">
+            <button class="btn btn-mu-back me-2" (click)="toggleUploadForm()">Batal</button>
+            <button class="btn btn-mu-primary" (click)="submitUpload()" [disabled]="isUploading()">
+              @if (isUploading()) {
+              <span class="spinner-border spinner-border-sm me-2" role="status"></span>Mengunggah...
+              } @else {
+              <i class="bi bi-upload me-2"></i>Upload & Proses
+              }
+            </button>
           </div>
         </div>
+      </div>
       }
 
       <!-- Search -->
-      <div class="mb-3">
-        <div class="mu-search" style="max-width: 380px;">
+      <div class="mb-2">
+        <div class="mu-search search-form-wide">
           <i class="bi bi-search"></i>
           <input type="text" class="form-control" placeholder="Cari no. rekening, bank, atau nama..."
-                 [ngModel]="accountSearch()"
-                 (ngModelChange)="accountSearch.set($event); onSearchChange('account')">
+            [ngModel]="accountSearch()" (ngModelChange)="accountSearch.set($event); onSearchChange('account')">
         </div>
       </div>
 
@@ -74,69 +84,71 @@
           <table class="table mu-table">
             <thead>
               <tr>
-                <th style="padding-left: 1.5rem;">No. Rekening</th>
+                <th>No. Rekening</th>
                 <th>Bank</th>
                 <th>Nama Pemilik</th>
                 <th class="text-center">Jumlah Upload</th>
-                <th class="text-center" style="padding-right: 1.5rem;">Aksi</th>
+                <th class="text-center">Aksi</th>
               </tr>
             </thead>
             <tbody>
               @for (account of pagedAccounts(); track account.id) {
-                <tr>
-                  <td style="padding-left: 1.5rem;" class="fw-bold font-mono">{{ account.accountNumber }}</td>
-                  <td><span [ngClass]="getBankBadgeClass(account.bankName)">{{ account.bankName }}</span></td>
-                  <td class="fw-medium">{{ account.accountName }}</td>
-                  <td class="text-center">
-                    <span style="background:#f1f5f9; color:#334155; padding: 0.3rem 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500;">
-                      <i class="bi bi-file-earmark-text me-1"></i>{{ account.documentCount }} dokumen
-                    </span>
-                  </td>
-                  <td class="text-center" style="padding-right: 1.5rem;">
-                    <button (click)="viewDocuments(account)" class="btn btn-mu-outline btn-sm">
-                      <i class="bi bi-folder2-open me-1"></i> Lihat Dokumen
-                    </button>
-                  </td>
-                </tr>
+              <tr>
+                <td class="fw-bold font-mono">{{ account.accountNumber }}</td>
+                <td><span [ngClass]="getBankBadgeClass(account.bankName)">{{ account.bankName }}</span></td>
+                <td class="fw-medium">{{ account.accountName }}</td>
+                <td class="text-center">
+                  <span class="badge-doc-count">
+                    <i class="bi bi-file-earmark-text me-1"></i>{{ account.documentCount }} dokumen
+                  </span>
+                </td>
+                <td class="text-center">
+                  <button (click)="viewDocuments(account)" class="btn btn-mu-outline btn-sm">
+                    <i class="bi bi-folder2-open me-1"></i> Lihat Dokumen
+                  </button>
+                </td>
+              </tr>
               } @empty {
-                <tr>
-                  <td colspan="5" class="text-center py-5" style="color: #94a3b8;">
-                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                    @if (accountSearch()) {
-                      Tidak ada rekening yang cocok dengan pencarian "<strong>{{ accountSearch() }}</strong>"
-                    } @else {
-                      Belum ada rekening terdaftar. Upload file mutasi untuk memulai.
-                    }
-                  </td>
-                </tr>
+              <tr>
+                <td colspan="5" class="text-center py-5 text-mu-slate-lighter">
+                  <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                  @if (accountSearch()) {
+                  Tidak ada rekening yang cocok dengan pencarian "<strong>{{ accountSearch() }}</strong>"
+                  } @else {
+                  Belum ada rekening terdaftar. Upload file mutasi untuk memulai.
+                  }
+                </td>
+              </tr>
               }
             </tbody>
           </table>
         </div>
         <!-- Pagination -->
         @if (accountTotalPages() > 1) {
-          <div class="mu-pagination">
-            <button class="page-btn" [disabled]="accountPage() === 1" (click)="goToPage('account', accountPage() - 1)">
-              <i class="bi bi-chevron-left"></i>
-            </button>
-            @for (p of getPageNumbers(accountTotalPages()); track p) {
-              <button class="page-btn" [class.active]="accountPage() === p" (click)="goToPage('account', p)">{{ p }}</button>
-            }
-            <button class="page-btn" [disabled]="accountPage() === accountTotalPages()" (click)="goToPage('account', accountPage() + 1)">
-              <i class="bi bi-chevron-right"></i>
-            </button>
-            <span class="page-info">{{ filteredAccounts().length }} rekening</span>
-          </div>
+        <div class="mu-pagination">
+          <button class="page-btn" [disabled]="accountPage() === 1" (click)="goToPage('account', accountPage() - 1)">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          @for (p of getPageNumbers(accountTotalPages()); track p) {
+          <button class="page-btn" [class.active]="accountPage() === p" (click)="goToPage('account', p)">{{ p
+            }}</button>
+          }
+          <button class="page-btn" [disabled]="accountPage() === accountTotalPages()"
+            (click)="goToPage('account', accountPage() + 1)">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+          <span class="page-info">{{ filteredAccounts().length }} rekening</span>
+        </div>
         }
       </div>
     </div>
-  }
+    }
 
-  <!-- ============================================== -->
-  <!-- LEVEL 2: DAFTAR MUTATION DOCUMENT               -->
-  <!-- ============================================== -->
-  @if (currentView() === 'documents') {
-    <div class="fade-in compact-view">
+    <!-- ============================================== -->
+    <!-- LEVEL 2: DAFTAR MUTATION DOCUMENT               -->
+    <!-- ============================================== -->
+    @if (currentView() === 'documents') {
+    <div class="fade-in moderate-view">
       <button class="btn btn-mu-back mb-2" (click)="backToAccounts()">
         <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar Rekening
       </button>
@@ -145,26 +157,28 @@
       <div class="mu-context-card shadow-sm mb-2">
         <div class="row align-items-center">
           <div class="col-md-auto pe-md-4 border-end-md">
-            <p class="mb-1 small" style="color: #64748b;">Bank</p>
+            <p class="mb-1 small text-mu-slate-light">Bank</p>
             <span [ngClass]="getBankBadgeClass(selectedAccount()!.bankName)">{{ selectedAccount()!.bankName }}</span>
           </div>
           <div class="col-md pt-3 pt-md-0 ps-md-4">
-            <p class="mb-1 small" style="color: #64748b;">Detail Rekening</p>
+            <p class="mb-1 small text-mu-slate-light">Detail Rekening</p>
             <div class="d-flex align-items-center">
-              <h5 class="fw-bold mb-0 me-3 font-mono" style="color: #0f172a;">{{ selectedAccount()!.accountNumber }}</h5>
-              <span style="color: #334155;"><i class="bi bi-person-circle me-1" style="color: #94a3b8;"></i>{{ selectedAccount()!.accountName }}</span>
+              <h5 class="fw-bold mb-0 me-3 font-mono text-mu-dark">{{ selectedAccount()!.accountNumber }}
+              </h5>
+              <span class="text-mu-slate"><i class="bi bi-person-circle me-1 text-mu-slate-lighter"></i>{{
+                selectedAccount()!.accountName }}</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <h6 class="fw-bold mb-0" style="color: #0f172a;"><i class="bi bi-file-earmark-text me-2" style="color: #1a56db;"></i>Riwayat Upload Dokumen</h6>
-        <div class="mu-search" style="width: 280px;">
+        <h6 class="fw-bold mb-0 text-mu-dark"><i class="bi bi-file-earmark-text me-2 text-mu-primary"></i>Riwayat Upload
+          Dokumen</h6>
+        <div class="mu-search search-form-md">
           <i class="bi bi-search"></i>
-          <input type="text" class="form-control" placeholder="Cari file..."
-                 [ngModel]="docSearch()"
-                 (ngModelChange)="docSearch.set($event); onSearchChange('doc')">
+          <input type="text" class="form-control" placeholder="Cari file..." [ngModel]="docSearch()"
+            (ngModelChange)="docSearch.set($event); onSearchChange('doc')">
         </div>
       </div>
 
@@ -173,110 +187,116 @@
           <table class="table mu-table">
             <thead>
               <tr>
-                <th style="padding-left: 1.5rem;">Nama File</th>
+                <th>Nama File</th>
                 <th>Tipe</th>
                 <th>Tanggal Upload</th>
                 <th>Periode Mutasi</th>
                 <th class="text-center">Status</th>
-                <th class="text-center" style="padding-right: 1.5rem;">Aksi</th>
+                <th class="text-center">Aksi</th>
               </tr>
             </thead>
             <tbody>
               @for (doc of pagedDocuments(); track doc.id) {
-                <tr>
-                  <td style="padding-left: 1.5rem;">
-                    <div class="d-flex align-items-center">
-                      @if (doc.fileType === 'PDF_DIGITAL') {
-                        <i class="bi bi-file-earmark-pdf-fill text-danger me-2 fs-5"></i>
-                      } @else {
-                        <i class="bi bi-file-earmark-image-fill me-2 fs-5" style="color: #0891b2;"></i>
-                      }
-                      <span class="fw-semibold" style="color: #0f172a;">{{ doc.fileName }}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <span style="background: #f1f5f9; color: #475569; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 500;">
-                      {{ doc.fileType === 'PDF_DIGITAL' ? 'PDF Digital' : 'Image/Scan' }}
-                    </span>
-                  </td>
-                  <td class="small" style="color: #64748b;">{{ formatDate(doc.createdAt) }}</td>
-                  <td class="small">{{ formatPeriod(doc.periodStart, doc.periodEnd) }}</td>
-                  <td class="text-center">
-                    <span [ngClass]="getStatusBadgeClass(doc.status)">
-                      <i class="bi" [ngClass]="getStatusIcon(doc.status)"></i>{{ getStatusLabel(doc.status) }}
-                    </span>
-                    @if (doc.status === 'FAILED' && doc.errorMessage) {
-                      <div class="mt-1"><small class="text-danger fst-italic" style="font-size: 0.7rem;">{{ doc.errorMessage }}</small></div>
-                    }
-                  </td>
-                  <td class="text-center" style="padding-right: 1.5rem;">
-                    @if (doc.status === 'SUCCESS') {
-                      <button (click)="viewAnalytics(doc)" class="btn btn-mu-outline btn-sm">
-                        <i class="bi bi-eye me-1"></i> Lihat Rincian
-                      </button>
-                    } @else if (doc.status === 'PARSING') {
-                      <span class="small" style="color: #94a3b8;"><i class="bi bi-hourglass-split me-1"></i>Menunggu...</span>
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    @if (doc.fileType === 'PDF_DIGITAL') {
+                    <i class="bi bi-file-earmark-pdf-fill text-danger me-2 fs-5"></i>
                     } @else {
-                      <span style="color: #cbd5e1;">—</span>
+                    <i class="bi bi-file-earmark-image-fill me-2 fs-5 text-mu-cyan"></i>
                     }
-                  </td>
-                </tr>
+                    <span class="fw-semibold text-mu-dark">{{ doc.fileName }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge-file-type">
+                    {{ doc.fileType === 'PDF_DIGITAL' ? 'PDF Digital' : 'Image/Scan' }}
+                  </span>
+                </td>
+                <td class="small text-mu-slate-light">{{ formatDate(doc.createdAt) }}</td>
+                <td class="small">{{ formatPeriod(doc.periodStart, doc.periodEnd) }}</td>
+                <td class="text-center">
+                  <span [ngClass]="getStatusBadgeClass(doc.status)">
+                    <i class="bi" [ngClass]="getStatusIcon(doc.status)"></i>{{ getStatusLabel(doc.status) }}
+                  </span>
+                  @if (doc.status === 'FAILED' && doc.errorMessage) {
+                  <div class="mt-1"><small class="text-danger fst-italic text-tiny">{{ doc.errorMessage
+                      }}</small></div>
+                  }
+                </td>
+                <td class="text-center">
+                  @if (doc.status === 'SUCCESS') {
+                  <button (click)="viewAnalytics(doc)" class="btn btn-mu-outline btn-sm">
+                    <i class="bi bi-eye me-1"></i> Lihat Rincian
+                  </button>
+                  } @else if (doc.status === 'PARSING') {
+                  <span class="small text-mu-slate-lighter"><i class="bi bi-hourglass-split me-1"></i>Menunggu...</span>
+                  } @else {
+                  <span class="text-mu-gray-light">—</span>
+                  }
+                </td>
+              </tr>
               } @empty {
-                <tr>
-                  <td colspan="6" class="text-center py-5" style="color: #94a3b8;">
-                    <i class="bi bi-file-earmark-x fs-1 d-block mb-2"></i>Belum ada dokumen untuk rekening ini.
-                  </td>
-                </tr>
+              <tr>
+                <td colspan="6" class="text-center py-4 text-mu-slate-lighter">
+                  <i class="bi bi-file-earmark-x fs-1 d-block mb-2"></i>Belum ada dokumen untuk rekening ini.
+                </td>
+              </tr>
               }
             </tbody>
           </table>
         </div>
         @if (docTotalPages() > 1) {
-          <div class="mu-pagination">
-            <button class="page-btn" [disabled]="docPage() === 1" (click)="goToPage('doc', docPage() - 1)"><i class="bi bi-chevron-left"></i></button>
-            @for (p of getPageNumbers(docTotalPages()); track p) {
-              <button class="page-btn" [class.active]="docPage() === p" (click)="goToPage('doc', p)">{{ p }}</button>
-            }
-            <button class="page-btn" [disabled]="docPage() === docTotalPages()" (click)="goToPage('doc', docPage() + 1)"><i class="bi bi-chevron-right"></i></button>
-            <span class="page-info">{{ filteredDocuments().length }} dokumen</span>
-          </div>
+        <div class="mu-pagination">
+          <button class="page-btn" [disabled]="docPage() === 1" (click)="goToPage('doc', docPage() - 1)"><i
+              class="bi bi-chevron-left"></i></button>
+          @for (p of getPageNumbers(docTotalPages()); track p) {
+          <button class="page-btn" [class.active]="docPage() === p" (click)="goToPage('doc', p)">{{ p }}</button>
+          }
+          <button class="page-btn" [disabled]="docPage() === docTotalPages()"
+            (click)="goToPage('doc', docPage() + 1)"><i class="bi bi-chevron-right"></i></button>
+          <span class="page-info">{{ filteredDocuments().length }} dokumen</span>
+        </div>
         }
       </div>
     </div>
-  }
+    }
 
-  <!-- ============================================== -->
-  <!-- LEVEL 3: DASHBOARD ANALYTICS                    -->
-  <!-- ============================================== -->
-  @if (currentView() === 'analytics') {
+    <!-- ============================================== -->
+    <!-- LEVEL 3: DASHBOARD ANALYTICS                    -->
+    <!-- ============================================== -->
+    @if (currentView() === 'analytics') {
     <div class="fade-in compact-view">
       <button class="btn btn-mu-back mb-2" (click)="backToDocuments()">
         <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar Dokumen
       </button>
 
       <div class="page-header mb-2">
-        <h3 class="mb-1"><i class="bi bi-speedometer2 me-2" style="color: #1a56db;"></i>Dashboard Analytics</h3>
-        <p class="mb-0">Rangkuman 11 Indikator & Metrik dari file <strong style="color: #0f172a;">{{ selectedDocument()!.fileName }}</strong></p>
+        <h3 class="mb-1"><i class="bi bi-speedometer2 me-2 text-mu-primary"></i>Dashboard Analytics</h3>
+        <p class="mb-0">Rangkuman 11 Indikator & Metrik dari file <strong class="text-mu-dark">{{
+            selectedDocument()!.fileName }}</strong></p>
       </div>
 
       <!-- Context Header -->
       <div class="mu-context-card shadow-sm mb-3">
         <div class="row align-items-center">
           <div class="col-md-auto pe-md-4 border-end-md">
-            <p class="mb-1 small" style="color: #64748b;">Bank</p>
+            <p class="mb-1 small text-mu-slate-light">Bank</p>
             <span [ngClass]="getBankBadgeClass(selectedAccount()!.bankName)">{{ selectedAccount()!.bankName }}</span>
           </div>
           <div class="col-md-auto pt-3 pt-md-0 ps-md-4 pe-md-4 border-end-md">
-            <p class="mb-1 small" style="color: #64748b;">Rekening</p>
-            <h6 class="fw-bold mb-0 font-mono" style="color: #0f172a;">{{ selectedAccount()!.accountNumber }}</h6>
+            <p class="mb-1 small text-mu-slate-light">Rekening</p>
+            <h6 class="fw-bold mb-0 font-mono text-mu-dark">{{ selectedAccount()!.accountNumber }}</h6>
           </div>
           <div class="col-md-auto pt-3 pt-md-0 ps-md-4 pe-md-4 border-end-md">
-            <p class="mb-1 small" style="color: #64748b;">Pemilik</p>
-            <span style="color: #334155;"><i class="bi bi-person-circle me-1" style="color: #94a3b8;"></i>{{ selectedAccount()!.accountName }}</span>
+            <p class="mb-1 small text-mu-slate-light">Pemilik</p>
+            <span class="text-mu-slate"><i class="bi bi-person-circle me-1 text-mu-slate-lighter"></i>{{
+              selectedAccount()!.accountName }}</span>
           </div>
           <div class="col-md pt-3 pt-md-0 ps-md-4">
-            <p class="mb-1 small" style="color: #64748b;">Periode</p>
-            <span class="fw-medium" style="color: #1e293b;">{{ formatPeriod(selectedDocument()!.periodStart, selectedDocument()!.periodEnd) }}</span>
+            <p class="mb-1 small text-mu-slate-light">Periode</p>
+            <span class="fw-medium text-mu-darker">{{ formatPeriod(selectedDocument()!.periodStart,
+              selectedDocument()!.periodEnd) }}</span>
           </div>
         </div>
       </div>
@@ -285,11 +305,46 @@
       <div class="mb-3">
         <div class="section-title"><i class="bi bi-wallet2 me-2"></i>1. Ringkasan Saldo & Arus Kas (3 Bulan)</div>
         <div class="row row-cols-1 row-cols-md-5 g-2">
-          <div class="col"><div class="summary-card"><div class="accent-bar accent-green"></div><div class="card-content"><div class="card-label label-green">Rata-rata Credit</div><div class="card-value">Rp 166.7 Jt</div></div></div></div>
-          <div class="col"><div class="summary-card"><div class="accent-bar accent-red"></div><div class="card-content"><div class="card-label label-red">Rata-rata Debit</div><div class="card-value">Rp 138.3 Jt</div></div></div></div>
-          <div class="col"><div class="summary-card"><div class="accent-bar accent-blue"></div><div class="card-content"><div class="card-label label-blue">Rata-rata Saldo (Harian)</div><div class="card-value">Rp 450 Jt</div></div></div></div>
-          <div class="col"><div class="summary-card"><div class="accent-bar accent-gray"></div><div class="card-content"><div class="card-label label-gray">Total Credit</div><div class="card-value">Rp 500.000.000</div></div></div></div>
-          <div class="col"><div class="summary-card"><div class="accent-bar accent-gray"></div><div class="card-content"><div class="card-label label-gray">Total Debit</div><div class="card-value">Rp 415.000.000</div></div></div></div>
+          <div class="col">
+            <div class="summary-card card-combo-green">
+              <div class="card-content">
+                <div class="card-label">Rata-rata Credit</div>
+                <div class="card-value">Rp 166.7 Jt</div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="summary-card card-combo-red">
+              <div class="card-content">
+                <div class="card-label">Rata-rata Debit</div>
+                <div class="card-value">Rp 138.3 Jt</div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="summary-card card-combo-blue">
+              <div class="card-content">
+                <div class="card-label">Rata-rata Saldo (Harian)</div>
+                <div class="card-value">Rp 450 Jt</div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="summary-card card-combo-gray">
+              <div class="card-content">
+                <div class="card-label">Total Credit</div>
+                <div class="card-value">Rp 500.000.000</div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="summary-card card-combo-gray">
+              <div class="card-content">
+                <div class="card-label">Total Debit</div>
+                <div class="card-value">Rp 415.000.000</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -301,10 +356,10 @@
             <table class="table mu-table text-nowrap">
               <thead>
                 <tr>
-                  <th style="padding-left: 1.5rem;">Periode</th>
+                  <th>Periode</th>
                   <th>Saldo Akhir</th>
-                  <th style="color: #059669;"><i class="bi bi-arrow-down-left me-1"></i>Total Credit</th>
-                  <th style="color: #dc2626;"><i class="bi bi-arrow-up-right me-1"></i>Total Debit</th>
+                  <th class="text-mu-green"><i class="bi bi-arrow-down-left me-1"></i>Total Credit</th>
+                  <th class="text-mu-red"><i class="bi bi-arrow-up-right me-1"></i>Total Debit</th>
                   <th class="text-center">Freq Credit</th>
                   <th class="text-center">Freq Debit</th>
                 </tr>
@@ -312,15 +367,19 @@
               <tbody>
                 @for (item of summaryPerbulan(); track item.periode) {
                 <tr>
-                  <td style="padding-left: 1.5rem;" class="fw-semibold">{{ item.periode }}</td>
+                  <td class="fw-semibold">{{ item.periode }}</td>
                   <td>{{ formatCurrency(item.saldoAkhir) }}</td>
-                  <td style="color: #059669;" class="fw-medium">{{ formatCurrency(item.totalCredit) }}</td>
-                  <td style="color: #dc2626;" class="fw-medium">{{ formatCurrency(item.totalDebit) }}</td>
-                  <td class="text-center"><span style="background:#f1f5f9; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.8rem;">{{ item.freqCredit }}x</span></td>
-                  <td class="text-center"><span style="background:#f1f5f9; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.8rem;">{{ item.freqDebit }}x</span></td>
+                  <td class="fw-medium text-mu-green">{{ formatCurrency(item.totalCredit) }}</td>
+                  <td class="fw-medium text-mu-red">{{ formatCurrency(item.totalDebit) }}</td>
+                  <td class="text-center"><span class="badge-freq-item">{{
+                      item.freqCredit }}x</span></td>
+                  <td class="text-center"><span class="badge-freq-item">{{
+                      item.freqDebit }}x</span></td>
                 </tr>
                 } @empty {
-                <tr><td colspan="6" class="text-center py-4" style="color: #94a3b8;">Belum ada data.</td></tr>
+                <tr>
+                  <td colspan="6" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
+                </tr>
                 }
               </tbody>
             </table>
@@ -333,32 +392,89 @@
       <!-- 3 & 4. Top 10 Amount -->
       <div class="row g-3 mb-3">
         <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-sort-down-alt me-2" style="color: #059669 !important;"></i>3. Top 10 Credit Amount</div>
+          <div class="section-title"><i class="bi bi-sort-down-alt me-2 text-mu-green"></i>3. Top
+            10 Credit Amount</div>
           <div class="mu-card">
-            <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
-              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;">Keterangan</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+            <div class="table-responsive table-scroll-280">
+              <table class="table mu-table">
+                <thead>
+                  <tr>
+                    <th>Keterangan</th>
+                    <th>Nominal</th>
+                    <th>Tanggal</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  <tr><td style="padding-left: 1.5rem;" class="text-truncate" style="max-width: 200px;">TRSF CR PT MAJU BERSAMA</td><td class="fw-semibold text-nowrap" style="color: #059669;">Rp 45.000.000</td><td class="small" style="color: #94a3b8;">28 Mar 26</td></tr>
-                  <tr><td style="padding-left: 1.5rem;">CLIENT PROJECT A</td><td class="fw-semibold" style="color: #059669;">Rp 30.500.000</td><td class="small" style="color: #94a3b8;">24 Mar 26</td></tr>
-                  <tr><td style="padding-left: 1.5rem;">REFUND VENDOR</td><td class="fw-semibold" style="color: #059669;">Rp 25.000.000</td><td class="small" style="color: #94a3b8;">20 Mar 26</td></tr>
-                  <tr><td style="padding-left: 1.5rem;">EDC SETTLEMENT</td><td class="fw-semibold" style="color: #059669;">Rp 12.500.000</td><td class="small" style="color: #94a3b8;">27 Mar 26</td></tr>
-                  <tr><td style="padding-left: 1.5rem;">TRF MASUK LAIN</td><td class="fw-semibold" style="color: #059669;">Rp 8.000.000</td><td class="small" style="color: #94a3b8;">15 Feb 26</td></tr>
+                  <tr>
+                    <td class="text-truncate max-w-200">TRSF CR PT MAJU
+                      BERSAMA</td>
+                    <td class="fw-semibold text-nowrap text-mu-green">Rp 45.000.000</td>
+                    <td class="small text-mu-slate-lighter">28 Mar 26</td>
+                  </tr>
+                  <tr>
+                    <td>CLIENT PROJECT A</td>
+                    <td class="fw-semibold text-mu-green">Rp 30.500.000</td>
+                    <td class="small text-mu-slate-lighter">24 Mar 26</td>
+                  </tr>
+                  <tr>
+                    <td>REFUND VENDOR</td>
+                    <td class="fw-semibold text-mu-green">Rp 25.000.000</td>
+                    <td class="small text-mu-slate-lighter">20 Mar 26</td>
+                  </tr>
+                  <tr>
+                    <td>EDC SETTLEMENT</td>
+                    <td class="fw-semibold text-mu-green">Rp 12.500.000</td>
+                    <td class="small text-mu-slate-lighter">27 Mar 26</td>
+                  </tr>
+                  <tr>
+                    <td>TRF MASUK LAIN</td>
+                    <td class="fw-semibold text-mu-green">Rp 8.000.000</td>
+                    <td class="small text-mu-slate-lighter">15 Feb 26</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-sort-up me-2" style="color: #dc2626 !important;"></i>4. Top 10 Debit Amount</div>
+          <div class="section-title"><i class="bi bi-sort-up me-2 text-mu-red"></i>4. Top 10
+            Debit Amount</div>
           <div class="mu-card">
-            <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
-              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;">Keterangan</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+            <div class="table-responsive table-scroll-280">
+              <table class="table mu-table">
+                <thead>
+                  <tr>
+                    <th>Keterangan</th>
+                    <th>Nominal</th>
+                    <th>Tanggal</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  <tr><td style="padding-left: 1.5rem;">PAYROLL MARET 2026</td><td class="fw-semibold text-nowrap" style="color: #dc2626;">Rp 150.000.000</td><td class="small" style="color: #94a3b8;">22 Mar 26</td></tr>
-                  <tr><td style="padding-left: 1.5rem;">PEMBAYARAN VENDOR</td><td class="fw-semibold" style="color: #dc2626;">Rp 35.000.000</td><td class="small" style="color: #94a3b8;">26 Mar 26</td></tr>
-                  <tr><td style="padding-left: 1.5rem;">SEWA GEDUNG KANTOR</td><td class="fw-semibold" style="color: #dc2626;">Rp 15.000.000</td><td class="small" style="color: #94a3b8;">10 Mar 26</td></tr>
-                  <tr><td style="padding-left: 1.5rem;">PAJAK PPH 21</td><td class="fw-semibold" style="color: #dc2626;">Rp 12.500.000</td><td class="small" style="color: #94a3b8;">25 Mar 26</td></tr>
-                  <tr><td style="padding-left: 1.5rem;">BUNGA KREDIT</td><td class="fw-semibold" style="color: #dc2626;">Rp 8.500.000</td><td class="small" style="color: #94a3b8;">15 Mar 26</td></tr>
+                  <tr>
+                    <td>PAYROLL MARET 2026</td>
+                    <td class="fw-semibold text-nowrap text-mu-red">Rp 150.000.000</td>
+                    <td class="small text-mu-slate-lighter">22 Mar 26</td>
+                  </tr>
+                  <tr>
+                    <td>PEMBAYARAN VENDOR</td>
+                    <td class="fw-semibold text-mu-red">Rp 35.000.000</td>
+                    <td class="small text-mu-slate-lighter">26 Mar 26</td>
+                  </tr>
+                  <tr>
+                    <td>SEWA GEDUNG KANTOR</td>
+                    <td class="fw-semibold text-mu-red">Rp 15.000.000</td>
+                    <td class="small text-mu-slate-lighter">10 Mar 26</td>
+                  </tr>
+                  <tr>
+                    <td>PAJAK PPH 21</td>
+                    <td class="fw-semibold text-mu-red">Rp 12.500.000</td>
+                    <td class="small text-mu-slate-lighter">25 Mar 26</td>
+                  </tr>
+                  <tr>
+                    <td>BUNGA KREDIT</td>
+                    <td class="fw-semibold text-mu-red">Rp 8.500.000</td>
+                    <td class="small text-mu-slate-lighter">15 Mar 26</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -369,31 +485,72 @@
       <!-- 5 & 6. Top 10 Freq -->
       <div class="row g-3 mb-3">
         <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-arrow-repeat me-2" style="color: #059669 !important;"></i>5. Top 10 Credit Freq</div>
+          <div class="section-title"><i class="bi bi-arrow-repeat me-2 text-mu-green"></i>5. Top 10
+            Credit Freq</div>
           <div class="mu-card">
-            <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
-              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;" class="w-75">Keterangan</th><th class="text-center">Frekuensi</th></tr></thead>
+            <div class="table-responsive table-scroll-250">
+              <table class="table mu-table">
+                <thead>
+                  <tr>
+                    <th class="w-75">Keterangan</th>
+                    <th class="text-center">Frekuensi</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  <tr><td style="padding-left: 1.5rem;">SETORAN TUNAI</td><td class="text-center"><span class="freq-badge-cr">45 x</span></td></tr>
-                  <tr><td style="padding-left: 1.5rem;">TRANSFER MASUK DARI A</td><td class="text-center"><span class="freq-badge-cr">30 x</span></td></tr>
-                  <tr><td style="padding-left: 1.5rem;">BUNGA TABUNGAN</td><td class="text-center"><span class="freq-badge-cr">3 x</span></td></tr>
-                  <tr><td style="padding-left: 1.5rem;">REFUND ONLINE</td><td class="text-center"><span class="freq-badge-cr">2 x</span></td></tr>
+                  <tr>
+                    <td>SETORAN TUNAI</td>
+                    <td class="text-center"><span class="freq-badge-cr">45 x</span></td>
+                  </tr>
+                  <tr>
+                    <td>TRANSFER MASUK DARI A</td>
+                    <td class="text-center"><span class="freq-badge-cr">30 x</span></td>
+                  </tr>
+                  <tr>
+                    <td>BUNGA TABUNGAN</td>
+                    <td class="text-center"><span class="freq-badge-cr">3 x</span></td>
+                  </tr>
+                  <tr>
+                    <td>REFUND ONLINE</td>
+                    <td class="text-center"><span class="freq-badge-cr">2 x</span></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-arrow-repeat me-2" style="color: #dc2626 !important;"></i>6. Top 10 Debit Freq</div>
+          <div class="section-title"><i class="bi bi-arrow-repeat me-2 text-mu-red"></i>6. Top 10
+            Debit Freq</div>
           <div class="mu-card">
-            <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
-              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;" class="w-75">Keterangan</th><th class="text-center">Frekuensi</th></tr></thead>
+            <div class="table-responsive table-scroll-250">
+              <table class="table mu-table">
+                <thead>
+                  <tr>
+                    <th class="w-75">Keterangan</th>
+                    <th class="text-center">Frekuensi</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  <tr><td style="padding-left: 1.5rem;">BIAYA ADMIN BANK</td><td class="text-center"><span class="freq-badge-db">120 x</span></td></tr>
-                  <tr><td style="padding-left: 1.5rem;">TRANSFER KELUAR BCA</td><td class="text-center"><span class="freq-badge-db">85 x</span></td></tr>
-                  <tr><td style="padding-left: 1.5rem;">PEMBELIAN VIA QRIS</td><td class="text-center"><span class="freq-badge-db">42 x</span></td></tr>
-                  <tr><td style="padding-left: 1.5rem;">TARIK TUNAI ATM</td><td class="text-center"><span class="freq-badge-db">15 x</span></td></tr>
-                  <tr><td style="padding-left: 1.5rem;">BIAYA MATERAI</td><td class="text-center"><span class="freq-badge-db">5 x</span></td></tr>
+                  <tr>
+                    <td>BIAYA ADMIN BANK</td>
+                    <td class="text-center"><span class="freq-badge-db">120 x</span></td>
+                  </tr>
+                  <tr>
+                    <td>TRANSFER KELUAR BCA</td>
+                    <td class="text-center"><span class="freq-badge-db">85 x</span></td>
+                  </tr>
+                  <tr>
+                    <td>PEMBELIAN VIA QRIS</td>
+                    <td class="text-center"><span class="freq-badge-db">42 x</span></td>
+                  </tr>
+                  <tr>
+                    <td>TARIK TUNAI ATM</td>
+                    <td class="text-center"><span class="freq-badge-db">15 x</span></td>
+                  </tr>
+                  <tr>
+                    <td>BIAYA MATERAI</td>
+                    <td class="text-center"><span class="freq-badge-db">5 x</span></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -406,28 +563,60 @@
       <!-- 7 & 8. Anomali -->
       <div class="row g-3 mb-3">
         <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-exclamation-triangle-fill me-2" style="color: #d97706 !important;"></i>7. Anomali Credit</div>
+          <div class="section-title"><i class="bi bi-exclamation-triangle-fill me-2 text-mu-amber"></i>7. Anomali Credit
+          </div>
           <div class="anomali-card">
             <div class="anomali-accent"></div>
-            <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
-              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;">Keterangan</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+            <div class="table-responsive table-scroll-200">
+              <table class="table mu-table">
+                <thead>
+                  <tr>
+                    <th>Keterangan</th>
+                    <th>Nominal</th>
+                    <th>Tanggal</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  <tr><td style="padding-left: 1.5rem;">TRF UNKNOWN ID</td><td class="fw-semibold text-nowrap" style="color: #0f172a;">Rp 5.500.000</td><td class="small" style="color: #94a3b8;">08 Mar 26</td></tr>
-                  <tr><td style="padding-left: 1.5rem;"><span class="badge-secondary" style="font-size: 0.65rem;">Unclassified</span><br>KIRIMAN DARI LUAR NEGERI</td><td class="fw-semibold text-nowrap" style="color: #0f172a;">Rp 12.000.000</td><td class="small" style="color: #94a3b8;">12 Feb 26</td></tr>
+                  <tr>
+                    <td>TRF UNKNOWN ID</td>
+                    <td class="fw-semibold text-nowrap text-mu-dark">Rp 5.500.000</td>
+                    <td class="small text-mu-slate-lighter">08 Mar 26</td>
+                  </tr>
+                  <tr>
+                    <td>KIRIMAN DARI LUAR NEGERI</td>
+                    <td class="fw-semibold text-nowrap text-mu-dark">Rp 12.000.000</td>
+                    <td class="small text-mu-slate-lighter">12 Feb 26</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-x-octagon-fill me-2" style="color: #dc2626 !important;"></i>8. Anomali Debit</div>
+          <div class="section-title"><i class="bi bi-x-octagon-fill me-2 text-mu-red"></i>8.
+            Anomali Debit</div>
           <div class="anomali-card">
             <div class="anomali-accent"></div>
-            <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
-              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;">Keterangan</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+            <div class="table-responsive table-scroll-200">
+              <table class="table mu-table">
+                <thead>
+                  <tr>
+                    <th>Keterangan</th>
+                    <th>Nominal</th>
+                    <th>Tanggal</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  <tr><td style="padding-left: 1.5rem;">PEND DEBET TRX SUSPICIOUS</td><td class="fw-semibold text-nowrap" style="color: #0f172a;">Rp 1.000.000</td><td class="small" style="color: #94a3b8;">21 Mar 26</td></tr>
-                  <tr><td style="padding-left: 1.5rem;">POTONGAN AUTO DEBIT X</td><td class="fw-semibold text-nowrap" style="color: #0f172a;">Rp 750.000</td><td class="small" style="color: #94a3b8;">15 Jan 26</td></tr>
+                  <tr>
+                    <td>PEND DEBET TRX SUSPICIOUS</td>
+                    <td class="fw-semibold text-nowrap text-mu-dark">Rp 1.000.000</td>
+                    <td class="small text-mu-slate-lighter">21 Mar 26</td>
+                  </tr>
+                  <tr>
+                    <td>POTONGAN AUTO DEBIT X</td>
+                    <td class="fw-semibold text-nowrap text-mu-dark">Rp 750.000</td>
+                    <td class="small text-mu-slate-lighter">15 Jan 26</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -441,36 +630,96 @@
       <div class="row g-3 mb-3">
         <div class="col-md-4">
           <div class="section-title">9. Income</div>
-          <div class="category-card h-100"><div class="cat-accent cat-accent-green"></div>
-            <table class="table mu-table"><thead><tr><th style="padding-left: 1rem;">Keterangan</th><th>Nominal</th><th>Tgl</th></tr></thead>
+          <div class="category-card h-100">
+            <div class="cat-accent cat-accent-green"></div>
+            <table class="table mu-table">
+              <thead>
+                <tr>
+                  <th>Keterangan</th>
+                  <th>Nominal</th>
+                  <th>Tgl</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td style="padding-left: 1rem;" class="small">REVENUE MAR</td><td class="fw-bold small" style="color: #1a56db;">Rp 180M</td><td class="small" style="color: #94a3b8;">01 Mar</td></tr>
-                <tr><td style="padding-left: 1rem;" class="small">REVENUE FEB</td><td class="fw-bold small" style="color: #1a56db;">Rp 165M</td><td class="small" style="color: #94a3b8;">01 Feb</td></tr>
-                <tr><td style="padding-left: 1rem;" class="small">REVENUE JAN</td><td class="fw-bold small" style="color: #1a56db;">Rp 155M</td><td class="small" style="color: #94a3b8;">01 Jan</td></tr>
+                <tr>
+                  <td class="small">REVENUE MAR</td>
+                  <td class="fw-bold small text-mu-primary">Rp 180M</td>
+                  <td class="small text-mu-slate-lighter">01 Mar</td>
+                </tr>
+                <tr>
+                  <td class="small">REVENUE FEB</td>
+                  <td class="fw-bold small text-mu-primary">Rp 165M</td>
+                  <td class="small text-mu-slate-lighter">01 Feb</td>
+                </tr>
+                <tr>
+                  <td class="small">REVENUE JAN</td>
+                  <td class="fw-bold small text-mu-primary">Rp 155M</td>
+                  <td class="small text-mu-slate-lighter">01 Jan</td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
         <div class="col-md-4">
           <div class="section-title">10. Pajak</div>
-          <div class="category-card h-100"><div class="cat-accent cat-accent-orange"></div>
-            <table class="table mu-table"><thead><tr><th style="padding-left: 1rem;">Keterangan</th><th>Nominal</th><th>Tgl</th></tr></thead>
+          <div class="category-card h-100">
+            <div class="cat-accent cat-accent-orange"></div>
+            <table class="table mu-table">
+              <thead>
+                <tr>
+                  <th>Keterangan</th>
+                  <th>Nominal</th>
+                  <th>Tgl</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td style="padding-left: 1rem;" class="small">PAJAK PPH 21</td><td class="fw-bold small" style="color: #0f172a;">Rp 12.5M</td><td class="small" style="color: #94a3b8;">25 Mar</td></tr>
-                <tr><td style="padding-left: 1rem;" class="small">PAJAK PPH 21</td><td class="fw-bold small" style="color: #0f172a;">Rp 11.2M</td><td class="small" style="color: #94a3b8;">15 Feb</td></tr>
-                <tr><td style="padding-left: 1rem;" class="small">PAJAK PPH 21</td><td class="fw-bold small" style="color: #0f172a;">Rp 10.8M</td><td class="small" style="color: #94a3b8;">15 Jan</td></tr>
+                <tr>
+                  <td class="small">PAJAK PPH 21</td>
+                  <td class="fw-bold small text-mu-dark">Rp 12.5M</td>
+                  <td class="small text-mu-slate-lighter">25 Mar</td>
+                </tr>
+                <tr>
+                  <td class="small">PAJAK PPH 21</td>
+                  <td class="fw-bold small text-mu-dark">Rp 11.2M</td>
+                  <td class="small text-mu-slate-lighter">15 Feb</td>
+                </tr>
+                <tr>
+                  <td class="small">PAJAK PPH 21</td>
+                  <td class="fw-bold small text-mu-dark">Rp 10.8M</td>
+                  <td class="small text-mu-slate-lighter">15 Jan</td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
         <div class="col-md-4">
           <div class="section-title">11. Bunga Pinjaman</div>
-          <div class="category-card h-100"><div class="cat-accent cat-accent-cyan"></div>
-            <table class="table mu-table"><thead><tr><th style="padding-left: 1rem;">Keterangan</th><th>Nominal</th><th>Tgl</th></tr></thead>
+          <div class="category-card h-100">
+            <div class="cat-accent cat-accent-cyan"></div>
+            <table class="table mu-table">
+              <thead>
+                <tr>
+                  <th>Keterangan</th>
+                  <th>Nominal</th>
+                  <th>Tgl</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td style="padding-left: 1rem;" class="small">BUNGA KREDIT</td><td class="fw-bold small" style="color: #0891b2;">Rp 8.5M</td><td class="small" style="color: #94a3b8;">15 Mar</td></tr>
-                <tr><td style="padding-left: 1rem;" class="small">BUNGA KREDIT</td><td class="fw-bold small" style="color: #0891b2;">Rp 8.5M</td><td class="small" style="color: #94a3b8;">15 Feb</td></tr>
-                <tr><td style="padding-left: 1rem;" class="small">BUNGA KREDIT</td><td class="fw-bold small" style="color: #0891b2;">Rp 8.5M</td><td class="small" style="color: #94a3b8;">15 Jan</td></tr>
+                <tr>
+                  <td class="small">BUNGA KREDIT</td>
+                  <td class="fw-bold small text-mu-cyan">Rp 8.5M</td>
+                  <td class="small text-mu-slate-lighter">15 Mar</td>
+                </tr>
+                <tr>
+                  <td class="small">BUNGA KREDIT</td>
+                  <td class="fw-bold small text-mu-cyan">Rp 8.5M</td>
+                  <td class="small text-mu-slate-lighter">15 Feb</td>
+                </tr>
+                <tr>
+                  <td class="small">BUNGA KREDIT</td>
+                  <td class="fw-bold small text-mu-cyan">Rp 8.5M</td>
+                  <td class="small text-mu-slate-lighter">15 Jan</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -482,52 +731,52 @@
       <!-- 12. Detail Semua Transaksi -->
       <div class="mb-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi</div>
+          <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
+          </div>
           <div class="d-flex align-items-center gap-3">
-            <div class="mu-search" style="width: 280px;">
+            <div class="mu-search search-form-md">
               <i class="bi bi-search"></i>
-              <input type="text" class="form-control" placeholder="Cari transaksi..."
-                     [ngModel]="txSearch()"
-                     (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
+              <input type="text" class="form-control" placeholder="Cari transaksi..." [ngModel]="txSearch()"
+                (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
             </div>
             <button class="btn btn-mu-success"><i class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
           </div>
         </div>
 
         <div class="mu-card">
-          <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+          <div class="table-responsive table-scroll-500">
             <table class="table mu-table">
               <thead class="sticky-top">
                 <tr>
-                  <th style="padding-left: 1.5rem;">Tanggal</th>
+                  <th>Tanggal</th>
                   <th>Keterangan</th>
                   <th class="text-center">Flag</th>
-                  <th class="text-end" style="padding-right: 1.5rem;">Jumlah</th>
+                  <th class="text-end">Jumlah</th>
                 </tr>
               </thead>
               <tbody>
                 @for (tx of pagedTransaksi(); track tx.tanggal + tx.keterangan + tx.jumlah) {
                 <tr>
-                  <td style="padding-left: 1.5rem; color: #64748b;" class="small">{{ tx.tanggal }}</td>
-                  <td class="fw-medium" style="color: #1e293b;">{{ tx.keterangan }}</td>
+                  <td class="small">{{ tx.tanggal }}</td>
+                  <td class="fw-medium text-mu-darker">{{ tx.keterangan }}</td>
                   <td class="text-center">
                     @if (tx.flag === 'CR') {
-                      <span class="flag-cr"><i class="bi bi-plus-circle me-1"></i>CR</span>
+                    <span class="flag-cr"><i class="bi bi-plus-circle me-1"></i>CR</span>
                     } @else {
-                      <span class="flag-db"><i class="bi bi-dash-circle me-1"></i>DB</span>
+                    <span class="flag-db"><i class="bi bi-dash-circle me-1"></i>DB</span>
                     }
                   </td>
-                  <td class="text-end fw-semibold" style="padding-right: 1.5rem;" [style.color]="tx.flag === 'CR' ? '#059669' : '#dc2626'">
+                  <td class="text-end fw-semibold" [ngClass]="tx.flag === 'CR' ? 'text-mu-green' : 'text-mu-red'">
                     {{ tx.flag === 'DB' ? '- ' : '+ ' }}{{ formatCurrency(tx.jumlah) }}
                   </td>
                 </tr>
                 } @empty {
                 <tr>
-                  <td colspan="4" class="text-center py-4" style="color: #94a3b8;">
+                  <td colspan="4" class="text-center py-4 text-mu-slate-lighter">
                     @if (txSearch()) {
-                      Tidak ada transaksi yang cocok dengan "<strong>{{ txSearch() }}</strong>"
+                    Tidak ada transaksi yang cocok dengan "<strong>{{ txSearch() }}</strong>"
                     } @else {
-                      Belum ada data detail transaksi.
+                    Belum ada data detail transaksi.
                     }
                   </td>
                 </tr>
@@ -536,20 +785,22 @@
             </table>
           </div>
           @if (txTotalPages() > 1) {
-            <div class="mu-pagination">
-              <button class="page-btn" [disabled]="txPage() === 1" (click)="goToPage('tx', txPage() - 1)"><i class="bi bi-chevron-left"></i></button>
-              @for (p of getPageNumbers(txTotalPages()); track p) {
-                <button class="page-btn" [class.active]="txPage() === p" (click)="goToPage('tx', p)">{{ p }}</button>
-              }
-              <button class="page-btn" [disabled]="txPage() === txTotalPages()" (click)="goToPage('tx', txPage() + 1)"><i class="bi bi-chevron-right"></i></button>
-              <span class="page-info">{{ filteredTransaksi().length }} transaksi</span>
-            </div>
+          <div class="mu-pagination">
+            <button class="page-btn" [disabled]="txPage() === 1" (click)="goToPage('tx', txPage() - 1)"><i
+                class="bi bi-chevron-left"></i></button>
+            @for (p of getPageNumbers(txTotalPages()); track p) {
+            <button class="page-btn" [class.active]="txPage() === p" (click)="goToPage('tx', p)">{{ p }}</button>
+            }
+            <button class="page-btn" [disabled]="txPage() === txTotalPages()" (click)="goToPage('tx', txPage() + 1)"><i
+                class="bi bi-chevron-right"></i></button>
+            <span class="page-info">{{ filteredTransaksi().length }} transaksi</span>
+          </div>
           }
         </div>
       </div>
 
     </div>
-  }
+    }
 
   </div>
 </div>
