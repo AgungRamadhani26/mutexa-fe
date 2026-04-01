@@ -493,12 +493,10 @@
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.7) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.7) 50%,
+      rgba(255, 255, 255, 0) 100%);
   transform: skewX(-25deg);
   transition: all 0.6s ease;
   z-index: 1;
@@ -723,6 +721,7 @@
 .compact-view .mu-table td:last-child {
   padding-right: 1.25rem !important;
 }
+
 .compact-view .mu-context-card {
   padding: 0.5rem 0.75rem !important;
 }
@@ -879,6 +878,7 @@
 .compact-view .mu-card .mu-table td:first-child {
   padding-left: 2.25rem !important;
 }
+
 .compact-view .mu-card .mu-table th:last-child,
 .compact-view .mu-card .mu-table td:last-child {
   padding-right: 2.25rem !important;

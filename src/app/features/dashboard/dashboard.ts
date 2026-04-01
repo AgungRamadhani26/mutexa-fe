@@ -149,7 +149,8 @@ export class Dashboard implements OnInit {
   documents = signal<MutationDocument[]>([]);
   summaryPerbulan = signal<SummaryPerbulan[]>([]);
   detailTransaksi = signal<DetailTransaksi[]>([]);
-
+  top10Credit = signal<DetailTransaksi[]>([]);
+  top10Debit = signal<DetailTransaksi[]>([]);
   // ==========================================
   // FUNGSI INIT & PEMANGGILAN API PERTAMA
   // ==========================================
@@ -186,7 +187,7 @@ export class Dashboard implements OnInit {
     this.currentView.set('documents');     // Ganti tampilan ke level 2 (Daftar Dokumen)
     this.docSearch.set('');
     this.docPage.set(1);
-    
+
     this.isLoadingDocuments.set(true);
     // Memanggil API backend untuk mengambil dokumen spesifik untuk rekening ini
     this.documentService.getDocumentsByAccount(account.id).subscribe({
@@ -209,13 +210,29 @@ export class Dashboard implements OnInit {
     this.currentView.set('analytics');     // Ganti tampilan ke level 3 (Dashboard Analytics)
     this.txSearch.set('');
     this.txPage.set(1);
-    
+
     this.isLoadingAnalytics.set(true);
 
     // Ambil data visualisasi kotak-kotak dashboard dari backend untuk dokumen ini
     this.dashboardService.getSummaryPerbulan(doc.id).subscribe({
       next: (res) => {
         if (res.success) this.summaryPerbulan.set(res.data);
+      },
+      error: (err) => console.error(err)
+    });
+
+    // Ambil data Top 10 Credit Amount
+    this.dashboardService.getTop10CreditAmount(doc.id).subscribe({
+      next: (res) => {
+        if (res.success) this.top10Credit.set(res.data);
+      },
+      error: (err) => console.error(err)
+    });
+
+    // Ambil data Top 10 Debit Amount
+    this.dashboardService.getTop10DebitAmount(doc.id).subscribe({
+      next: (res) => {
+        if (res.success) this.top10Debit.set(res.data);
       },
       error: (err) => console.error(err)
     });
@@ -247,6 +264,8 @@ export class Dashboard implements OnInit {
     this.selectedDocument.set(null);
     this.summaryPerbulan.set([]);
     this.detailTransaksi.set([]);
+    this.top10Credit.set([]);
+    this.top10Debit.set([]);
     this.currentView.set('documents');
   }
 
@@ -290,9 +309,9 @@ export class Dashboard implements OnInit {
       alert("Mohon lengkapi semua isian.");
       return;
     }
-    
+
     this.isUploading.set(true);
-    
+
     const formData = new FormData();
     formData.append('accountId', '0'); // Backend creates or updates by account number anyway
     formData.append('accountNumber', this.uploadForm.accountNumber);
@@ -381,3 +400,4 @@ export class Dashboard implements OnInit {
     return 'Rp ' + amount.toLocaleString('id-ID');
   }
 }
+

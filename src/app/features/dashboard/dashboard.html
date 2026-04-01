@@ -405,33 +405,20 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td class="text-truncate max-w-200">TRSF CR PT MAJU
-                      BERSAMA</td>
-                    <td class="fw-semibold text-nowrap text-mu-green">Rp 45.000.000</td>
-                    <td class="small text-mu-slate-lighter">28 Mar 26</td>
-                  </tr>
-                  <tr>
-                    <td>CLIENT PROJECT A</td>
-                    <td class="fw-semibold text-mu-green">Rp 30.500.000</td>
-                    <td class="small text-mu-slate-lighter">24 Mar 26</td>
-                  </tr>
-                  <tr>
-                    <td>REFUND VENDOR</td>
-                    <td class="fw-semibold text-mu-green">Rp 25.000.000</td>
-                    <td class="small text-mu-slate-lighter">20 Mar 26</td>
-                  </tr>
-                  <tr>
-                    <td>EDC SETTLEMENT</td>
-                    <td class="fw-semibold text-mu-green">Rp 12.500.000</td>
-                    <td class="small text-mu-slate-lighter">27 Mar 26</td>
-                  </tr>
-                  <tr>
-                    <td>TRF MASUK LAIN</td>
-                    <td class="fw-semibold text-mu-green">Rp 8.000.000</td>
-                    <td class="small text-mu-slate-lighter">15 Feb 26</td>
-                  </tr>
-                </tbody>
+                                                      @for (cr of top10Credit(); track cr.keterangan + cr.tanggal + cr.jumlah) {
+                    <tr>
+                      <td class="text-truncate max-w-200">{{ cr.keterangan }}</td>
+                      <td class="fw-semibold text-nowrap text-mu-green">Rp {{ formatCurrency(cr.jumlah) }}</td>
+                      <td class="small text-mu-slate-lighter">{{ cr.tanggal | date:'dd MMM yy' }}</td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                      <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
+                    </tr>
+                    }
+                  </tbody>
+
+
               </table>
             </div>
           </div>
@@ -450,31 +437,17 @@
                   </tr>
                 </thead>
                 <tbody>
+                  @for (db of top10Debit(); track db.keterangan + db.tanggal + db.jumlah) {
                   <tr>
-                    <td>PAYROLL MARET 2026</td>
-                    <td class="fw-semibold text-nowrap text-mu-red">Rp 150.000.000</td>
-                    <td class="small text-mu-slate-lighter">22 Mar 26</td>
+                    <td class="text-truncate max-w-200">{{ db.keterangan }}</td>
+                    <td class="fw-semibold text-nowrap text-mu-red">Rp {{ formatCurrency(db.jumlah) }}</td>
+                    <td class="small text-mu-slate-lighter">{{ db.tanggal | date:'dd MMM yy' }}</td>
                   </tr>
+                  } @empty {
                   <tr>
-                    <td>PEMBAYARAN VENDOR</td>
-                    <td class="fw-semibold text-mu-red">Rp 35.000.000</td>
-                    <td class="small text-mu-slate-lighter">26 Mar 26</td>
+                    <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
                   </tr>
-                  <tr>
-                    <td>SEWA GEDUNG KANTOR</td>
-                    <td class="fw-semibold text-mu-red">Rp 15.000.000</td>
-                    <td class="small text-mu-slate-lighter">10 Mar 26</td>
-                  </tr>
-                  <tr>
-                    <td>PAJAK PPH 21</td>
-                    <td class="fw-semibold text-mu-red">Rp 12.500.000</td>
-                    <td class="small text-mu-slate-lighter">25 Mar 26</td>
-                  </tr>
-                  <tr>
-                    <td>BUNGA KREDIT</td>
-                    <td class="fw-semibold text-mu-red">Rp 8.500.000</td>
-                    <td class="small text-mu-slate-lighter">15 Mar 26</td>
-                  </tr>
+                  }
                 </tbody>
               </table>
             </div>
@@ -804,3 +777,4 @@
 
   </div>
 </div>
+

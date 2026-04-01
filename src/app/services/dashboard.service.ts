@@ -24,6 +24,18 @@ export class DashboardService {
     return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/detail-transaksi`, { params });
   }
 
+  // Mengambil data top 10 credit amount
+  getTop10CreditAmount(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/top10-credit`, { params });
+  }
+
+  // Mengambil data top 10 debit amount
+  getTop10DebitAmount(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/top10-debit`, { params });
+  }
+
   // Menghasilkan URL download File Excel untuk rincian transaksi dokumen terkait
   exportExcelUrl(documentId: number): string {
     return `${this.apiUrl}/export-excel?documentId=${documentId}`;
