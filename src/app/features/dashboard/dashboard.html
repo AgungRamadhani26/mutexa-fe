@@ -1,423 +1,555 @@
-<div class="container-fluid py-4 bg-light min-vh-100">
-  <div class="mb-5 d-flex justify-content-between align-items-end">
-    <div>
-      <h3 class="fw-bold mb-1"><i class="bi bi-speedometer2 text-primary me-2"></i>Dashboard Analytics</h3>
-      <p class="text-muted mb-0">Rangkuman 11 Indikator &amp; Metrik Transaksi Perbankan.</p>
-    </div>
-  </div>
+<div class="page-bg">
+  <div class="dashboard-container">
 
-  <!-- 1. Ringkasan Saldo -->
-  <div class="mb-4">
-    <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">
-      <i class="bi bi-wallet2 me-2"></i>1. Ringkasan Saldo &amp; Arus Kas (3 Bulan)
-    </h6>
-    <div class="row row-cols-1 row-cols-md-5 g-3">
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100 bg-success bg-opacity-10 border-start border-success border-4">
-          <div class="card-body">
-            <small class="text-success text-uppercase fw-bold d-block mb-1">Rata-rata Credit</small>
-            <h5 class="fw-bold text-dark mb-0">Rp 150 Jt</h5>
+  <!-- ============================================== -->
+  <!-- LEVEL 1: DAFTAR BANK ACCOUNT                   -->
+  <!-- ============================================== -->
+  @if (currentView() === 'accounts') {
+    <div class="fade-in">
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4 page-header">
+        <div>
+          <h3 class="mb-1"><i class="bi bi-bank me-2" style="color: #1a56db;"></i>Daftar Rekening</h3>
+          <p class="mb-0">Pilih rekening bank untuk melihat riwayat upload dan hasil analisis mutasi.</p>
+        </div>
+        <button class="btn btn-mu-primary" (click)="toggleUploadForm()">
+          <i class="bi bi-cloud-upload me-2"></i>Upload Mutasi Baru
+        </button>
+      </div>
+
+      <!-- Upload Form -->
+      @if (showUploadForm()) {
+        <div class="upload-card shadow-sm mb-4 p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0" style="color: #0f172a;"><i class="bi bi-file-earmark-arrow-up me-2" style="color: #1a56db;"></i>Upload File Mutasi</h5>
+            <button class="btn btn-sm btn-light border rounded-circle" (click)="toggleUploadForm()"><i class="bi bi-x-lg"></i></button>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label fw-medium small" style="color: #334155;">Nama Bank <span class="text-danger">*</span></label>
+              <select class="form-select" [(ngModel)]="uploadForm.bankName" style="border-radius: 10px; border-color: #e2e8f0;">
+                <option value="">Pilih Bank</option>
+                <option value="BCA">BCA</option><option value="BRI">BRI</option><option value="MANDIRI">MANDIRI</option><option value="UOB">UOB</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-medium small" style="color: #334155;">Nomor Rekening <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" placeholder="Contoh: 1234567890" [(ngModel)]="uploadForm.accountNumber" style="border-radius: 10px; border-color: #e2e8f0;">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-medium small" style="color: #334155;">Nama Pemilik <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" placeholder="Contoh: PT MAJU BERSAMA" [(ngModel)]="uploadForm.accountName" style="border-radius: 10px; border-color: #e2e8f0;">
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-medium small" style="color: #334155;">File Mutasi (PDF, JPG, PNG) <span class="text-danger">*</span></label>
+              <input type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileSelected($event)" style="border-radius: 10px; border-color: #e2e8f0;">
+            </div>
+            <div class="col-12 text-end">
+              <button class="btn btn-mu-back me-2" (click)="toggleUploadForm()">Batal</button>
+              <button class="btn btn-mu-primary" (click)="submitUpload()" [disabled]="isUploading()">
+                @if (isUploading()) {
+                  <span class="spinner-border spinner-border-sm me-2" role="status"></span>Mengunggah...
+                } @else {
+                  <i class="bi bi-upload me-2"></i>Upload & Proses
+                }
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100 bg-danger bg-opacity-10 border-start border-danger border-4">
-          <div class="card-body">
-            <small class="text-danger text-uppercase fw-bold d-block mb-1">Rata-rata Debit</small>
-            <h5 class="fw-bold text-dark mb-0">Rp 120 Jt</h5>
-          </div>
+      }
+
+      <!-- Search -->
+      <div class="mb-3">
+        <div class="mu-search" style="max-width: 380px;">
+          <i class="bi bi-search"></i>
+          <input type="text" class="form-control" placeholder="Cari no. rekening, bank, atau nama..."
+                 [ngModel]="accountSearch()"
+                 (ngModelChange)="accountSearch.set($event); onSearchChange('account')">
         </div>
       </div>
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100 bg-primary bg-opacity-10 border-start border-primary border-4">
-          <div class="card-body">
-            <small class="text-primary text-uppercase fw-bold d-block mb-1">Rata-rata Saldo (Harian)</small>
-            <h5 class="fw-bold text-dark mb-0">Rp 450 Jt</h5>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
-          <div class="card-body border-start border-secondary border-4">
-            <small class="text-muted text-uppercase fw-bold d-block mb-1">Total Credit</small>
-            <h5 class="fw-bold text-dark mb-0">Rp 450.000.000</h5>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
-          <div class="card-body border-start border-secondary border-4">
-            <small class="text-muted text-uppercase fw-bold d-block mb-1">Total Debit</small>
-            <h5 class="fw-bold text-dark mb-0">Rp 360.000.000</h5>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- 2. Summary Perbulan -->
-  <div class="mb-5 mt-5">
-    <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">
-      <i class="bi bi-calendar3 me-2"></i>2. Summary Perbulan
-    </h6>
-    <div class="card border-0 shadow-sm rounded-4">
-      <div class="card-body p-0 table-responsive">
-        <table class="table table-hover align-middle mb-0 text-nowrap">
-          <thead class="table-light">
-            <tr>
-              <th class="ps-4">Periode</th>
-              <th>Saldo Akhir</th>
-              <th class="text-success"><i class="bi bi-arrow-down-left me-1"></i>Total Credit</th>
-              <th class="text-danger"><i class="bi bi-arrow-up-right me-1"></i>Total Debit</th>
-              <th class="text-center">Freq Credit</th>
-              <th class="text-center">Freq Debit</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (item of summaryPerbulan(); track item.periode) {
-            <tr>
-              <td class="ps-4 fw-semibold">{{ item.periode }}</td>
-              <td>{{ item.saldoAkhir | currency:'IDR':'symbol':'1.0-0' }}</td>
-              <td class="text-success fw-medium">{{ item.totalCredit | currency:'IDR':'symbol':'1.0-0' }}</td>
-              <td class="text-danger fw-medium">{{ item.totalDebit | currency:'IDR':'symbol':'1.0-0' }}</td>
-              <td class="text-center"><span class="badge bg-light text-dark border">{{ item.freqCredit }}x</span></td>
-              <td class="text-center"><span class="badge bg-light text-dark border">{{ item.freqDebit }}x</span></td>
-            </tr>
-            }
-            @empty {
-            <tr>
-              <td colspan="6" class="text-center text-muted py-4">Belum ada data transaksi.</td>
-            </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <hr class="text-muted my-5">
-
-  <!-- 3 & 4. Top 10 Amount -->
-  <div class="row g-4 mb-4">
-    <!-- Top 10 Credit Amount -->
-    <div class="col-md-6">
-      <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">
-        <i class="bi bi-sort-down-alt text-success me-2"></i>3. Top 10 Credit Amount
-      </h6>
-      <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-0">
-          <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light sticky-top">
-                <tr>
-                  <th class="ps-4">Keterangan</th>
-                  <th>Nominal</th>
-                  <th>Tanggal</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="ps-4 text-truncate" style="max-width: 200px;">INV-IN-001 PT MAJU</td>
-                  <td class="text-success fw-semibold text-nowrap">Rp 45.000.000</td>
-                  <td class="text-muted small text-nowrap">01 Mar 26</td>
-                </tr>
-                <tr>
-                  <td class="ps-4 text-truncate" style="max-width: 200px;">CLIENT PROJECT A</td>
-                  <td class="text-success fw-semibold text-nowrap">Rp 30.500.000</td>
-                  <td class="text-muted small text-nowrap">15 Feb 26</td>
-                </tr>
-                <tr>
-                  <td class="ps-4 text-truncate" style="max-width: 200px;">REFUND VENDOR</td>
-                  <td class="text-success fw-semibold text-nowrap">Rp 25.000.000</td>
-                  <td class="text-muted small text-nowrap">20 Jan 26</td>
-                </tr>
-                <tr><td class="ps-4">PAYMENT C</td><td class="text-success fw-semibold">Rp 15.000.000</td><td class="text-muted small">10 Mar 26</td></tr>
-                <tr><td class="ps-4">TRF MASUK</td><td class="text-success fw-semibold">Rp 12.000.000</td><td class="text-muted small">11 Mar 26</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Top 10 Debit Amount -->
-    <div class="col-md-6">
-      <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">
-        <i class="bi bi-sort-up text-danger me-2"></i>4. Top 10 Debit Amount
-      </h6>
-      <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-0">
-          <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light sticky-top">
-                <tr>
-                  <th class="ps-4">Keterangan</th>
-                  <th>Nominal</th>
-                  <th>Tanggal</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="ps-4 text-truncate" style="max-width: 200px;">PAYROLL MARET</td>
-                  <td class="text-danger fw-semibold text-nowrap">Rp 150.000.000</td>
-                  <td class="text-muted small text-nowrap">25 Mar 26</td>
-                </tr>
-                <tr>
-                  <td class="ps-4 text-truncate" style="max-width: 200px;">BIAYA SERVER KANTOR</td>
-                  <td class="text-danger fw-semibold text-nowrap">Rp 45.000.000</td>
-                  <td class="text-muted small text-nowrap">01 Mar 26</td>
-                </tr>
-                <tr>
-                  <td class="ps-4 text-truncate" style="max-width: 200px;">PEMBELIAN INVENTARIS</td>
-                  <td class="text-danger fw-semibold text-nowrap">Rp 35.000.000</td>
-                  <td class="text-muted small text-nowrap">10 Feb 26</td>
-                </tr>
-                <tr><td class="ps-4">TAGIHAN LISTRIK</td><td class="text-danger fw-semibold">Rp 15.000.000</td><td class="text-muted small">05 Mar 26</td></tr>
-                <tr><td class="ps-4">SEWA GEDUNG</td><td class="text-danger fw-semibold">Rp 10.000.000</td><td class="text-muted small">01 Feb 26</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5 & 6. Top 10 Frequencies -->
-  <div class="row g-4 mb-4 mt-2">
-    <!-- Top 10 Credit Freq -->
-    <div class="col-md-6">
-      <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">
-        <i class="bi bi-arrow-repeat text-success me-2"></i>5. Top 10 Credit Freq
-      </h6>
-      <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-0">
-          <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light sticky-top">
-                <tr>
-                  <th class="ps-4 w-75">Keterangan</th>
-                  <th class="text-center">Frekuensi</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td class="ps-4">SETORAN TUNAI</td><td class="text-center"><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">45 x</span></td></tr>
-                <tr><td class="ps-4">TRANSFER MASUK DARI A</td><td class="text-center"><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">30 x</span></td></tr>
-                <tr><td class="ps-4">BUNGA TABUNGAN</td><td class="text-center"><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">3 x</span></td></tr>
-                <tr><td class="ps-4">REFUND ONLINE</td><td class="text-center"><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">2 x</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Top 10 Debit Freq -->
-    <div class="col-md-6">
-      <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">
-        <i class="bi bi-arrow-repeat text-danger me-2"></i>6. Top 10 Debit Freq
-      </h6>
-      <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-0">
-          <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light sticky-top">
-                <tr>
-                  <th class="ps-4 w-75">Keterangan</th>
-                  <th class="text-center">Frekuensi</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td class="ps-4">BIAYA ADMIN BANK</td><td class="text-center"><span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">120 x</span></td></tr>
-                <tr><td class="ps-4">TRANSFER KELUAR BCA</td><td class="text-center"><span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">85 x</span></td></tr>
-                <tr><td class="ps-4">PEMBELIAN VIA QRIS</td><td class="text-center"><span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">42 x</span></td></tr>
-                <tr><td class="ps-4">TARIK TUNAI ATM</td><td class="text-center"><span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">15 x</span></td></tr>
-                <tr><td class="ps-4">BIAYA MATERAI</td><td class="text-center"><span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">5 x</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <hr class="text-muted my-5">
-
-  <!-- 7 & 8. Anomali -->
-  <div class="row g-4 mb-4">
-    <!-- Anomali Credit -->
-    <div class="col-md-6">
-      <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">
-        <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>7. Anomali Credit
-      </h6>
-      <div class="card border-0 shadow-sm rounded-4 border-start border-warning border-3">
-        <div class="card-body p-0">
-          <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light sticky-top">
-                <tr>
-                  <th class="ps-4">Keterangan</th>
-                  <th>Nominal</th>
-                  <th>Tanggal</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="ps-4">TRF UNKNOWN ID</td>
-                  <td class="text-dark fw-semibold text-nowrap">Rp 5.500.000</td>
-                  <td class="text-muted small text-nowrap">08 Mar 26</td>
-                </tr>
-                <tr>
-                  <td class="ps-4"><span class="badge bg-secondary mb-1">Unclassified</span><br>KIRIMAN DARI LUAR NEGERI</td>
-                  <td class="text-dark fw-semibold text-nowrap">Rp 12.000.000</td>
-                  <td class="text-muted small text-nowrap">12 Feb 26</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Anomali Debit -->
-    <div class="col-md-6">
-      <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">
-        <i class="bi bi-x-octagon-fill text-danger me-2"></i>8. Anomali Debit
-      </h6>
-      <div class="card border-0 shadow-sm rounded-4 border-start border-danger border-3">
-        <div class="card-body p-0">
-          <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light sticky-top">
-                <tr>
-                  <th class="ps-4">Keterangan</th>
-                  <th>Nominal</th>
-                  <th>Tanggal</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="ps-4">PEND DEBET TRX SUSPICIOUS</td>
-                  <td class="text-dark fw-semibold text-nowrap">Rp 1.000.000</td>
-                  <td class="text-muted small text-nowrap">21 Mar 26</td>
-                </tr>
-                <tr>
-                  <td class="ps-4">POTONGAN AUTO DEBIT X</td>
-                  <td class="text-dark fw-semibold text-nowrap">Rp 750.000</td>
-                  <td class="text-muted small text-nowrap">15 Jan 26</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <hr class="text-muted my-5">
-
-  <!-- 9, 10, 11 (Income, Pajak, Bunga) -->
-  <div class="row g-4 mb-5">
-    <div class="col-md-4">
-      <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">9. Income</h6>
-      <div class="card bg-white border-0 shadow-sm rounded-4 h-100 border-top border-primary border-3">
-        <div class="card-body p-0">
-          <table class="table table-hover align-middle mb-0">
-             <thead class="table-light"><tr><th class="ps-3">Keterangan</th><th>Nominal</th><th>Tgl</th></tr></thead>
-             <tbody>
-               <tr><td class="ps-3 small">REVENUE FEB</td><td class="fw-bold text-primary small">Rp 450M</td><td class="small text-muted">01 Mar</td></tr>
-               <tr><td class="ps-3 small">REVENUE JAN</td><td class="fw-bold text-primary small">Rp 420M</td><td class="small text-muted">01 Feb</td></tr>
-             </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">10. Pajak</h6>
-      <div class="card bg-white border-0 shadow-sm rounded-4 h-100 border-top border-warning border-3">
-        <div class="card-body p-0">
-          <table class="table table-hover align-middle mb-0">
-             <thead class="table-light"><tr><th class="ps-3">Keterangan</th><th>Nominal</th><th>Tgl</th></tr></thead>
-             <tbody>
-               <tr><td class="ps-3 small">PAJAK PPH 21</td><td class="fw-bold text-dark small">Rp 12.5M</td><td class="small text-muted">15 Mar</td></tr>
-               <tr><td class="ps-3 small">PAJAK PPH 21</td><td class="fw-bold text-dark small">Rp 11.2M</td><td class="small text-muted">15 Feb</td></tr>
-             </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <h6 class="fw-bold text-uppercase text-secondary mb-3" style="letter-spacing: 0.5px;">11. Bunga Pinjaman</h6>
-      <div class="card bg-white border-0 shadow-sm rounded-4 h-100 border-top border-info border-3">
-        <div class="card-body p-0">
-          <table class="table table-hover align-middle mb-0">
-             <thead class="table-light"><tr><th class="ps-3">Keterangan</th><th>Nominal</th><th>Tgl</th></tr></thead>
-             <tbody>
-               <tr><td class="ps-3 small">BUNGA KREDIT</td><td class="fw-bold text-info-emphasis small">Rp 8.5M</td><td class="small text-muted">10 Mar</td></tr>
-               <tr><td class="ps-3 small">BUNGA KREDIT</td><td class="fw-bold text-info-emphasis small">Rp 8.5M</td><td class="small text-muted">10 Feb</td></tr>
-             </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <hr class="text-muted my-5">
-
-  <!-- 12. Detail Semua Transaksi -->
-  <div class="mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h6 class="fw-bold text-uppercase text-secondary mb-0" style="letter-spacing: 0.5px;">
-        <i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
-      </h6>
-      <div>
-        <a [href]="excelExportUrl" class="btn btn-success shadow-sm rounded-pill px-4 fw-medium"><i class="bi bi-file-earmark-excel me-2"></i>Export Excel</a>
-      </div>
-    </div>
-
-    <div class="card border-0 shadow-sm rounded-4">
-      <div class="card-body p-0">
-        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light sticky-top">
+      <!-- Account Table -->
+      <div class="mu-card">
+        <div class="table-responsive">
+          <table class="table mu-table">
+            <thead>
               <tr>
-                <th class="ps-4">Tanggal</th>
-                <th>Keterangan</th>
-                <th class="text-center">Flag</th>
-                <th class="text-end pe-4">Jumlah</th>
+                <th style="padding-left: 1.5rem;">No. Rekening</th>
+                <th>Bank</th>
+                <th>Nama Pemilik</th>
+                <th class="text-center">Jumlah Upload</th>
+                <th class="text-center" style="padding-right: 1.5rem;">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              @for (tx of detailTransaksi(); track tx.tanggal + tx.keterangan + tx.jumlah) {
-              <tr>
-                <td class="ps-4 text-muted small">{{ tx.tanggal | date:'dd MMM yyyy' }}</td>
-                <td class="fw-medium">{{ tx.keterangan }}</td>
-                <td class="text-center">
-                  @if (tx.flag === 'CR') {
-                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1"><i class="bi bi-plus-circle me-1"></i>CR</span>
-                  } @else if (tx.flag === 'DB') {
-                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1"><i class="bi bi-dash-circle me-1"></i>DB</span>
-                  } @else {
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1">{{ tx.flag }}</span>
-                  }
-                </td>
-                <td class="text-end pe-4 fw-semibold" [ngClass]="{'text-success': tx.flag === 'CR', 'text-danger': tx.flag === 'DB'}">
-                  {{ tx.flag === 'DB' ? '- ' : '+ ' }}
-                  {{ tx.jumlah | currency:'IDR':'symbol':'1.0-0' }}
-                </td>
-              </tr>
-              }
-              @empty {
-              <tr>
-                <td colspan="4" class="text-center text-muted py-4">Belum ada data detail transaksi.</td>
-              </tr>
+              @for (account of pagedAccounts(); track account.id) {
+                <tr>
+                  <td style="padding-left: 1.5rem;" class="fw-bold font-mono">{{ account.accountNumber }}</td>
+                  <td><span [ngClass]="getBankBadgeClass(account.bankName)">{{ account.bankName }}</span></td>
+                  <td class="fw-medium">{{ account.accountName }}</td>
+                  <td class="text-center">
+                    <span style="background:#f1f5f9; color:#334155; padding: 0.3rem 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500;">
+                      <i class="bi bi-file-earmark-text me-1"></i>{{ account.documentCount }} dokumen
+                    </span>
+                  </td>
+                  <td class="text-center" style="padding-right: 1.5rem;">
+                    <button (click)="viewDocuments(account)" class="btn btn-mu-outline btn-sm">
+                      <i class="bi bi-folder2-open me-1"></i> Lihat Dokumen
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5" class="text-center py-5" style="color: #94a3b8;">
+                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                    @if (accountSearch()) {
+                      Tidak ada rekening yang cocok dengan pencarian "<strong>{{ accountSearch() }}</strong>"
+                    } @else {
+                      Belum ada rekening terdaftar. Upload file mutasi untuk memulai.
+                    }
+                  </td>
+                </tr>
               }
             </tbody>
           </table>
         </div>
+        <!-- Pagination -->
+        @if (accountTotalPages() > 1) {
+          <div class="mu-pagination">
+            <button class="page-btn" [disabled]="accountPage() === 1" (click)="goToPage('account', accountPage() - 1)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            @for (p of getPageNumbers(accountTotalPages()); track p) {
+              <button class="page-btn" [class.active]="accountPage() === p" (click)="goToPage('account', p)">{{ p }}</button>
+            }
+            <button class="page-btn" [disabled]="accountPage() === accountTotalPages()" (click)="goToPage('account', accountPage() + 1)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+            <span class="page-info">{{ filteredAccounts().length }} rekening</span>
+          </div>
+        }
       </div>
     </div>
-  </div>
+  }
 
+  <!-- ============================================== -->
+  <!-- LEVEL 2: DAFTAR MUTATION DOCUMENT               -->
+  <!-- ============================================== -->
+  @if (currentView() === 'documents') {
+    <div class="fade-in compact-view">
+      <button class="btn btn-mu-back mb-2" (click)="backToAccounts()">
+        <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar Rekening
+      </button>
+
+      <!-- Account Context -->
+      <div class="mu-context-card shadow-sm mb-2">
+        <div class="row align-items-center">
+          <div class="col-md-auto pe-md-4 border-end-md">
+            <p class="mb-1 small" style="color: #64748b;">Bank</p>
+            <span [ngClass]="getBankBadgeClass(selectedAccount()!.bankName)">{{ selectedAccount()!.bankName }}</span>
+          </div>
+          <div class="col-md pt-3 pt-md-0 ps-md-4">
+            <p class="mb-1 small" style="color: #64748b;">Detail Rekening</p>
+            <div class="d-flex align-items-center">
+              <h5 class="fw-bold mb-0 me-3 font-mono" style="color: #0f172a;">{{ selectedAccount()!.accountNumber }}</h5>
+              <span style="color: #334155;"><i class="bi bi-person-circle me-1" style="color: #94a3b8;"></i>{{ selectedAccount()!.accountName }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="fw-bold mb-0" style="color: #0f172a;"><i class="bi bi-file-earmark-text me-2" style="color: #1a56db;"></i>Riwayat Upload Dokumen</h6>
+        <div class="mu-search" style="width: 280px;">
+          <i class="bi bi-search"></i>
+          <input type="text" class="form-control" placeholder="Cari file..."
+                 [ngModel]="docSearch()"
+                 (ngModelChange)="docSearch.set($event); onSearchChange('doc')">
+        </div>
+      </div>
+
+      <div class="mu-card">
+        <div class="table-responsive">
+          <table class="table mu-table">
+            <thead>
+              <tr>
+                <th style="padding-left: 1.5rem;">Nama File</th>
+                <th>Tipe</th>
+                <th>Tanggal Upload</th>
+                <th>Periode Mutasi</th>
+                <th class="text-center">Status</th>
+                <th class="text-center" style="padding-right: 1.5rem;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (doc of pagedDocuments(); track doc.id) {
+                <tr>
+                  <td style="padding-left: 1.5rem;">
+                    <div class="d-flex align-items-center">
+                      @if (doc.fileType === 'PDF_DIGITAL') {
+                        <i class="bi bi-file-earmark-pdf-fill text-danger me-2 fs-5"></i>
+                      } @else {
+                        <i class="bi bi-file-earmark-image-fill me-2 fs-5" style="color: #0891b2;"></i>
+                      }
+                      <span class="fw-semibold" style="color: #0f172a;">{{ doc.fileName }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span style="background: #f1f5f9; color: #475569; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 500;">
+                      {{ doc.fileType === 'PDF_DIGITAL' ? 'PDF Digital' : 'Image/Scan' }}
+                    </span>
+                  </td>
+                  <td class="small" style="color: #64748b;">{{ formatDate(doc.createdAt) }}</td>
+                  <td class="small">{{ formatPeriod(doc.periodStart, doc.periodEnd) }}</td>
+                  <td class="text-center">
+                    <span [ngClass]="getStatusBadgeClass(doc.status)">
+                      <i class="bi" [ngClass]="getStatusIcon(doc.status)"></i>{{ getStatusLabel(doc.status) }}
+                    </span>
+                    @if (doc.status === 'FAILED' && doc.errorMessage) {
+                      <div class="mt-1"><small class="text-danger fst-italic" style="font-size: 0.7rem;">{{ doc.errorMessage }}</small></div>
+                    }
+                  </td>
+                  <td class="text-center" style="padding-right: 1.5rem;">
+                    @if (doc.status === 'SUCCESS') {
+                      <button (click)="viewAnalytics(doc)" class="btn btn-mu-outline btn-sm">
+                        <i class="bi bi-eye me-1"></i> Lihat Rincian
+                      </button>
+                    } @else if (doc.status === 'PARSING') {
+                      <span class="small" style="color: #94a3b8;"><i class="bi bi-hourglass-split me-1"></i>Menunggu...</span>
+                    } @else {
+                      <span style="color: #cbd5e1;">—</span>
+                    }
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="text-center py-5" style="color: #94a3b8;">
+                    <i class="bi bi-file-earmark-x fs-1 d-block mb-2"></i>Belum ada dokumen untuk rekening ini.
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        @if (docTotalPages() > 1) {
+          <div class="mu-pagination">
+            <button class="page-btn" [disabled]="docPage() === 1" (click)="goToPage('doc', docPage() - 1)"><i class="bi bi-chevron-left"></i></button>
+            @for (p of getPageNumbers(docTotalPages()); track p) {
+              <button class="page-btn" [class.active]="docPage() === p" (click)="goToPage('doc', p)">{{ p }}</button>
+            }
+            <button class="page-btn" [disabled]="docPage() === docTotalPages()" (click)="goToPage('doc', docPage() + 1)"><i class="bi bi-chevron-right"></i></button>
+            <span class="page-info">{{ filteredDocuments().length }} dokumen</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ============================================== -->
+  <!-- LEVEL 3: DASHBOARD ANALYTICS                    -->
+  <!-- ============================================== -->
+  @if (currentView() === 'analytics') {
+    <div class="fade-in compact-view">
+      <button class="btn btn-mu-back mb-2" (click)="backToDocuments()">
+        <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar Dokumen
+      </button>
+
+      <div class="page-header mb-2">
+        <h3 class="mb-1"><i class="bi bi-speedometer2 me-2" style="color: #1a56db;"></i>Dashboard Analytics</h3>
+        <p class="mb-0">Rangkuman 11 Indikator & Metrik dari file <strong style="color: #0f172a;">{{ selectedDocument()!.fileName }}</strong></p>
+      </div>
+
+      <!-- Context Header -->
+      <div class="mu-context-card shadow-sm mb-3">
+        <div class="row align-items-center">
+          <div class="col-md-auto pe-md-4 border-end-md">
+            <p class="mb-1 small" style="color: #64748b;">Bank</p>
+            <span [ngClass]="getBankBadgeClass(selectedAccount()!.bankName)">{{ selectedAccount()!.bankName }}</span>
+          </div>
+          <div class="col-md-auto pt-3 pt-md-0 ps-md-4 pe-md-4 border-end-md">
+            <p class="mb-1 small" style="color: #64748b;">Rekening</p>
+            <h6 class="fw-bold mb-0 font-mono" style="color: #0f172a;">{{ selectedAccount()!.accountNumber }}</h6>
+          </div>
+          <div class="col-md-auto pt-3 pt-md-0 ps-md-4 pe-md-4 border-end-md">
+            <p class="mb-1 small" style="color: #64748b;">Pemilik</p>
+            <span style="color: #334155;"><i class="bi bi-person-circle me-1" style="color: #94a3b8;"></i>{{ selectedAccount()!.accountName }}</span>
+          </div>
+          <div class="col-md pt-3 pt-md-0 ps-md-4">
+            <p class="mb-1 small" style="color: #64748b;">Periode</p>
+            <span class="fw-medium" style="color: #1e293b;">{{ formatPeriod(selectedDocument()!.periodStart, selectedDocument()!.periodEnd) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. Ringkasan Saldo -->
+      <div class="mb-3">
+        <div class="section-title"><i class="bi bi-wallet2 me-2"></i>1. Ringkasan Saldo & Arus Kas (3 Bulan)</div>
+        <div class="row row-cols-1 row-cols-md-5 g-2">
+          <div class="col"><div class="summary-card"><div class="accent-bar accent-green"></div><div class="card-content"><div class="card-label label-green">Rata-rata Credit</div><div class="card-value">Rp 166.7 Jt</div></div></div></div>
+          <div class="col"><div class="summary-card"><div class="accent-bar accent-red"></div><div class="card-content"><div class="card-label label-red">Rata-rata Debit</div><div class="card-value">Rp 138.3 Jt</div></div></div></div>
+          <div class="col"><div class="summary-card"><div class="accent-bar accent-blue"></div><div class="card-content"><div class="card-label label-blue">Rata-rata Saldo (Harian)</div><div class="card-value">Rp 450 Jt</div></div></div></div>
+          <div class="col"><div class="summary-card"><div class="accent-bar accent-gray"></div><div class="card-content"><div class="card-label label-gray">Total Credit</div><div class="card-value">Rp 500.000.000</div></div></div></div>
+          <div class="col"><div class="summary-card"><div class="accent-bar accent-gray"></div><div class="card-content"><div class="card-label label-gray">Total Debit</div><div class="card-value">Rp 415.000.000</div></div></div></div>
+        </div>
+      </div>
+
+      <!-- 2. Summary Perbulan -->
+      <div class="mb-3 mt-3">
+        <div class="section-title"><i class="bi bi-calendar3 me-2"></i>2. Summary Perbulan</div>
+        <div class="mu-card">
+          <div class="table-responsive">
+            <table class="table mu-table text-nowrap">
+              <thead>
+                <tr>
+                  <th style="padding-left: 1.5rem;">Periode</th>
+                  <th>Saldo Akhir</th>
+                  <th style="color: #059669;"><i class="bi bi-arrow-down-left me-1"></i>Total Credit</th>
+                  <th style="color: #dc2626;"><i class="bi bi-arrow-up-right me-1"></i>Total Debit</th>
+                  <th class="text-center">Freq Credit</th>
+                  <th class="text-center">Freq Debit</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of summaryPerbulan(); track item.periode) {
+                <tr>
+                  <td style="padding-left: 1.5rem;" class="fw-semibold">{{ item.periode }}</td>
+                  <td>{{ formatCurrency(item.saldoAkhir) }}</td>
+                  <td style="color: #059669;" class="fw-medium">{{ formatCurrency(item.totalCredit) }}</td>
+                  <td style="color: #dc2626;" class="fw-medium">{{ formatCurrency(item.totalDebit) }}</td>
+                  <td class="text-center"><span style="background:#f1f5f9; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.8rem;">{{ item.freqCredit }}x</span></td>
+                  <td class="text-center"><span style="background:#f1f5f9; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.8rem;">{{ item.freqDebit }}x</span></td>
+                </tr>
+                } @empty {
+                <tr><td colspan="6" class="text-center py-4" style="color: #94a3b8;">Belum ada data.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <hr class="mu-divider">
+
+      <!-- 3 & 4. Top 10 Amount -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <div class="section-title"><i class="bi bi-sort-down-alt me-2" style="color: #059669 !important;"></i>3. Top 10 Credit Amount</div>
+          <div class="mu-card">
+            <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;">Keterangan</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+                <tbody>
+                  <tr><td style="padding-left: 1.5rem;" class="text-truncate" style="max-width: 200px;">TRSF CR PT MAJU BERSAMA</td><td class="fw-semibold text-nowrap" style="color: #059669;">Rp 45.000.000</td><td class="small" style="color: #94a3b8;">28 Mar 26</td></tr>
+                  <tr><td style="padding-left: 1.5rem;">CLIENT PROJECT A</td><td class="fw-semibold" style="color: #059669;">Rp 30.500.000</td><td class="small" style="color: #94a3b8;">24 Mar 26</td></tr>
+                  <tr><td style="padding-left: 1.5rem;">REFUND VENDOR</td><td class="fw-semibold" style="color: #059669;">Rp 25.000.000</td><td class="small" style="color: #94a3b8;">20 Mar 26</td></tr>
+                  <tr><td style="padding-left: 1.5rem;">EDC SETTLEMENT</td><td class="fw-semibold" style="color: #059669;">Rp 12.500.000</td><td class="small" style="color: #94a3b8;">27 Mar 26</td></tr>
+                  <tr><td style="padding-left: 1.5rem;">TRF MASUK LAIN</td><td class="fw-semibold" style="color: #059669;">Rp 8.000.000</td><td class="small" style="color: #94a3b8;">15 Feb 26</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="section-title"><i class="bi bi-sort-up me-2" style="color: #dc2626 !important;"></i>4. Top 10 Debit Amount</div>
+          <div class="mu-card">
+            <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;">Keterangan</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+                <tbody>
+                  <tr><td style="padding-left: 1.5rem;">PAYROLL MARET 2026</td><td class="fw-semibold text-nowrap" style="color: #dc2626;">Rp 150.000.000</td><td class="small" style="color: #94a3b8;">22 Mar 26</td></tr>
+                  <tr><td style="padding-left: 1.5rem;">PEMBAYARAN VENDOR</td><td class="fw-semibold" style="color: #dc2626;">Rp 35.000.000</td><td class="small" style="color: #94a3b8;">26 Mar 26</td></tr>
+                  <tr><td style="padding-left: 1.5rem;">SEWA GEDUNG KANTOR</td><td class="fw-semibold" style="color: #dc2626;">Rp 15.000.000</td><td class="small" style="color: #94a3b8;">10 Mar 26</td></tr>
+                  <tr><td style="padding-left: 1.5rem;">PAJAK PPH 21</td><td class="fw-semibold" style="color: #dc2626;">Rp 12.500.000</td><td class="small" style="color: #94a3b8;">25 Mar 26</td></tr>
+                  <tr><td style="padding-left: 1.5rem;">BUNGA KREDIT</td><td class="fw-semibold" style="color: #dc2626;">Rp 8.500.000</td><td class="small" style="color: #94a3b8;">15 Mar 26</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 & 6. Top 10 Freq -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <div class="section-title"><i class="bi bi-arrow-repeat me-2" style="color: #059669 !important;"></i>5. Top 10 Credit Freq</div>
+          <div class="mu-card">
+            <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;" class="w-75">Keterangan</th><th class="text-center">Frekuensi</th></tr></thead>
+                <tbody>
+                  <tr><td style="padding-left: 1.5rem;">SETORAN TUNAI</td><td class="text-center"><span class="freq-badge-cr">45 x</span></td></tr>
+                  <tr><td style="padding-left: 1.5rem;">TRANSFER MASUK DARI A</td><td class="text-center"><span class="freq-badge-cr">30 x</span></td></tr>
+                  <tr><td style="padding-left: 1.5rem;">BUNGA TABUNGAN</td><td class="text-center"><span class="freq-badge-cr">3 x</span></td></tr>
+                  <tr><td style="padding-left: 1.5rem;">REFUND ONLINE</td><td class="text-center"><span class="freq-badge-cr">2 x</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="section-title"><i class="bi bi-arrow-repeat me-2" style="color: #dc2626 !important;"></i>6. Top 10 Debit Freq</div>
+          <div class="mu-card">
+            <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;" class="w-75">Keterangan</th><th class="text-center">Frekuensi</th></tr></thead>
+                <tbody>
+                  <tr><td style="padding-left: 1.5rem;">BIAYA ADMIN BANK</td><td class="text-center"><span class="freq-badge-db">120 x</span></td></tr>
+                  <tr><td style="padding-left: 1.5rem;">TRANSFER KELUAR BCA</td><td class="text-center"><span class="freq-badge-db">85 x</span></td></tr>
+                  <tr><td style="padding-left: 1.5rem;">PEMBELIAN VIA QRIS</td><td class="text-center"><span class="freq-badge-db">42 x</span></td></tr>
+                  <tr><td style="padding-left: 1.5rem;">TARIK TUNAI ATM</td><td class="text-center"><span class="freq-badge-db">15 x</span></td></tr>
+                  <tr><td style="padding-left: 1.5rem;">BIAYA MATERAI</td><td class="text-center"><span class="freq-badge-db">5 x</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="mu-divider">
+
+      <!-- 7 & 8. Anomali -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <div class="section-title"><i class="bi bi-exclamation-triangle-fill me-2" style="color: #d97706 !important;"></i>7. Anomali Credit</div>
+          <div class="anomali-card">
+            <div class="anomali-accent"></div>
+            <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;">Keterangan</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+                <tbody>
+                  <tr><td style="padding-left: 1.5rem;">TRF UNKNOWN ID</td><td class="fw-semibold text-nowrap" style="color: #0f172a;">Rp 5.500.000</td><td class="small" style="color: #94a3b8;">08 Mar 26</td></tr>
+                  <tr><td style="padding-left: 1.5rem;"><span class="badge-secondary" style="font-size: 0.65rem;">Unclassified</span><br>KIRIMAN DARI LUAR NEGERI</td><td class="fw-semibold text-nowrap" style="color: #0f172a;">Rp 12.000.000</td><td class="small" style="color: #94a3b8;">12 Feb 26</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="section-title"><i class="bi bi-x-octagon-fill me-2" style="color: #dc2626 !important;"></i>8. Anomali Debit</div>
+          <div class="anomali-card">
+            <div class="anomali-accent"></div>
+            <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+              <table class="table mu-table"><thead><tr><th style="padding-left: 1.5rem;">Keterangan</th><th>Nominal</th><th>Tanggal</th></tr></thead>
+                <tbody>
+                  <tr><td style="padding-left: 1.5rem;">PEND DEBET TRX SUSPICIOUS</td><td class="fw-semibold text-nowrap" style="color: #0f172a;">Rp 1.000.000</td><td class="small" style="color: #94a3b8;">21 Mar 26</td></tr>
+                  <tr><td style="padding-left: 1.5rem;">POTONGAN AUTO DEBIT X</td><td class="fw-semibold text-nowrap" style="color: #0f172a;">Rp 750.000</td><td class="small" style="color: #94a3b8;">15 Jan 26</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="mu-divider">
+
+      <!-- 9, 10, 11 (Income, Pajak, Bunga) -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <div class="section-title">9. Income</div>
+          <div class="category-card h-100"><div class="cat-accent cat-accent-green"></div>
+            <table class="table mu-table"><thead><tr><th style="padding-left: 1rem;">Keterangan</th><th>Nominal</th><th>Tgl</th></tr></thead>
+              <tbody>
+                <tr><td style="padding-left: 1rem;" class="small">REVENUE MAR</td><td class="fw-bold small" style="color: #1a56db;">Rp 180M</td><td class="small" style="color: #94a3b8;">01 Mar</td></tr>
+                <tr><td style="padding-left: 1rem;" class="small">REVENUE FEB</td><td class="fw-bold small" style="color: #1a56db;">Rp 165M</td><td class="small" style="color: #94a3b8;">01 Feb</td></tr>
+                <tr><td style="padding-left: 1rem;" class="small">REVENUE JAN</td><td class="fw-bold small" style="color: #1a56db;">Rp 155M</td><td class="small" style="color: #94a3b8;">01 Jan</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="section-title">10. Pajak</div>
+          <div class="category-card h-100"><div class="cat-accent cat-accent-orange"></div>
+            <table class="table mu-table"><thead><tr><th style="padding-left: 1rem;">Keterangan</th><th>Nominal</th><th>Tgl</th></tr></thead>
+              <tbody>
+                <tr><td style="padding-left: 1rem;" class="small">PAJAK PPH 21</td><td class="fw-bold small" style="color: #0f172a;">Rp 12.5M</td><td class="small" style="color: #94a3b8;">25 Mar</td></tr>
+                <tr><td style="padding-left: 1rem;" class="small">PAJAK PPH 21</td><td class="fw-bold small" style="color: #0f172a;">Rp 11.2M</td><td class="small" style="color: #94a3b8;">15 Feb</td></tr>
+                <tr><td style="padding-left: 1rem;" class="small">PAJAK PPH 21</td><td class="fw-bold small" style="color: #0f172a;">Rp 10.8M</td><td class="small" style="color: #94a3b8;">15 Jan</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="section-title">11. Bunga Pinjaman</div>
+          <div class="category-card h-100"><div class="cat-accent cat-accent-cyan"></div>
+            <table class="table mu-table"><thead><tr><th style="padding-left: 1rem;">Keterangan</th><th>Nominal</th><th>Tgl</th></tr></thead>
+              <tbody>
+                <tr><td style="padding-left: 1rem;" class="small">BUNGA KREDIT</td><td class="fw-bold small" style="color: #0891b2;">Rp 8.5M</td><td class="small" style="color: #94a3b8;">15 Mar</td></tr>
+                <tr><td style="padding-left: 1rem;" class="small">BUNGA KREDIT</td><td class="fw-bold small" style="color: #0891b2;">Rp 8.5M</td><td class="small" style="color: #94a3b8;">15 Feb</td></tr>
+                <tr><td style="padding-left: 1rem;" class="small">BUNGA KREDIT</td><td class="fw-bold small" style="color: #0891b2;">Rp 8.5M</td><td class="small" style="color: #94a3b8;">15 Jan</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <hr class="mu-divider">
+
+      <!-- 12. Detail Semua Transaksi -->
+      <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi</div>
+          <div class="d-flex align-items-center gap-3">
+            <div class="mu-search" style="width: 280px;">
+              <i class="bi bi-search"></i>
+              <input type="text" class="form-control" placeholder="Cari transaksi..."
+                     [ngModel]="txSearch()"
+                     (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
+            </div>
+            <button class="btn btn-mu-success"><i class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
+          </div>
+        </div>
+
+        <div class="mu-card">
+          <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+            <table class="table mu-table">
+              <thead class="sticky-top">
+                <tr>
+                  <th style="padding-left: 1.5rem;">Tanggal</th>
+                  <th>Keterangan</th>
+                  <th class="text-center">Flag</th>
+                  <th class="text-end" style="padding-right: 1.5rem;">Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (tx of pagedTransaksi(); track tx.tanggal + tx.keterangan + tx.jumlah) {
+                <tr>
+                  <td style="padding-left: 1.5rem; color: #64748b;" class="small">{{ tx.tanggal }}</td>
+                  <td class="fw-medium" style="color: #1e293b;">{{ tx.keterangan }}</td>
+                  <td class="text-center">
+                    @if (tx.flag === 'CR') {
+                      <span class="flag-cr"><i class="bi bi-plus-circle me-1"></i>CR</span>
+                    } @else {
+                      <span class="flag-db"><i class="bi bi-dash-circle me-1"></i>DB</span>
+                    }
+                  </td>
+                  <td class="text-end fw-semibold" style="padding-right: 1.5rem;" [style.color]="tx.flag === 'CR' ? '#059669' : '#dc2626'">
+                    {{ tx.flag === 'DB' ? '- ' : '+ ' }}{{ formatCurrency(tx.jumlah) }}
+                  </td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="4" class="text-center py-4" style="color: #94a3b8;">
+                    @if (txSearch()) {
+                      Tidak ada transaksi yang cocok dengan "<strong>{{ txSearch() }}</strong>"
+                    } @else {
+                      Belum ada data detail transaksi.
+                    }
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          @if (txTotalPages() > 1) {
+            <div class="mu-pagination">
+              <button class="page-btn" [disabled]="txPage() === 1" (click)="goToPage('tx', txPage() - 1)"><i class="bi bi-chevron-left"></i></button>
+              @for (p of getPageNumbers(txTotalPages()); track p) {
+                <button class="page-btn" [class.active]="txPage() === p" (click)="goToPage('tx', p)">{{ p }}</button>
+              }
+              <button class="page-btn" [disabled]="txPage() === txTotalPages()" (click)="goToPage('tx', txPage() + 1)"><i class="bi bi-chevron-right"></i></button>
+              <span class="page-info">{{ filteredTransaksi().length }} transaksi</span>
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+  }
+
+  </div>
 </div>

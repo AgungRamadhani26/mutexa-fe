@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { SummaryPerbulan, DetailTransaksi } from '../models/dashboard.model';
@@ -8,19 +8,21 @@ import { SummaryPerbulan, DetailTransaksi } from '../models/dashboard.model';
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = 'http://localhost:9091/api/dashboard';
+  private apiUrl = '/api/dashboard';
 
   constructor(private http: HttpClient) {}
 
-  getSummaryPerbulan(): Observable<ApiResponse<SummaryPerbulan[]>> {
-    return this.http.get<ApiResponse<SummaryPerbulan[]>>(`${this.apiUrl}/summary-perbulan`);
+  getSummaryPerbulan(documentId: number): Observable<ApiResponse<SummaryPerbulan[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<SummaryPerbulan[]>>(`${this.apiUrl}/summary-perbulan`, { params });
   }
 
-  getDetailSemuaTransaksi(): Observable<ApiResponse<DetailTransaksi[]>> {
-    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/detail-transaksi`);
+  getDetailSemuaTransaksi(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/detail-transaksi`, { params });
   }
 
-  exportExcelUrl(): string {
-    return `${this.apiUrl}/export-excel`;
+  exportExcelUrl(documentId: number): string {
+    return `${this.apiUrl}/export-excel?documentId=${documentId}`;
   }
 }
