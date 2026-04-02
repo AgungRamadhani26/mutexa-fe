@@ -1,0 +1,36 @@
+﻿
+> mutexa-fe@0.0.0 build
+> ng build
+
+[33mΓ¥»[39m Building...
+[32mΓ£ö[39m Building...
+[35mBrowser bundles[39m     
+[1mInitial chunk files[22m [2m | [22m[1mNames[22m           [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mstyles-4IBG6XET.css[39m [2m | [22m[2mstyles[22m          [2m | [22m[36m315.62 kB[39m[2m | [22m               [36m32.99 kB[39m
+[32mchunk-5PSTMAS2.js[39m   [2m | [22m[2m-[22m               [2m | [22m[36m199.23 kB[39m[2m | [22m               [36m58.43 kB[39m
+[32mmain-OEIN543F.js[39m    [2m | [22m[2mmain[22m            [2m | [22m [36m88.33 kB[39m[2m | [22m               [36m22.74 kB[39m
+[32mscripts-TTWY4XDY.js[39m [2m | [22m[2mscripts[22m         [2m | [22m [36m80.45 kB[39m[2m | [22m               [36m21.60 kB[39m
+
+[1m [22m                   [2m | [22m[1mInitial total[22m   [2m | [22m[1m683.63 kB[22m[2m | [22m              [1m135.77 kB[22m
+
+[1mLazy chunk files[22m    [2m | [22m[1mNames[22m           [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mchunk-BHCOFUZV.js[39m   [2m | [22m[2mdashboard[22m       [2m | [22m [36m78.91 kB[39m[2m | [22m               [36m16.25 kB[39m
+
+
+[35mServer bundles[39m      
+[1mInitial chunk files[22m [2m | [22m[1mNames[22m           [2m | [22m [1mRaw size[22m
+[32mserver.mjs[39m          [2m | [22m[2mserver[22m          [2m | [22m[36m810.37 kB[39m[2m | [22m                       
+[32mmain.server.mjs[39m     [2m | [22m[2mmain.server[22m     [2m | [22m[36m526.77 kB[39m[2m | [22m                       
+[32mpolyfills.server.mjs[39m[2m | [22m[2mpolyfills.server[22m[2m | [22m[36m233.25 kB[39m[2m | [22m                       
+[32mchunk-6NGMJAFO.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m[36m198.60 kB[39m[2m | [22m                       
+[32mchunk-L2MVFUKD.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m  [36m1.32 kB[39m[2m | [22m                       
+[32mchunk-T55IDOPT.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m[36m976 bytes[39m[2m | [22m                       
+
+[1mLazy chunk files[22m    [2m | [22m[1mNames[22m           [2m | [22m [1mRaw size[22m
+[32mchunk-MJCACYOS.mjs[39m  [2m | [22m[2mdashboard[22m       [2m | [22m [36m78.98 kB[39m[2m | [22m                       
+[32mchunk-RHDGF2TI.mjs[39m  [2m | [22m[2mxhr2[22m            [2m | [22m [36m12.14 kB[39m[2m | [22m                       
+[32mchunk-N3SI5I4Q.mjs[39m  [2m | [22m[2mxhr2[22m            [2m | [22m [36m12.07 kB[39m[2m | [22m                       
+
+[35mPrerendered 1 static route.[39m
+Application bundle generation failed. [39.106 seconds] - 2026-04-02T07:23:15.226Z
+

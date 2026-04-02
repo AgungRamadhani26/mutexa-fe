@@ -52,4 +52,9 @@ export class DashboardService {
   exportExcelUrl(documentId: number): string {
     return `${this.apiUrl}/export-excel?documentId=${documentId}`;
   }
+
+  // Toggle status pengecualian transaksi
+  toggleExclude(transactionId: number): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/toggle-exclude/${transactionId}`, {});
+  }
 }

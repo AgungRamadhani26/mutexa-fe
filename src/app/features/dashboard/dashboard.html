@@ -690,6 +690,7 @@
       <div class="mb-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
+            (Bisa Exclude)
           </div>
           <div class="d-flex align-items-center gap-3">
             <div class="mu-search search-form-md">
@@ -707,6 +708,7 @@
             <table class="table mu-table">
               <thead class="sticky-top">
                 <tr>
+                  <th class="text-center" style="width: 50px;" title="Kecualikan dari Export Excel">Excld</th>
                   <th>Tanggal</th>
                   <th>Keterangan</th>
                   <th class="text-center">Flag</th>
@@ -714,24 +716,34 @@
                 </tr>
               </thead>
               <tbody>
-                @for (tx of pagedTransaksi(); track tx.tanggal + tx.keterangan + tx.jumlah) {
-                <tr>
+                @for (tx of pagedTransaksi(); track tx.id || tx.tanggal + tx.keterangan + tx.jumlah) {
+                <tr [class.text-decoration-line-through]="!!tx.isExcluded" [class.text-muted]="!!tx.isExcluded"
+                  [class.bg-light]="!!tx.isExcluded">
+                  <td class="text-center">
+                    <div class="form-check d-flex justify-content-center m-0">
+                      <input class="form-check-input flex-shrink-0" type="checkbox" [checked]="!!tx.isExcluded"
+                        (change)="toggleExclude(tx)">
+                    </div>
+                  </td>
                   <td class="small">{{ tx.tanggal }}</td>
-                  <td class="fw-medium text-mu-darker">{{ tx.keterangan }}</td>
+                  <td class="fw-medium" [class.text-mu-darker]="!tx.isExcluded">{{ tx.keterangan }}</td>
                   <td class="text-center">
                     @if (tx.flag === 'CR') {
-                    <span class="flag-cr"><i class="bi bi-plus-circle me-1"></i>CR</span>
+                    <span class="flag-cr" [class.text-muted]="!!tx.isExcluded"><i
+                        class="bi bi-plus-circle me-1"></i>CR</span>
                     } @else {
-                    <span class="flag-db"><i class="bi bi-dash-circle me-1"></i>DB</span>
+                    <span class="flag-db" [class.text-muted]="!!tx.isExcluded"><i
+                        class="bi bi-dash-circle me-1"></i>DB</span>
                     }
                   </td>
-                  <td class="text-end fw-semibold" [ngClass]="tx.flag === 'CR' ? 'text-mu-green' : 'text-mu-red'">
+                  <td class="text-end fw-semibold"
+                    [ngClass]="tx.isExcluded ? 'text-muted' : (tx.flag === 'CR' ? 'text-mu-green' : 'text-mu-red')">
                     {{ tx.flag === 'DB' ? '- ' : '+ ' }}{{ formatCurrency(tx.jumlah) }}
                   </td>
                 </tr>
                 } @empty {
                 <tr>
-                  <td colspan="4" class="text-center py-4 text-mu-slate-lighter">
+                  <td colspan="5" class="text-center py-4 text-mu-slate-lighter">
                     @if (txSearch()) {
                     Tidak ada transaksi yang cocok dengan "<strong>{{ txSearch() }}</strong>"
                     } @else {

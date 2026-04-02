@@ -35,10 +35,12 @@ interface SummaryPerbulan {
 }
 
 interface DetailTransaksi {
+  id?: number;
   tanggal: string;
   keterangan: string;
   flag: string;
   jumlah: number;
+  isExcluded?: boolean;
 }
 
 @Component({
@@ -274,9 +276,34 @@ export class Dashboard implements OnInit {
   exportExcel() {
     const doc = this.selectedDocument();
     if (doc) {
+      // Periksa apakah ada transaksi yang di-exclude
+      const excludedCount = this.detailTransaksi().filter(t => t.isExcluded).length;
+      if (excludedCount > 0) {
+        if (!confirm(`Anda telah mengecualikan (exclude) ${excludedCount} transaksi.\n\nTransaksi-transaksi ini TIDAK akan disertakan di dalam file ekspor Excel.\n\nLanjutkan mengunduh?`)) {
+          return; // Batal download
+        }
+      }
+
       // Buka URL langsung melalui browser agar header Content-Disposition ter-trigger sebagai File Download
       window.location.href = this.dashboardService.exportExcelUrl(doc.id);
     }
+  }
+
+  // Mengubah status exclude transaksi secara langsung (Optimistic UI)
+  toggleExclude(tx: DetailTransaksi) {
+    if (!tx.id) return;
+    const oldStatus = tx.isExcluded;
+    tx.isExcluded = !tx.isExcluded; // UI update seketika
+
+    this.dashboardService.toggleExclude(tx.id).subscribe({
+      next: (res) => {
+        if (!res.success) tx.isExcluded = oldStatus; // Revert jika gagal
+      },
+      error: (err) => {
+        console.error("Gagal toggle exclude", err);
+        tx.isExcluded = oldStatus; // Revert jika gagal
+      }
+    });
   }
 
   // Fungsi tombol "Kembali" dari Level 2 ke Level 1

@@ -101,6 +101,8 @@
 /* ---- Tables ---- */
 .mu-table {
   margin-bottom: 0;
+  border-collapse: separate; /* Default for Bootstrap, helpful for tr position:relative */
+  border-spacing: 0;
 }
 
 /* Padding standar untuk semua tabel (agar tabel kecil tidak berantakan) */
