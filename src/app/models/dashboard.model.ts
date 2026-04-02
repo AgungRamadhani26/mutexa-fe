@@ -13,3 +13,8 @@ export interface DetailTransaksi {
   flag: string;
   jumlah: number;
 }
+
+export interface TopFreq {
+  keterangan: string;
+  frekuensi: number;
+}

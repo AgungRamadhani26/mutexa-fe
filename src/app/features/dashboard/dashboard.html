@@ -405,18 +405,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                                                      @for (cr of top10Credit(); track cr.keterangan + cr.tanggal + cr.jumlah) {
-                    <tr>
-                      <td class="text-truncate max-w-200">{{ cr.keterangan }}</td>
-                      <td class="fw-semibold text-nowrap text-mu-green">Rp {{ formatCurrency(cr.jumlah) }}</td>
-                      <td class="small text-mu-slate-lighter">{{ cr.tanggal | date:'dd MMM yy' }}</td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                      <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
-                    </tr>
-                    }
-                  </tbody>
+                  @for (cr of top10Credit(); track cr.keterangan + cr.tanggal + cr.jumlah) {
+                  <tr>
+                    <td class="text-truncate max-w-200">{{ cr.keterangan }}</td>
+                    <td class="fw-semibold text-nowrap text-mu-green">Rp {{ formatCurrency(cr.jumlah) }}</td>
+                    <td class="small text-mu-slate-lighter">{{ cr.tanggal | date:'dd MMM yy' }}</td>
+                  </tr>
+                  } @empty {
+                  <tr>
+                    <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
+                  </tr>
+                  }
+                </tbody>
 
 
               </table>
@@ -470,22 +470,17 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <!-- Menarik rentetan top 10 frekuensi keterangan via Angular Signal (hasil Response backend) -->
+                  @for (freq of top10CreditFreq(); track freq.keterangan) {
                   <tr>
-                    <td>SETORAN TUNAI</td>
-                    <td class="text-center"><span class="freq-badge-cr">45 x</span></td>
+                    <td>{{ freq.keterangan }}</td>
+                    <td class="text-center"><span class="freq-badge-cr">{{ freq.frekuensi }} x</span></td>
                   </tr>
+                  } @empty {
                   <tr>
-                    <td>TRANSFER MASUK DARI A</td>
-                    <td class="text-center"><span class="freq-badge-cr">30 x</span></td>
+                    <td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
                   </tr>
-                  <tr>
-                    <td>BUNGA TABUNGAN</td>
-                    <td class="text-center"><span class="freq-badge-cr">3 x</span></td>
-                  </tr>
-                  <tr>
-                    <td>REFUND ONLINE</td>
-                    <td class="text-center"><span class="freq-badge-cr">2 x</span></td>
-                  </tr>
+                  }
                 </tbody>
               </table>
             </div>
@@ -712,7 +707,8 @@
               <input type="text" class="form-control" placeholder="Cari transaksi..." [ngModel]="txSearch()"
                 (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
             </div>
-            <button class="btn btn-mu-success"><i class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
+            <button class="btn btn-mu-success" (click)="exportExcel()"><i
+                class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
           </div>
         </div>
 
@@ -777,4 +773,3 @@
 
   </div>
 </div>
-

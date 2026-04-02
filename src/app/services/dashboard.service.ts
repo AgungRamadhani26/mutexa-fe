@@ -36,6 +36,12 @@ export class DashboardService {
     return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/top10-debit`, { params });
   }
 
+  // Mengambil data frekuensi keterangan paling sering muncul (Kredit)
+  getTop10CreditFreq(documentId: number): Observable<ApiResponse<import('../models/dashboard.model').TopFreq[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<import('../models/dashboard.model').TopFreq[]>>(`${this.apiUrl}/top10-credit-freq`, { params });
+  }
+
   // Menghasilkan URL download File Excel untuk rincian transaksi dokumen terkait
   exportExcelUrl(documentId: number): string {
     return `${this.apiUrl}/export-excel?documentId=${documentId}`;
