@@ -152,6 +152,7 @@ export class Dashboard implements OnInit {
   top10Credit = signal<DetailTransaksi[]>([]);
   top10Debit = signal<DetailTransaksi[]>([]);
   top10CreditFreq = signal<import('../../models/dashboard.model').TopFreq[]>([]);
+  top10DebitFreq = signal<import('../../models/dashboard.model').TopFreq[]>([]);
   // ==========================================
   // FUNGSI INIT & PEMANGGILAN API PERTAMA
   // ==========================================
@@ -246,6 +247,14 @@ export class Dashboard implements OnInit {
       error: (err) => console.error(err)
     });
 
+    // Ambil data Top 10 Debit Freq
+    this.dashboardService.getTop10DebitFreq(doc.id).subscribe({
+      next: (res) => {
+        if (res.success) this.top10DebitFreq.set(res.data);
+      },
+      error: (err) => console.error(err)
+    });
+
     // Ambil isi rincian tabel transaksi mentah untuk ditampilkan di bagian bawah
     this.dashboardService.getDetailSemuaTransaksi(doc.id).subscribe({
       next: (res) => {
@@ -285,6 +294,7 @@ export class Dashboard implements OnInit {
     this.top10Credit.set([]);
     this.top10Debit.set([]);
     this.top10CreditFreq.set([]);
+    this.top10DebitFreq.set([]);
     this.currentView.set('documents');
   }
 

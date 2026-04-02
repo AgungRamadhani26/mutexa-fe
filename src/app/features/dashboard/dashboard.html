@@ -499,26 +499,16 @@
                   </tr>
                 </thead>
                 <tbody>
+                  @for (freq of top10DebitFreq(); track freq.keterangan) {
                   <tr>
-                    <td>BIAYA ADMIN BANK</td>
-                    <td class="text-center"><span class="freq-badge-db">120 x</span></td>
+                    <td>{{ freq.keterangan }}</td>
+                    <td class="text-center"><span class="freq-badge-db">{{ freq.frekuensi }} x</span></td>
                   </tr>
+                  } @empty {
                   <tr>
-                    <td>TRANSFER KELUAR BCA</td>
-                    <td class="text-center"><span class="freq-badge-db">85 x</span></td>
+                    <td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
                   </tr>
-                  <tr>
-                    <td>PEMBELIAN VIA QRIS</td>
-                    <td class="text-center"><span class="freq-badge-db">42 x</span></td>
-                  </tr>
-                  <tr>
-                    <td>TARIK TUNAI ATM</td>
-                    <td class="text-center"><span class="freq-badge-db">15 x</span></td>
-                  </tr>
-                  <tr>
-                    <td>BIAYA MATERAI</td>
-                    <td class="text-center"><span class="freq-badge-db">5 x</span></td>
-                  </tr>
+                  }
                 </tbody>
               </table>
             </div>
