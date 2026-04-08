@@ -407,7 +407,7 @@
                 <tbody>
                   @for (cr of top10Credit(); track cr.keterangan + cr.tanggal + cr.jumlah) {
                   <tr>
-                    <td class="text-truncate max-w-200">{{ cr.keterangan }}</td>
+                    <td class="text-break">{{ cr.keterangan }}</td>
                     <td class="fw-semibold text-nowrap text-mu-green">Rp {{ formatCurrency(cr.jumlah) }}</td>
                     <td class="small text-mu-slate-lighter">{{ cr.tanggal | date:'dd MMM yy' }}</td>
                   </tr>
@@ -439,7 +439,7 @@
                 <tbody>
                   @for (db of top10Debit(); track db.keterangan + db.tanggal + db.jumlah) {
                   <tr>
-                    <td class="text-truncate max-w-200">{{ db.keterangan }}</td>
+                    <td class="text-break">{{ db.keterangan }}</td>
                     <td class="fw-semibold text-nowrap text-mu-red">Rp {{ formatCurrency(db.jumlah) }}</td>
                     <td class="small text-mu-slate-lighter">{{ db.tanggal | date:'dd MMM yy' }}</td>
                   </tr>
