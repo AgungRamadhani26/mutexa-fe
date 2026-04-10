@@ -101,13 +101,47 @@ export class Dashboard implements OnInit {
   txPage = signal(1);
   txPageSize = 10;
 
+  filterMonth = signal<string>('ALL');
+  filterFlag = signal<string>('ALL');
+
+  availableMonths = computed(() => {
+    const txs = this.detailTransaksi();
+    const monthsMap = new Map<string, string>();
+    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    
+    txs.forEach(tx => {
+      if (tx.tanggal) {
+        const yyyyMm = tx.tanggal.substring(0, 7); // "YYYY-MM"
+        if (!monthsMap.has(yyyyMm)) {
+           const parts = yyyyMm.split('-');
+           if(parts.length === 2) {
+             const year = parts[0];
+             const monthIdx = parseInt(parts[1], 10) - 1;
+             monthsMap.set(yyyyMm, `${monthNames[monthIdx]} ${year}`);
+           }
+        }
+      }
+    });
+    
+    const sortedKeys = Array.from(monthsMap.keys()).sort();
+    return sortedKeys.map(k => ({ value: k, label: monthsMap.get(k) }));
+  });
+
   filteredTransaksi = computed(() => {
     const search = this.txSearch().toLowerCase();
-    return this.detailTransaksi().filter(tx =>
-      tx.keterangan.toLowerCase().includes(search) ||
-      tx.tanggal.includes(search) ||
-      tx.flag.toLowerCase().includes(search)
-    );
+    const flagFilt = this.filterFlag();
+    const monthFilt = this.filterMonth();
+
+    return this.detailTransaksi().filter(tx => {
+      const matchSearch = tx.keterangan.toLowerCase().includes(search) ||
+                          tx.tanggal.includes(search) ||
+                          tx.flag.toLowerCase().includes(search);
+      
+      const matchFlag = flagFilt === 'ALL' ? true : tx.flag === flagFilt;
+      const matchMonth = monthFilt === 'ALL' ? true : tx.tanggal.startsWith(monthFilt);
+
+      return matchSearch && matchFlag && matchMonth;
+    });
   });
 
   pagedTransaksi = computed(() => {
@@ -272,8 +306,14 @@ export class Dashboard implements OnInit {
         }
       }
 
-      // Buka URL langsung melalui browser agar header Content-Disposition ter-trigger sebagai File Download
-      window.location.href = this.dashboardService.exportExcelUrl(doc.id);
+      let url = this.dashboardService.exportExcelUrl(doc.id);
+      if (this.filterMonth() !== 'ALL') {
+         url += '&month=' + this.filterMonth();
+      }
+      if (this.filterFlag() !== 'ALL') {
+         url += '&flag=' + this.filterFlag();
+      }
+      window.location.href = url;
     }
   }
 

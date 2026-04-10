@@ -689,18 +689,43 @@
 
       <!-- 12. Detail Semua Transaksi -->
       <div class="mb-3">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
-            (Bisa Exclude)
+        <div class="d-flex flex-column gap-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi (Bisa Exclude)</div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-mu-success" (click)="exportExcel()"><i class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
+            </div>
           </div>
-          <div class="d-flex align-items-center gap-3">
-            <div class="mu-search search-form-md">
+          
+          <div class="d-flex flex-wrap align-items-center gap-3 bg-light p-2 rounded border">
+            <!-- Select Bulan -->
+            <div class="flex-grow-0">
+                <select class="form-select form-select-sm border-0 shadow-sm" style="min-width: 150px; font-weight: 500;" [ngModel]="filterMonth()" (ngModelChange)="filterMonth.set($event); onSearchChange('tx')">
+                    <option value="ALL">🗓️ Semua Bulan</option>
+                    @for (m of availableMonths(); track m.value) {
+                        <option [value]="m.value">{{m.label}}</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Styled Segmented Buttons for Flag -->
+            <div class="btn-group shadow-sm" role="group">
+                <input type="radio" class="btn-check" name="btnflag" id="flagAll" value="ALL" [checked]="filterFlag() === 'ALL'" (change)="filterFlag.set('ALL'); onSearchChange('tx')">
+                <label class="btn btn-sm btn-outline-secondary" for="flagAll"><i class="bi bi-funnel"></i> Semua</label>
+              
+                <input type="radio" class="btn-check" name="btnflag" id="flagCr" value="CR" [checked]="filterFlag() === 'CR'" (change)="filterFlag.set('CR'); onSearchChange('tx')">
+                <label class="btn btn-sm btn-outline-success" for="flagCr"><i class="bi bi-plus-circle"></i> Kredit</label>
+              
+                <input type="radio" class="btn-check" name="btnflag" id="flagDb" value="DB" [checked]="filterFlag() === 'DB'" (change)="filterFlag.set('DB'); onSearchChange('tx')">
+                <label class="btn btn-sm btn-outline-danger" for="flagDb"><i class="bi bi-dash-circle"></i> Debit</label>
+            </div>
+
+            <!-- Search -->
+            <div class="mu-search search-form-md ms-auto shadow-sm">
               <i class="bi bi-search"></i>
-              <input type="text" class="form-control" placeholder="Cari transaksi..." [ngModel]="txSearch()"
+              <input type="text" class="form-control form-control-sm border-0" placeholder="Cari transaksi..." [ngModel]="txSearch()"
                 (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
             </div>
-            <button class="btn btn-mu-success" (click)="exportExcel()"><i
-                class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
           </div>
         </div>
 
