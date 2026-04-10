@@ -155,6 +155,11 @@ export class Dashboard implements OnInit {
   top10Debit = signal<DetailTransaksi[]>([]);
   top10CreditFreq = signal<import('../../models/dashboard.model').TopFreq[]>([]);
   top10DebitFreq = signal<import('../../models/dashboard.model').TopFreq[]>([]);
+
+  // Ringkasan Saldo & Arus Kas (dari backend, exclude-aware)
+  ringkasanSaldo = signal<import('../../models/dashboard.model').RingkasanSaldo>({
+    totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0
+  });
   // ==========================================
   // FUNGSI INIT & PEMANGGILAN API PERTAMA
   // ==========================================
@@ -221,6 +226,14 @@ export class Dashboard implements OnInit {
     this.dashboardService.getSummaryPerbulan(doc.id).subscribe({
       next: (res) => {
         if (res.success) this.summaryPerbulan.set(res.data);
+      },
+      error: (err) => console.error(err)
+    });
+
+    // Ambil Ringkasan Saldo & Arus Kas (exclude-aware)
+    this.dashboardService.getRingkasanSaldo(doc.id).subscribe({
+      next: (res) => {
+        if (res.success) this.ringkasanSaldo.set(res.data);
       },
       error: (err) => console.error(err)
     });
@@ -322,6 +335,7 @@ export class Dashboard implements OnInit {
     this.top10Debit.set([]);
     this.top10CreditFreq.set([]);
     this.top10DebitFreq.set([]);
+    this.ringkasanSaldo.set({ totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0 });
     this.currentView.set('documents');
   }
 

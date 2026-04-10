@@ -20,3 +20,11 @@ export interface TopFreq {
   keterangan: string;
   frekuensi: number;
 }
+
+export interface RingkasanSaldo {
+  totalCredit: number;
+  totalDebit: number;
+  avgCredit: number;
+  avgDebit: number;
+  jumlahBulan: number;
+}

@@ -303,13 +303,13 @@
 
       <!-- 1. Ringkasan Saldo -->
       <div class="mb-3">
-        <div class="section-title"><i class="bi bi-wallet2 me-2"></i>1. Ringkasan Saldo & Arus Kas (3 Bulan)</div>
+        <div class="section-title"><i class="bi bi-wallet2 me-2"></i>1. Ringkasan Saldo & Arus Kas ({{ ringkasanSaldo().jumlahBulan }} Bulan)</div>
         <div class="row row-cols-1 row-cols-md-5 g-2">
           <div class="col">
             <div class="summary-card card-combo-green">
               <div class="card-content">
                 <div class="card-label">Rata-rata Credit</div>
-                <div class="card-value">Rp 166.7 Jt</div>
+                <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgCredit) }}</div>
               </div>
             </div>
           </div>
@@ -317,7 +317,7 @@
             <div class="summary-card card-combo-red">
               <div class="card-content">
                 <div class="card-label">Rata-rata Debit</div>
-                <div class="card-value">Rp 138.3 Jt</div>
+                <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDebit) }}</div>
               </div>
             </div>
           </div>
@@ -325,7 +325,7 @@
             <div class="summary-card card-combo-blue">
               <div class="card-content">
                 <div class="card-label">Rata-rata Saldo (Harian)</div>
-                <div class="card-value">Rp 450 Jt</div>
+                <div class="card-value">-</div>
               </div>
             </div>
           </div>
@@ -333,7 +333,7 @@
             <div class="summary-card card-combo-gray">
               <div class="card-content">
                 <div class="card-label">Total Credit</div>
-                <div class="card-value">Rp 500.000.000</div>
+                <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalCredit) }}</div>
               </div>
             </div>
           </div>
@@ -341,7 +341,7 @@
             <div class="summary-card card-combo-gray">
               <div class="card-content">
                 <div class="card-label">Total Debit</div>
-                <div class="card-value">Rp 415.000.000</div>
+                <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalDebit) }}</div>
               </div>
             </div>
           </div>
@@ -408,7 +408,7 @@
                   @for (cr of top10Credit(); track cr.keterangan + cr.tanggal + cr.jumlah) {
                   <tr>
                     <td class="text-break">{{ cr.keterangan }}</td>
-                    <td class="fw-semibold text-nowrap text-mu-green">Rp {{ formatCurrency(cr.jumlah) }}</td>
+                    <td class="fw-semibold text-nowrap text-mu-green">{{ formatCurrency(cr.jumlah) }}</td>
                     <td class="small text-mu-slate-lighter">{{ cr.tanggal | date:'dd MMM yy' }}</td>
                   </tr>
                   } @empty {
@@ -440,7 +440,7 @@
                   @for (db of top10Debit(); track db.keterangan + db.tanggal + db.jumlah) {
                   <tr>
                     <td class="text-break">{{ db.keterangan }}</td>
-                    <td class="fw-semibold text-nowrap text-mu-red">Rp {{ formatCurrency(db.jumlah) }}</td>
+                    <td class="fw-semibold text-nowrap text-mu-red">{{ formatCurrency(db.jumlah) }}</td>
                     <td class="small text-mu-slate-lighter">{{ db.tanggal | date:'dd MMM yy' }}</td>
                   </tr>
                   } @empty {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
-import { SummaryPerbulan, DetailTransaksi } from '../models/dashboard.model';
+import { SummaryPerbulan, DetailTransaksi, RingkasanSaldo } from '../models/dashboard.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,12 @@ export class DashboardService {
   getSummaryPerbulan(documentId: number): Observable<ApiResponse<SummaryPerbulan[]>> {
     const params = new HttpParams().set('documentId', documentId.toString());
     return this.http.get<ApiResponse<SummaryPerbulan[]>>(`${this.apiUrl}/summary-perbulan`, { params });
+  }
+
+  // Mengambil ringkasan saldo & arus kas (total dan rata-rata, exclude-aware)
+  getRingkasanSaldo(documentId: number): Observable<ApiResponse<RingkasanSaldo>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<RingkasanSaldo>>(`${this.apiUrl}/ringkasan-saldo`, { params });
   }
 
   // Mengambil detail seluruh baris transaksi riwayat mutasi dari spesifik dokumen
