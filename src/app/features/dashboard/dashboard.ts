@@ -133,7 +133,7 @@ export class Dashboard implements OnInit {
 
   // Ringkasan Saldo & Arus Kas (dari backend, exclude-aware)
   ringkasanSaldo = signal<RingkasanSaldo>({
-    totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0
+    totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0, avgDailyBalance: 0
   });
   // ==========================================
   // FUNGSI INIT & PEMANGGILAN API PERTAMA
@@ -310,7 +310,7 @@ export class Dashboard implements OnInit {
     this.top10Debit.set([]);
     this.top10CreditFreq.set([]);
     this.top10DebitFreq.set([]);
-    this.ringkasanSaldo.set({ totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0 });
+    this.ringkasanSaldo.set({ totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0, avgDailyBalance: 0 });
     this.currentView.set('documents');
   }
 
