@@ -303,7 +303,8 @@
 
       <!-- 1. Ringkasan Saldo -->
       <div class="mb-3">
-        <div class="section-title"><i class="bi bi-wallet2 me-2"></i>1. Ringkasan Saldo & Arus Kas ({{ ringkasanSaldo().jumlahBulan }} Bulan)</div>
+        <div class="section-title"><i class="bi bi-wallet2 me-2"></i>1. Ringkasan Saldo & Arus Kas ({{
+          ringkasanSaldo().jumlahBulan }} Bulan)</div>
         <div class="row row-cols-1 row-cols-md-5 g-2">
           <div class="col">
             <div class="summary-card card-combo-green">
@@ -725,7 +726,7 @@
                         (change)="toggleExclude(tx)">
                     </div>
                   </td>
-                  <td class="small">{{ tx.tanggal }}</td>
+                  <td class="small">{{ tx.tanggal | date:'dd-MM-yyyy' }}</td>
                   <td class="fw-medium" [class.text-mu-darker]="!tx.isExcluded">{{ tx.keterangan }}</td>
                   <td class="text-center">
                     @if (tx.flag === 'CR') {

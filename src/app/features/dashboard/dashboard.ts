@@ -5,44 +5,19 @@ import { DocumentService } from '../../services/document.service';
 import { DashboardService } from '../../services/dashboard.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
-// Interfaces sesuai struktur database
-interface BankAccount {
-  id: number;
-  accountNumber: string;
-  accountName: string;
-  bankName: string;
-  documentCount: number;
-}
+import { BankAccount } from '../../models/bank-account.model';
+import { MutationDocument } from '../../models/mutation-document.model';
+import { SummaryPerbulan } from '../../models/summary-perbulan.model';
+import { DetailTransaksi } from '../../models/detail-transaksi.model';
+import { RingkasanSaldo } from '../../models/ringkasan-saldo.model';
+import { TopFreq } from '../../models/top-freq.model';
 
-interface MutationDocument {
-  id: number;
-  fileName: string;
-  fileType: string;
-  status: string;
-  errorMessage: string | null;
-  periodStart: string | null;
-  periodEnd: string | null;
-  createdAt: string;
-}
-
-interface SummaryPerbulan {
-  periode: string;
-  saldoAkhir: number;
-  totalCredit: number;
-  totalDebit: number;
-  freqCredit: number;
-  freqDebit: number;
-}
-
-interface DetailTransaksi {
-  id?: number;
-  tanggal: string;
-  keterangan: string;
-  flag: string;
-  jumlah: number;
-  isExcluded?: boolean;
-}
-
+/**
+ * Komponen utama tampilan Dashboard mutasi.
+ * Prinsip SOLID:
+ * - SRP: Komponen ini sekarang lebih ramping dengan memisahkan antarmuka (interfaces)
+ *   ke folder models/ sehingga file ini hanya berfokus pada logika presentasi UI.
+ */
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -153,11 +128,11 @@ export class Dashboard implements OnInit {
   detailTransaksi = signal<DetailTransaksi[]>([]);
   top10Credit = signal<DetailTransaksi[]>([]);
   top10Debit = signal<DetailTransaksi[]>([]);
-  top10CreditFreq = signal<import('../../models/dashboard.model').TopFreq[]>([]);
-  top10DebitFreq = signal<import('../../models/dashboard.model').TopFreq[]>([]);
+  top10CreditFreq = signal<TopFreq[]>([]);
+  top10DebitFreq = signal<TopFreq[]>([]);
 
   // Ringkasan Saldo & Arus Kas (dari backend, exclude-aware)
-  ringkasanSaldo = signal<import('../../models/dashboard.model').RingkasanSaldo>({
+  ringkasanSaldo = signal<RingkasanSaldo>({
     totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0
   });
   // ==========================================

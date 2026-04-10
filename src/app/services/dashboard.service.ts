@@ -2,15 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
-import { SummaryPerbulan, DetailTransaksi, RingkasanSaldo } from '../models/dashboard.model';
-
+import { SummaryPerbulan } from '../models/summary-perbulan.model';
+import { DetailTransaksi } from '../models/detail-transaksi.model';
+import { RingkasanSaldo } from '../models/ringkasan-saldo.model';
+import { TopFreq } from '../models/top-freq.model';
+/**
+ * Service untuk mengambil data dashboard dari backend.
+ * Prinsip SOLID:
+ * - SRP: Fokus pada fetch data terkait modul Dashboard.
+ * - DIP: Bergantung pada abstraksi HttpClient Angular, bukan implementasi XHR statis.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
   private apiUrl = '/api/dashboard';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Mengambil ringkasan saldo dan total kredit/debit per bulan (difilter berdasarkan ID Dokumen)
   getSummaryPerbulan(documentId: number): Observable<ApiResponse<SummaryPerbulan[]>> {
@@ -43,15 +51,15 @@ export class DashboardService {
   }
 
   // Mengambil data frekuensi keterangan paling sering muncul (Kredit)
-  getTop10CreditFreq(documentId: number): Observable<ApiResponse<import('../models/dashboard.model').TopFreq[]>> {
+  getTop10CreditFreq(documentId: number): Observable<ApiResponse<TopFreq[]>> {
     const params = new HttpParams().set('documentId', documentId.toString());
-    return this.http.get<ApiResponse<import('../models/dashboard.model').TopFreq[]>>(`${this.apiUrl}/top10-credit-freq`, { params });
+    return this.http.get<ApiResponse<TopFreq[]>>(`${this.apiUrl}/top10-credit-freq`, { params });
   }
 
   // Mengambil data frekuensi keterangan paling sering muncul (Debit)
-  getTop10DebitFreq(documentId: number): Observable<ApiResponse<import('../models/dashboard.model').TopFreq[]>> {
+  getTop10DebitFreq(documentId: number): Observable<ApiResponse<TopFreq[]>> {
     const params = new HttpParams().set('documentId', documentId.toString());
-    return this.http.get<ApiResponse<import('../models/dashboard.model').TopFreq[]>>(`${this.apiUrl}/top10-debit-freq`, { params });
+    return this.http.get<ApiResponse<TopFreq[]>>(`${this.apiUrl}/top10-debit-freq`, { params });
   }
 
   // Menghasilkan URL download File Excel untuk rincian transaksi dokumen terkait

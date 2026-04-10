@@ -1,36 +1,18 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-export interface AccountWithDocumentsResponse {
-  id: number;
-  accountNumber: string;
-  accountName: string;
-  bankName: string;
-  documentCount: number;
-}
+import { BankAccount } from '../models/bank-account.model';
+import { MutationDocument } from '../models/mutation-document.model';
+import { ApiResponse } from '../models/api-response.model';
 
-export interface DocumentListResponse {
-  id: number;
-  fileName: string;
-  fileType: string;
-  status: string;
-  errorMessage: string | null;
-  periodStart: string | null;
-  periodEnd: string | null;
-  createdAt: string;
-}
+// Aliases agar tidak break dengan method signature lama
+export type AccountWithDocumentsResponse = BankAccount;
+export type DocumentListResponse = MutationDocument;
 
 export interface DocumentUploadResponse {
   id: number;
   fileName: string;
   status: string;
-}
-
-export interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data: T;
-  timestamp: string;
 }
 
 @Injectable({
