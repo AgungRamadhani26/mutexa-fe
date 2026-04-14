@@ -108,7 +108,7 @@ export class Dashboard implements OnInit {
     const txs = this.detailTransaksi();
     const monthsMap = new Map<string, string>();
     const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-    
+
     txs.forEach(tx => {
       if (tx.tanggal) {
         const yyyyMm = tx.tanggal.substring(0, 7); // "YYYY-MM"
@@ -122,7 +122,7 @@ export class Dashboard implements OnInit {
         }
       }
     });
-    
+
     const sortedKeys = Array.from(monthsMap.keys()).sort();
     return sortedKeys.map(k => ({ value: k, label: monthsMap.get(k) }));
   });
@@ -136,7 +136,7 @@ export class Dashboard implements OnInit {
       const matchSearch = tx.keterangan.toLowerCase().includes(search) ||
                           tx.tanggal.includes(search) ||
                           tx.flag.toLowerCase().includes(search);
-      
+
       const matchFlag = flagFilt === 'ALL' ? true : tx.flag === flagFilt;
       const matchMonth = monthFilt === 'ALL' ? true : tx.tanggal.startsWith(monthFilt);
 
@@ -461,7 +461,7 @@ export class Dashboard implements OnInit {
     switch (bank) {
       case 'BCA': return 'bank-badge-bca';
       case 'BRI': return 'bank-badge-bri';
-      case 'MANDIRI': return 'bank-badge-mandiri';
+      case 'MANDIRI KOPRA': return 'bank-badge-mandiri';
       case 'UOB': return 'bank-badge-uob';
       default: return 'bank-badge-default';
     }
