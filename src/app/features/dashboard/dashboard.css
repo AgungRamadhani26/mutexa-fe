@@ -175,6 +175,16 @@
   display: inline-block;
 }
 
+.bank-badge-bni {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: white;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  display: inline-block;
+}
+
 .bank-badge-bri {
   background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
   color: white;

@@ -460,7 +460,10 @@ export class Dashboard implements OnInit {
   getBankBadgeClass(bank: string): string {
     switch (bank) {
       case 'BCA': return 'bank-badge-bca';
-      case 'BRI': return 'bank-badge-bri';        case 'MANDIRI': return 'bank-badge-mandiri';      case 'MANDIRI KOPRA': return 'bank-badge-mandiri';
+      case 'BNI': return 'bank-badge-bni';
+      case 'BRI': return 'bank-badge-bri';
+      case 'MANDIRI':
+      case 'MANDIRI KOPRA': return 'bank-badge-mandiri';
       case 'UOB': return 'bank-badge-uob';
       default: return 'bank-badge-default';
     }
