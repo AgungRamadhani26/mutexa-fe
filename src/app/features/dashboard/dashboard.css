@@ -101,7 +101,8 @@
 /* ---- Tables ---- */
 .mu-table {
   margin-bottom: 0;
-  border-collapse: separate; /* Default for Bootstrap, helpful for tr position:relative */
+  border-collapse: separate;
+  /* Default for Bootstrap, helpful for tr position:relative */
   border-spacing: 0;
 }
 
@@ -619,6 +620,10 @@
   border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .flag-db {
@@ -629,6 +634,10 @@
   border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 /* ---- Freq badges ---- */

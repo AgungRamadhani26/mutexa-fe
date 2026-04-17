@@ -364,8 +364,34 @@ export class Dashboard implements OnInit {
     else this.txPage.set(page);
   }
 
-  getPageNumbers(totalPages: number): number[] {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  getVisiblePages(currentPage: number, totalPages: number): (number | string)[] {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const pages: (number | string)[] = [1];
+    let startPage = Math.max(2, currentPage - 2);
+    let endPage = Math.min(totalPages - 1, currentPage + 2);
+    
+    if (currentPage <= 4) {
+      endPage = 5;
+    }
+    if (currentPage >= totalPages - 3) {
+      startPage = totalPages - 4;
+    }
+
+    if (startPage > 2) {
+      pages.push('...');
+    }
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    if (endPage < totalPages - 1) {
+      pages.push('...');
+    }
+    if (totalPages > 1) {
+      pages.push(totalPages);
+    }
+    return pages;
   }
 
   onSearchChange(type: 'account' | 'doc' | 'tx') {

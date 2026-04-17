@@ -130,9 +130,8 @@
           <button class="page-btn" [disabled]="accountPage() === 1" (click)="goToPage('account', accountPage() - 1)">
             <i class="bi bi-chevron-left"></i>
           </button>
-          @for (p of getPageNumbers(accountTotalPages()); track p) {
-          <button class="page-btn" [class.active]="accountPage() === p" (click)="goToPage('account', p)">{{ p
-            }}</button>
+          @for (p of getVisiblePages(accountPage(), accountTotalPages()); track p) {
+          <button class="page-btn" [class.active]="accountPage() === p" [disabled]="p === '...'" (click)="p !== '...' ? goToPage('account', +p) : null">{{ p }}</button>
           }
           <button class="page-btn" [disabled]="accountPage() === accountTotalPages()"
             (click)="goToPage('account', accountPage() + 1)">
@@ -251,8 +250,8 @@
         <div class="mu-pagination">
           <button class="page-btn" [disabled]="docPage() === 1" (click)="goToPage('doc', docPage() - 1)"><i
               class="bi bi-chevron-left"></i></button>
-          @for (p of getPageNumbers(docTotalPages()); track p) {
-          <button class="page-btn" [class.active]="docPage() === p" (click)="goToPage('doc', p)">{{ p }}</button>
+          @for (p of getVisiblePages(docPage(), docTotalPages()); track $index) {
+          <button class="page-btn" [class.active]="docPage() === p" [disabled]="p === '...'" (click)="p !== '...' ? goToPage('doc', +p) : null">{{ p }}</button>
           }
           <button class="page-btn" [disabled]="docPage() === docTotalPages()"
             (click)="goToPage('doc', docPage() + 1)"><i class="bi bi-chevron-right"></i></button>
@@ -786,8 +785,8 @@
           <div class="mu-pagination">
             <button class="page-btn" [disabled]="txPage() === 1" (click)="goToPage('tx', txPage() - 1)"><i
                 class="bi bi-chevron-left"></i></button>
-            @for (p of getPageNumbers(txTotalPages()); track p) {
-            <button class="page-btn" [class.active]="txPage() === p" (click)="goToPage('tx', p)">{{ p }}</button>
+            @for (p of getVisiblePages(txPage(), txTotalPages()); track $index) {
+            <button class="page-btn" [class.active]="txPage() === p" [disabled]="p === '...'" (click)="p !== '...' ? goToPage('tx', +p) : null">{{ p }}</button>
             }
             <button class="page-btn" [disabled]="txPage() === txTotalPages()" (click)="goToPage('tx', txPage() + 1)"><i
                 class="bi bi-chevron-right"></i></button>
