@@ -34,7 +34,8 @@
               <option value="BCA">BCA</option>
               <option value="BNI">BNI</option>
               <option value="BRI">BRI</option>
-              <option value="MANDIRI">MANDIRI</option>              <option value="MANDIRI KOPRA">MANDIRI KOPRA</option>
+              <option value="MANDIRI">MANDIRI</option>
+              <option value="MANDIRI KOPRA">MANDIRI KOPRA</option>
               <option value="UOB">UOB</option>
             </select>
           </div>
@@ -131,7 +132,8 @@
             <i class="bi bi-chevron-left"></i>
           </button>
           @for (p of getVisiblePages(accountPage(), accountTotalPages()); track p) {
-          <button class="page-btn" [class.active]="accountPage() === p" [disabled]="p === '...'" (click)="p !== '...' ? goToPage('account', +p) : null">{{ p }}</button>
+          <button class="page-btn" [class.active]="accountPage() === p" [disabled]="p === '...'"
+            (click)="p !== '...' ? goToPage('account', +p) : null">{{ p }}</button>
           }
           <button class="page-btn" [disabled]="accountPage() === accountTotalPages()"
             (click)="goToPage('account', accountPage() + 1)">
@@ -251,7 +253,8 @@
           <button class="page-btn" [disabled]="docPage() === 1" (click)="goToPage('doc', docPage() - 1)"><i
               class="bi bi-chevron-left"></i></button>
           @for (p of getVisiblePages(docPage(), docTotalPages()); track $index) {
-          <button class="page-btn" [class.active]="docPage() === p" [disabled]="p === '...'" (click)="p !== '...' ? goToPage('doc', +p) : null">{{ p }}</button>
+          <button class="page-btn" [class.active]="docPage() === p" [disabled]="p === '...'"
+            (click)="p !== '...' ? goToPage('doc', +p) : null">{{ p }}</button>
           }
           <button class="page-btn" [disabled]="docPage() === docTotalPages()"
             (click)="goToPage('doc', docPage() + 1)"><i class="bi bi-chevron-right"></i></button>
@@ -585,42 +588,10 @@
 
       <hr class="mu-divider">
 
-      <!-- 9, 10, 11 (Income, Pajak, Bunga) -->
+      <!-- 9, 10 (Pajak, Bunga) -->
       <div class="row g-3 mb-3">
-        <div class="col-md-4">
-          <div class="section-title">9. Income</div>
-          <div class="category-card h-100">
-            <div class="cat-accent cat-accent-green"></div>
-            <table class="table mu-table">
-              <thead>
-                <tr>
-                  <th>Keterangan</th>
-                  <th>Nominal</th>
-                  <th>Tgl</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="small">REVENUE MAR</td>
-                  <td class="fw-bold small text-mu-primary">Rp 180M</td>
-                  <td class="small text-mu-slate-lighter">01 Mar</td>
-                </tr>
-                <tr>
-                  <td class="small">REVENUE FEB</td>
-                  <td class="fw-bold small text-mu-primary">Rp 165M</td>
-                  <td class="small text-mu-slate-lighter">01 Feb</td>
-                </tr>
-                <tr>
-                  <td class="small">REVENUE JAN</td>
-                  <td class="fw-bold small text-mu-primary">Rp 155M</td>
-                  <td class="small text-mu-slate-lighter">01 Jan</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="section-title">10. Pajak</div>
+        <div class="col-md-6">
+          <div class="section-title">9. Pajak</div>
           <div class="category-card h-100">
             <div class="cat-accent cat-accent-orange"></div>
             <table class="table mu-table">
@@ -651,8 +622,8 @@
             </table>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="section-title">11. Bunga Pinjaman</div>
+        <div class="col-md-6">
+          <div class="section-title">10. Bunga Pinjaman</div>
           <div class="category-card h-100">
             <div class="cat-accent cat-accent-cyan"></div>
             <table class="table mu-table">
@@ -687,44 +658,51 @@
 
       <hr class="mu-divider">
 
-      <!-- 12. Detail Semua Transaksi -->
+      <!-- 11. Detail Semua Transaksi -->
       <div class="mb-3">
         <div class="d-flex flex-column gap-3 mb-3">
           <div class="d-flex justify-content-between align-items-center">
-            <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi (Bisa Exclude)</div>
+            <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>11. Detail Semua Transaksi
+              (Bisa Exclude)</div>
             <div class="d-flex gap-2">
-                <button class="btn btn-mu-success" (click)="exportExcel()"><i class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
+              <button class="btn btn-mu-success" (click)="exportExcel()"><i
+                  class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
             </div>
           </div>
 
           <div class="d-flex flex-wrap align-items-center gap-3 bg-light p-2 rounded border">
             <!-- Select Bulan -->
             <div class="flex-grow-0">
-                <select class="form-select form-select-sm border-0 shadow-sm" style="min-width: 150px; font-weight: 500;" [ngModel]="filterMonth()" (ngModelChange)="filterMonth.set($event); onSearchChange('tx')">
-                    <option value="ALL">🗓️ Semua Bulan</option>
-                    @for (m of availableMonths(); track m.value) {
-                        <option [value]="m.value">{{m.label}}</option>
-                    }
-                </select>
+              <select class="form-select form-select-sm border-0 shadow-sm" style="min-width: 150px; font-weight: 500;"
+                [ngModel]="filterMonth()" (ngModelChange)="filterMonth.set($event); onSearchChange('tx')">
+                <option value="ALL">🗓️ Semua Bulan</option>
+                @for (m of availableMonths(); track m.value) {
+                <option [value]="m.value">{{m.label}}</option>
+                }
+              </select>
             </div>
 
             <!-- Styled Segmented Buttons for Flag -->
             <div class="btn-group shadow-sm" role="group">
-                <input type="radio" class="btn-check" name="btnflag" id="flagAll" value="ALL" [checked]="filterFlag() === 'ALL'" (change)="filterFlag.set('ALL'); onSearchChange('tx')">
-                <label class="btn btn-sm btn-outline-secondary" for="flagAll"><i class="bi bi-funnel"></i> Semua</label>
+              <input type="radio" class="btn-check" name="btnflag" id="flagAll" value="ALL"
+                [checked]="filterFlag() === 'ALL'" (change)="filterFlag.set('ALL'); onSearchChange('tx')">
+              <label class="btn btn-sm btn-outline-secondary" for="flagAll"><i class="bi bi-funnel"></i> Semua</label>
 
-                <input type="radio" class="btn-check" name="btnflag" id="flagCr" value="CR" [checked]="filterFlag() === 'CR'" (change)="filterFlag.set('CR'); onSearchChange('tx')">
-                <label class="btn btn-sm btn-outline-success" for="flagCr"><i class="bi bi-plus-circle"></i> Kredit</label>
+              <input type="radio" class="btn-check" name="btnflag" id="flagCr" value="CR"
+                [checked]="filterFlag() === 'CR'" (change)="filterFlag.set('CR'); onSearchChange('tx')">
+              <label class="btn btn-sm btn-outline-success" for="flagCr"><i class="bi bi-plus-circle"></i>
+                Kredit</label>
 
-                <input type="radio" class="btn-check" name="btnflag" id="flagDb" value="DB" [checked]="filterFlag() === 'DB'" (change)="filterFlag.set('DB'); onSearchChange('tx')">
-                <label class="btn btn-sm btn-outline-danger" for="flagDb"><i class="bi bi-dash-circle"></i> Debit</label>
+              <input type="radio" class="btn-check" name="btnflag" id="flagDb" value="DB"
+                [checked]="filterFlag() === 'DB'" (change)="filterFlag.set('DB'); onSearchChange('tx')">
+              <label class="btn btn-sm btn-outline-danger" for="flagDb"><i class="bi bi-dash-circle"></i> Debit</label>
             </div>
 
             <!-- Search -->
             <div class="mu-search search-form-md ms-auto shadow-sm">
               <i class="bi bi-search"></i>
-              <input type="text" class="form-control form-control-sm border-0" placeholder="Cari transaksi..." [ngModel]="txSearch()"
-                (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
+              <input type="text" class="form-control form-control-sm border-0" placeholder="Cari transaksi..."
+                [ngModel]="txSearch()" (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
             </div>
           </div>
         </div>
@@ -786,7 +764,8 @@
             <button class="page-btn" [disabled]="txPage() === 1" (click)="goToPage('tx', txPage() - 1)"><i
                 class="bi bi-chevron-left"></i></button>
             @for (p of getVisiblePages(txPage(), txTotalPages()); track $index) {
-            <button class="page-btn" [class.active]="txPage() === p" [disabled]="p === '...'" (click)="p !== '...' ? goToPage('tx', +p) : null">{{ p }}</button>
+            <button class="page-btn" [class.active]="txPage() === p" [disabled]="p === '...'"
+              (click)="p !== '...' ? goToPage('tx', +p) : null">{{ p }}</button>
             }
             <button class="page-btn" [disabled]="txPage() === txTotalPages()" (click)="goToPage('tx', txPage() + 1)"><i
                 class="bi bi-chevron-right"></i></button>
