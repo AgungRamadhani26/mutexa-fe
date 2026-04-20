@@ -908,3 +908,80 @@
 .compact-view .mu-card .mu-table td:last-child {
   padding-right: 2.25rem !important;
 }
+
+/* ---- Mini Pagination (Category Cards) ---- */
+.mini-pagination {
+  background: #f8fafc;
+  min-height: 32px;
+  border-top: 1px solid rgba(0, 48, 120, 0.05) !important;
+}
+
+.btn-mini-nav {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #64748b;
+}
+
+.btn-mini-nav:hover:not(:disabled) {
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.btn-mini-nav:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Category Specific Button Colors (Solid & Ultra-Bold) */
+.btn-mini-orange {
+  color: #ffffff !important;
+  background: #f59e0b;
+  border-color: #d97706;
+  box-shadow: 0 1px 2px rgba(217, 119, 6, 0.2);
+}
+.btn-mini-orange:hover:not(:disabled) {
+  background: #d97706;
+  border-color: #b45309;
+  box-shadow: 0 2px 4px rgba(217, 119, 6, 0.3);
+}
+
+.btn-mini-purple {
+  color: #ffffff !important;
+  background: #9b59b6;
+  border-color: #8e44ad;
+  box-shadow: 0 1px 2px rgba(142, 68, 173, 0.2);
+}
+.btn-mini-purple:hover:not(:disabled) {
+  background: #8e44ad;
+  border-color: #7d3c98;
+  box-shadow: 0 2px 4px rgba(142, 68, 173, 0.3);
+}
+
+.btn-mini-cyan {
+  color: #ffffff !important;
+  background: #06b6d4;
+  border-color: #0891b2;
+  box-shadow: 0 1px 2px rgba(8, 145, 178, 0.2);
+}
+.btn-mini-cyan:hover:not(:disabled) {
+  background: #0891b2;
+  border-color: #0e7490;
+  box-shadow: 0 2px 4px rgba(8, 145, 178, 0.3);
+}
+
+.text-tiny {
+  font-size: 0.65rem;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+}

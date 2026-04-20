@@ -151,6 +151,33 @@ export class Dashboard implements OnInit {
   });
 
   txTotalPages = computed(() => Math.ceil(this.filteredTransaksi().length / this.txPageSize));
+  
+  // Category Tables Pagination (Pajak, Admin, Bunga)
+  taxPage = signal(1);
+  adminPage = signal(1);
+  interestPage = signal(1);
+  categoryPageSize = 5;
+
+  currentTaxData = computed(() => this.taxTransactions().length > 0 ? this.taxTransactions() : this.dummyTax());
+  pagedTax = computed(() => {
+    const start = (this.taxPage() - 1) * this.categoryPageSize;
+    return this.currentTaxData().slice(start, start + this.categoryPageSize);
+  });
+  taxTotalPages = computed(() => Math.ceil(this.currentTaxData().length / this.categoryPageSize));
+
+  currentAdminData = computed(() => this.adminTransactions().length > 0 ? this.adminTransactions() : this.dummyAdmin());
+  pagedAdmin = computed(() => {
+    const start = (this.adminPage() - 1) * this.categoryPageSize;
+    return this.currentAdminData().slice(start, start + this.categoryPageSize);
+  });
+  adminTotalPages = computed(() => Math.ceil(this.currentAdminData().length / this.categoryPageSize));
+
+  currentInterestData = computed(() => this.interestTransactions().length > 0 ? this.interestTransactions() : this.dummyInterest());
+  pagedInterest = computed(() => {
+    const start = (this.interestPage() - 1) * this.categoryPageSize;
+    return this.currentInterestData().slice(start, start + this.categoryPageSize);
+  });
+  interestTotalPages = computed(() => Math.ceil(this.currentInterestData().length / this.categoryPageSize));
 
   // Loading states
   isLoadingAccounts = signal(false);
@@ -251,6 +278,9 @@ export class Dashboard implements OnInit {
     this.currentView.set('analytics');     // Ganti tampilan ke level 3 (Dashboard Analytics)
     this.txSearch.set('');
     this.txPage.set(1);
+    this.taxPage.set(1);
+    this.adminPage.set(1);
+    this.interestPage.set(1);
 
     this.isLoadingAnalytics.set(true);
 
@@ -400,6 +430,9 @@ export class Dashboard implements OnInit {
     this.adminTransactions.set([]);
     this.taxTransactions.set([]);
     this.interestTransactions.set([]);
+    this.taxPage.set(1);
+    this.adminPage.set(1);
+    this.interestPage.set(1);
     this.ringkasanSaldo.set({ totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0, avgDailyBalance: 0 });
     this.currentView.set('documents');
   }
@@ -408,10 +441,13 @@ export class Dashboard implements OnInit {
   // PAGINATION
   // ==========================================
 
-  goToPage(type: 'account' | 'doc' | 'tx', page: number) {
+  goToPage(type: 'account' | 'doc' | 'tx' | 'tax' | 'admin' | 'interest', page: number) {
     if (type === 'account') this.accountPage.set(page);
     else if (type === 'doc') this.docPage.set(page);
-    else this.txPage.set(page);
+    else if (type === 'tx') this.txPage.set(page);
+    else if (type === 'tax') this.taxPage.set(page);
+    else if (type === 'admin') this.adminPage.set(page);
+    else if (type === 'interest') this.interestPage.set(page);
   }
 
   getVisiblePages(currentPage: number, totalPages: number): (number | string)[] {
