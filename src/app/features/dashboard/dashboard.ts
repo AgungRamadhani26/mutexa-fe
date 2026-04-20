@@ -1,5 +1,5 @@
-import { Component, signal, computed, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, computed, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DocumentService } from '../../services/document.service';
 import { DashboardService } from '../../services/dashboard.service';
@@ -29,6 +29,7 @@ export class Dashboard implements OnInit {
 
   private documentService = inject(DocumentService);
   private dashboardService = inject(DashboardService);
+  private platformId = inject(PLATFORM_ID);
 
   // ==========================================
   // STATE MACHINE (PENGATUR TAMPILAN)
@@ -164,6 +165,26 @@ export class Dashboard implements OnInit {
   top10Debit = signal<DetailTransaksi[]>([]);
   top10CreditFreq = signal<TopFreq[]>([]);
   top10DebitFreq = signal<TopFreq[]>([]);
+  adminTransactions = signal<DetailTransaksi[]>([]);
+  taxTransactions = signal<DetailTransaksi[]>([]);
+  interestTransactions = signal<DetailTransaksi[]>([]);
+
+  // Dummy Data untuk visualisasi awal (Premium Look)
+  dummyTax = signal<DetailTransaksi[]>([
+    { tanggal: '2026-03-25', keterangan: 'PAJAK PPH PASAL 21 MEI', flag: 'DB', jumlah: 12500000 },
+    { tanggal: '2026-02-15', keterangan: 'SETORAN PAJAK PPN DN', flag: 'DB', jumlah: 8450000 },
+    { tanggal: '2026-01-20', keterangan: 'PAJAK PPH 23 JASA KONSULTASI', flag: 'DB', jumlah: 3200000 }
+  ]);
+  dummyAdmin = signal<DetailTransaksi[]>([
+    { tanggal: '2026-03-31', keterangan: 'BIAYA ADMIN BULANAN', flag: 'DB', jumlah: 25000 },
+    { tanggal: '2026-03-15', keterangan: 'ADM TRANSAKSI KLIRING', flag: 'DB', jumlah: 5000 },
+    { tanggal: '2026-02-28', keterangan: 'BIAYA ADMIN BULANAN', flag: 'DB', jumlah: 25000 }
+  ]);
+  dummyInterest = signal<DetailTransaksi[]>([
+    { tanggal: '2026-03-15', keterangan: 'BUNGA PINJAMAN KMK', flag: 'DB', jumlah: 45200000 },
+    { tanggal: '2026-02-15', keterangan: 'BUNGA PINJAMAN KMK', flag: 'DB', jumlah: 45200000 },
+    { tanggal: '2026-01-15', keterangan: 'BUNGA PINJAMAN KMK', flag: 'DB', jumlah: 45200000 }
+  ]);
 
   // Ringkasan Saldo & Arus Kas (dari backend, exclude-aware)
   ringkasanSaldo = signal<RingkasanSaldo>({
@@ -173,8 +194,10 @@ export class Dashboard implements OnInit {
   // FUNGSI INIT & PEMANGGILAN API PERTAMA
   // ==========================================
   ngOnInit(): void {
-    // Saat komponen dashboard pertama kali dirender, panggil API untuk ambil daftar rekening
-    this.fetchAccounts();
+    if (isPlatformBrowser(this.platformId)) {
+        // Saat komponen dashboard pertama kali dirender di browser, panggil API untuk ambil daftar rekening
+        this.fetchAccounts();
+    }
   }
 
   fetchAccounts() {
@@ -279,6 +302,30 @@ export class Dashboard implements OnInit {
       error: (err) => console.error(err)
     });
 
+    // Ambil data biaya admin
+    this.dashboardService.getAdminTransactions(doc.id).subscribe({
+      next: (res) => {
+        if (res.success) this.adminTransactions.set(res.data);
+      },
+      error: (err) => console.error(err)
+    });
+
+    // Ambil data pajak
+    this.dashboardService.getTaxTransactions(doc.id).subscribe({
+      next: (res) => {
+        if (res.success) this.taxTransactions.set(res.data);
+      },
+      error: (err) => console.error(err)
+    });
+
+    // Ambil data bunga
+    this.dashboardService.getInterestTransactions(doc.id).subscribe({
+      next: (res) => {
+        if (res.success) this.interestTransactions.set(res.data);
+      },
+      error: (err) => console.error(err)
+    });
+
     // Ambil isi rincian tabel transaksi mentah untuk ditampilkan di bagian bawah
     this.dashboardService.getDetailSemuaTransaksi(doc.id).subscribe({
       next: (res) => {
@@ -350,6 +397,9 @@ export class Dashboard implements OnInit {
     this.top10Debit.set([]);
     this.top10CreditFreq.set([]);
     this.top10DebitFreq.set([]);
+    this.adminTransactions.set([]);
+    this.taxTransactions.set([]);
+    this.interestTransactions.set([]);
     this.ringkasanSaldo.set({ totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0, avgDailyBalance: 0 });
     this.currentView.set('documents');
   }

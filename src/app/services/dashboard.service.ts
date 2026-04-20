@@ -62,6 +62,24 @@ export class DashboardService {
     return this.http.get<ApiResponse<TopFreq[]>>(`${this.apiUrl}/top10-debit-freq`, { params });
   }
 
+  // Mengambil data transaksi spesifik kategori ADMIN
+  getAdminTransactions(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/admin-transactions`, { params });
+  }
+
+  // Mengambil data transaksi spesifik kategori TAX (Pajak)
+  getTaxTransactions(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/tax-transactions`, { params });
+  }
+
+  // Mengambil data transaksi spesifik kategori INTEREST (Bunga)
+  getInterestTransactions(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/interest-transactions`, { params });
+  }
+
   // Menghasilkan URL download File Excel untuk rincian transaksi dokumen terkait
   exportExcelUrl(documentId: number): string {
     return `${this.apiUrl}/export-excel?documentId=${documentId}`;
