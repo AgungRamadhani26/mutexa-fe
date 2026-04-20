@@ -158,21 +158,21 @@ export class Dashboard implements OnInit {
   interestPage = signal(1);
   categoryPageSize = 5;
 
-  currentTaxData = computed(() => this.taxTransactions().length > 0 ? this.taxTransactions() : this.dummyTax());
+  currentTaxData = computed(() => this.taxTransactions());
   pagedTax = computed(() => {
     const start = (this.taxPage() - 1) * this.categoryPageSize;
     return this.currentTaxData().slice(start, start + this.categoryPageSize);
   });
   taxTotalPages = computed(() => Math.ceil(this.currentTaxData().length / this.categoryPageSize));
 
-  currentAdminData = computed(() => this.adminTransactions().length > 0 ? this.adminTransactions() : this.dummyAdmin());
+  currentAdminData = computed(() => this.adminTransactions());
   pagedAdmin = computed(() => {
     const start = (this.adminPage() - 1) * this.categoryPageSize;
     return this.currentAdminData().slice(start, start + this.categoryPageSize);
   });
   adminTotalPages = computed(() => Math.ceil(this.currentAdminData().length / this.categoryPageSize));
 
-  currentInterestData = computed(() => this.interestTransactions().length > 0 ? this.interestTransactions() : this.dummyInterest());
+  currentInterestData = computed(() => this.interestTransactions());
   pagedInterest = computed(() => {
     const start = (this.interestPage() - 1) * this.categoryPageSize;
     return this.currentInterestData().slice(start, start + this.categoryPageSize);
@@ -195,23 +195,8 @@ export class Dashboard implements OnInit {
   adminTransactions = signal<DetailTransaksi[]>([]);
   taxTransactions = signal<DetailTransaksi[]>([]);
   interestTransactions = signal<DetailTransaksi[]>([]);
-
-  // Dummy Data untuk visualisasi awal (Premium Look)
-  dummyTax = signal<DetailTransaksi[]>([
-    { tanggal: '2026-03-25', keterangan: 'PAJAK PPH PASAL 21 MEI', flag: 'DB', jumlah: 12500000 },
-    { tanggal: '2026-02-15', keterangan: 'SETORAN PAJAK PPN DN', flag: 'DB', jumlah: 8450000 },
-    { tanggal: '2026-01-20', keterangan: 'PAJAK PPH 23 JASA KONSULTASI', flag: 'DB', jumlah: 3200000 }
-  ]);
-  dummyAdmin = signal<DetailTransaksi[]>([
-    { tanggal: '2026-03-31', keterangan: 'BIAYA ADMIN BULANAN', flag: 'DB', jumlah: 25000 },
-    { tanggal: '2026-03-15', keterangan: 'ADM TRANSAKSI KLIRING', flag: 'DB', jumlah: 5000 },
-    { tanggal: '2026-02-28', keterangan: 'BIAYA ADMIN BULANAN', flag: 'DB', jumlah: 25000 }
-  ]);
-  dummyInterest = signal<DetailTransaksi[]>([
-    { tanggal: '2026-03-15', keterangan: 'BUNGA PINJAMAN KMK', flag: 'DB', jumlah: 45200000 },
-    { tanggal: '2026-02-15', keterangan: 'BUNGA PINJAMAN KMK', flag: 'DB', jumlah: 45200000 },
-    { tanggal: '2026-01-15', keterangan: 'BUNGA PINJAMAN KMK', flag: 'DB', jumlah: 45200000 }
-  ]);
+  anomalyCreditTransactions = signal<DetailTransaksi[]>([]);
+  anomalyDebitTransactions = signal<DetailTransaksi[]>([]);
 
   // Ringkasan Saldo & Arus Kas (dari backend, exclude-aware)
   ringkasanSaldo = signal<RingkasanSaldo>({

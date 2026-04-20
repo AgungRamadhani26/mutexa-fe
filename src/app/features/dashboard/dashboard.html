@@ -539,16 +539,17 @@
                   </tr>
                 </thead>
                 <tbody>
+                  @for (an of anomalyCreditTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
                   <tr>
-                    <td>TRF UNKNOWN ID</td>
-                    <td class="fw-semibold text-nowrap text-mu-dark">Rp 5.500.000</td>
-                    <td class="small text-mu-slate-lighter">08 Mar 26</td>
+                    <td class="text-break">{{ an.keterangan }}</td>
+                    <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
+                    <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd MMM yy' }}</td>
                   </tr>
+                  } @empty {
                   <tr>
-                    <td>KIRIMAN DARI LUAR NEGERI</td>
-                    <td class="fw-semibold text-nowrap text-mu-dark">Rp 12.000.000</td>
-                    <td class="small text-mu-slate-lighter">12 Feb 26</td>
+                    <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
                   </tr>
+                  }
                 </tbody>
               </table>
             </div>
@@ -569,16 +570,17 @@
                   </tr>
                 </thead>
                 <tbody>
+                  @for (an of anomalyDebitTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
                   <tr>
-                    <td>PEND DEBET TRX SUSPICIOUS</td>
-                    <td class="fw-semibold text-nowrap text-mu-dark">Rp 1.000.000</td>
-                    <td class="small text-mu-slate-lighter">21 Mar 26</td>
+                    <td class="text-break">{{ an.keterangan }}</td>
+                    <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
+                    <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd MMM yy' }}</td>
                   </tr>
+                  } @empty {
                   <tr>
-                    <td>POTONGAN AUTO DEBIT X</td>
-                    <td class="fw-semibold text-nowrap text-mu-dark">Rp 750.000</td>
-                    <td class="small text-mu-slate-lighter">15 Jan 26</td>
+                    <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
                   </tr>
+                  }
                 </tbody>
               </table>
             </div>
