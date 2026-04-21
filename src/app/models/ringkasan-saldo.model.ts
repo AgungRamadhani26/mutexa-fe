@@ -9,4 +9,10 @@ export interface RingkasanSaldo {
   avgDebit: number;
   jumlahBulan: number;
   avgDailyBalance: number;
+
+  // Added for Windress
+  cleanedTotalCredit?: number;
+  cleanedTotalDebit?: number;
+  cleanedAvgCredit?: number;
+  cleanedAvgDebit?: number;
 }

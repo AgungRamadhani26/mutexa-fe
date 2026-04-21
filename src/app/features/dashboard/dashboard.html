@@ -328,18 +328,32 @@
             ringkasanSaldo().jumlahBulan }} Bulan)</div>
           <div class="row row-cols-1 row-cols-md-5 g-2">
             <div class="col">
-              <div class="summary-card card-combo-green">
+              <div class="summary-card card-combo-green" [class.windress-mode]="isWindressActive()">
                 <div class="card-content">
                   <div class="card-label">Rata-rata Credit</div>
-                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgCredit) }}</div>
+                  @if (!isWindressActive()) {
+                    <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgCredit) }}</div>
+                  } @else {
+                    <div class="windress-compare">
+                      <div class="val-before">{{ formatCurrency(ringkasanSaldo().avgCredit) }} <span class="badge-wr">Before</span></div>
+                      <div class="val-after">{{ formatCurrency(ringkasanSaldo().cleanedAvgCredit || 0) }} <span class="badge-wr-active">After</span></div>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
             <div class="col">
-              <div class="summary-card card-combo-red">
+              <div class="summary-card card-combo-red" [class.windress-mode]="isWindressActive()">
                 <div class="card-content">
                   <div class="card-label">Rata-rata Debit</div>
-                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDebit) }}</div>
+                  @if (!isWindressActive()) {
+                    <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDebit) }}</div>
+                  } @else {
+                    <div class="windress-compare">
+                      <div class="val-before">{{ formatCurrency(ringkasanSaldo().avgDebit) }} <span class="badge-wr">Before</span></div>
+                      <div class="val-after">{{ formatCurrency(ringkasanSaldo().cleanedAvgDebit || 0) }} <span class="badge-wr-active">After</span></div>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
@@ -352,18 +366,32 @@
               </div>
             </div>
             <div class="col">
-              <div class="summary-card card-combo-gray">
+              <div class="summary-card card-combo-gray" [class.windress-mode]="isWindressActive()">
                 <div class="card-content">
                   <div class="card-label">Total Credit</div>
-                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalCredit) }}</div>
+                  @if (!isWindressActive()) {
+                    <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalCredit) }}</div>
+                  } @else {
+                    <div class="windress-compare">
+                      <div class="val-before">{{ formatCurrency(ringkasanSaldo().totalCredit) }} <span class="badge-wr">Before</span></div>
+                      <div class="val-after">{{ formatCurrency(ringkasanSaldo().cleanedTotalCredit || 0) }} <span class="badge-wr-active">After</span></div>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
             <div class="col">
-              <div class="summary-card card-combo-gray">
+              <div class="summary-card card-combo-gray" [class.windress-mode]="isWindressActive()">
                 <div class="card-content">
                   <div class="card-label">Total Debit</div>
-                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalDebit) }}</div>
+                  @if (!isWindressActive()) {
+                    <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalDebit) }}</div>
+                  } @else {
+                    <div class="windress-compare">
+                      <div class="val-before">{{ formatCurrency(ringkasanSaldo().totalDebit) }} <span class="badge-wr">Before</span></div>
+                      <div class="val-after">{{ formatCurrency(ringkasanSaldo().cleanedTotalDebit || 0) }} <span class="badge-wr-active">After</span></div>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
@@ -775,10 +803,13 @@
               <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
                 (Bisa Exclude)</div>
               <div class="d-flex gap-2">
-                <button class="btn btn-mu-accent" (click)="applyWindress()"><i class="bi bi-magic me-2"></i>Terapkan
-                  Windress</button>
-                <button class="btn btn-mu-success" (click)="exportExcel()"><i
-                    class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
+                <button class="btn" [ngClass]="isWindressActive() ? 'btn-mu-amber' : 'btn-mu-accent'" (click)="applyWindress()">
+                  <i class="bi bi-magic me-2"></i>
+                  {{ isWindressActive() ? 'Matikan Windress' : 'Terapkan Windress' }}
+                </button>
+                <button class="btn btn-mu-success" (click)="exportExcel()">
+                  <i class="bi bi-file-earmark-excel me-2"></i>Export Excel
+                </button>
               </div>
             </div>
 

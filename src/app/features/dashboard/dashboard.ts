@@ -40,6 +40,7 @@ export class Dashboard implements OnInit {
   // ==========================================
   currentView = signal<'accounts' | 'documents' | 'analytics'>('accounts');
   activeTab = signal<'ringkasan' | 'anomali' | 'log'>('ringkasan');
+  isWindressActive = signal(false); // Flag Window Dressing
   selectedAccount = signal<BankAccount | null>(null);
   selectedDocument = signal<MutationDocument | null>(null);
 
@@ -280,6 +281,7 @@ export class Dashboard implements OnInit {
 
     this.isLoadingAnalytics.set(true);
     this.activeTab.set('ringkasan'); // Reset ke tab pertama
+    this.isWindressActive.set(false); // Reset status windress
 
     // Ambil data visualisasi kotak-kotak dashboard dari backend untuk dokumen ini
     this.dashboardService.getSummaryPerbulan(doc.id).subscribe({
@@ -369,9 +371,9 @@ export class Dashboard implements OnInit {
   }
 
   // Men-trigger unduhan file Excel berdasarkan dokumen yang sedang aktif
-  // Fungsi placeholder untuk fitur Window Dressing di masa depan
+  // Men-trigger tampilan perbandingan Before/After Windress
   applyWindress() {
-    alert("Fitur 'Terapkan Windress' sedang dikembangkan. Nantinya ini akan mengotomatisasi exclude dan menampilkan perbandingan Before/After.");
+    this.isWindressActive.update(v => !v);
   }
 
   exportExcel() {
@@ -404,7 +406,17 @@ export class Dashboard implements OnInit {
 
     this.dashboardService.toggleExclude(tx.id).subscribe({
       next: (res) => {
-        if (!res.success) tx.isExcluded = oldStatus; // Revert jika gagal
+        if (!res.success) {
+          tx.isExcluded = oldStatus; // Revert jika gagal
+        } else {
+          // Jika berhasil, panggil ulang ringkasan saldo agar angka di dashboard terupdate
+          const doc = this.selectedDocument();
+          if (doc) {
+            this.dashboardService.getRingkasanSaldo(doc.id).subscribe(res => {
+              if (res.success) this.ringkasanSaldo.set(res.data);
+            });
+          }
+        }
       },
       error: (err) => {
         console.error("Gagal toggle exclude", err);
