@@ -39,6 +39,7 @@ export class Dashboard implements OnInit {
   // 3. 'analytics' : Menampilkan visualisasi data dari 1 dokumen spesifik
   // ==========================================
   currentView = signal<'accounts' | 'documents' | 'analytics'>('accounts');
+  activeTab = signal<'ringkasan' | 'anomali' | 'log'>('ringkasan');
   selectedAccount = signal<BankAccount | null>(null);
   selectedDocument = signal<MutationDocument | null>(null);
 
@@ -114,12 +115,12 @@ export class Dashboard implements OnInit {
       if (tx.tanggal) {
         const yyyyMm = tx.tanggal.substring(0, 7); // "YYYY-MM"
         if (!monthsMap.has(yyyyMm)) {
-           const parts = yyyyMm.split('-');
-           if(parts.length === 2) {
-             const year = parts[0];
-             const monthIdx = parseInt(parts[1], 10) - 1;
-             monthsMap.set(yyyyMm, `${monthNames[monthIdx]} ${year}`);
-           }
+          const parts = yyyyMm.split('-');
+          if (parts.length === 2) {
+            const year = parts[0];
+            const monthIdx = parseInt(parts[1], 10) - 1;
+            monthsMap.set(yyyyMm, `${monthNames[monthIdx]} ${year}`);
+          }
         }
       }
     });
@@ -135,8 +136,8 @@ export class Dashboard implements OnInit {
 
     return this.detailTransaksi().filter(tx => {
       const matchSearch = tx.keterangan.toLowerCase().includes(search) ||
-                          tx.tanggal.includes(search) ||
-                          tx.flag.toLowerCase().includes(search);
+        tx.tanggal.includes(search) ||
+        tx.flag.toLowerCase().includes(search);
 
       const matchFlag = flagFilt === 'ALL' ? true : tx.flag === flagFilt;
       const matchMonth = monthFilt === 'ALL' ? true : tx.tanggal.startsWith(monthFilt);
@@ -151,7 +152,7 @@ export class Dashboard implements OnInit {
   });
 
   txTotalPages = computed(() => Math.ceil(this.filteredTransaksi().length / this.txPageSize));
-  
+
   // Category Tables Pagination (Pajak, Admin, Bunga)
   taxPage = signal(1);
   adminPage = signal(1);
@@ -207,8 +208,8 @@ export class Dashboard implements OnInit {
   // ==========================================
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-        // Saat komponen dashboard pertama kali dirender di browser, panggil API untuk ambil daftar rekening
-        this.fetchAccounts();
+      // Saat komponen dashboard pertama kali dirender di browser, panggil API untuk ambil daftar rekening
+      this.fetchAccounts();
     }
   }
 
@@ -233,7 +234,7 @@ export class Dashboard implements OnInit {
   // ==========================================
   // NAVIGASI (PINDAH-PINDAH TAMPILAN/LEVEL)
   // ==========================================
-  
+
   getCategoryRowClass(category?: string): string {
     if (!category) return '';
     switch (category) {
@@ -278,6 +279,7 @@ export class Dashboard implements OnInit {
     this.interestPage.set(1);
 
     this.isLoadingAnalytics.set(true);
+    this.activeTab.set('ringkasan'); // Reset ke tab pertama
 
     // Ambil data visualisasi kotak-kotak dashboard dari backend untuk dokumen ini
     this.dashboardService.getSummaryPerbulan(doc.id).subscribe({
@@ -385,10 +387,10 @@ export class Dashboard implements OnInit {
 
       let url = this.dashboardService.exportExcelUrl(doc.id);
       if (this.filterMonth() !== 'ALL') {
-         url += '&month=' + this.filterMonth();
+        url += '&month=' + this.filterMonth();
       }
       if (this.filterFlag() !== 'ALL') {
-         url += '&flag=' + this.filterFlag();
+        url += '&flag=' + this.filterFlag();
       }
       window.location.href = url;
     }
@@ -457,7 +459,7 @@ export class Dashboard implements OnInit {
     const pages: (number | string)[] = [1];
     let startPage = Math.max(2, currentPage - 2);
     let endPage = Math.min(totalPages - 1, currentPage + 2);
-    
+
     if (currentPage <= 4) {
       endPage = 5;
     }

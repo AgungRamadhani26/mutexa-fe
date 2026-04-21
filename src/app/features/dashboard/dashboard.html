@@ -304,10 +304,28 @@
         </div>
       </div>
 
-      <!-- 1. Ringkasan Saldo -->
-      <div class="mb-3">
-        <div class="section-title"><i class="bi bi-wallet2 me-2"></i>1. Ringkasan Saldo & Arus Kas ({{
-          ringkasanSaldo().jumlahBulan }} Bulan)</div>
+      <!-- NAVIGASI TAB MENU -->
+      <div class="mu-tab-nav mb-4 shadow-sm">
+        <button class="tab-item" [class.active]="activeTab() === 'ringkasan'" (click)="activeTab.set('ringkasan')">
+          <i class="bi bi-graph-up-arrow me-2"></i>Analisis Utama
+        </button>
+        <button class="tab-item" [class.active]="activeTab() === 'anomali'" (click)="activeTab.set('anomali')">
+          <i class="bi bi-exclamation-octagon me-2"></i>Anomali & Kategori
+        </button>
+        <button class="tab-item" [class.active]="activeTab() === 'log'" (click)="activeTab.set('log')">
+          <i class="bi bi-database me-2"></i>Buku Log Transaksi
+        </button>
+      </div>
+
+      <!-- BAGIAN I: ANALISIS UTAMA & TREN -->
+      @if (activeTab() === 'ringkasan') {
+        <div class="analytics-section fade-in">
+          <h5 class="section-group-title"><i class="bi bi-graph-up-arrow me-2"></i>I. ANALISIS UTAMA & TREN ARUS KAS</h5>
+        
+        <!-- 1. Ringkasan Saldo -->
+        <div class="mb-3">
+          <div class="section-title"><i class="bi bi-wallet2 me-2"></i>1. Ringkasan Saldo & Arus Kas ({{
+            ringkasanSaldo().jumlahBulan }} Bulan)</div>
         <div class="row row-cols-1 row-cols-md-5 g-2">
           <div class="col">
             <div class="summary-card card-combo-green">
@@ -421,8 +439,6 @@
                   </tr>
                   }
                 </tbody>
-
-
               </table>
             </div>
           </div>
@@ -519,11 +535,16 @@
           </div>
         </div>
       </div>
+        </div>
+      }
 
-      <hr class="mu-divider">
+      <!-- BAGIAN II: ANOMALI & PENGELUARAN KHUSUS -->
+      @if (activeTab() === 'anomali') {
+        <div class="analytics-section fade-in">
+          <h5 class="section-group-title text-mu-amber"><i class="bi bi-exclamation-octagon me-2"></i>II. ANOMALI & PENGELUARAN KHUSUS</h5>
 
-      <!-- 7 & 8. Anomali -->
-      <div class="row g-3 mb-3">
+        <!-- 7 & 8. Anomali -->
+        <div class="row g-3 mb-3">
         <div class="col-md-6">
           <div class="section-title"><i class="bi bi-exclamation-triangle-fill me-2 text-mu-amber"></i>7. Anomali Credit
           </div>
@@ -721,129 +742,138 @@
           </div>
         </div>
       </div>
-
-      <hr class="mu-divider">
-
-      <!-- 12. Detail Semua Transaksi -->
-      <div class="mb-3">
-        <div class="d-flex flex-column gap-3 mb-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
-              (Bisa Exclude)</div>
-            <div class="d-flex gap-2">
-              <button class="btn btn-mu-accent" (click)="applyWindress()"><i
-                  class="bi bi-magic me-2"></i>Terapkan Windress</button>
-              <button class="btn btn-mu-success" (click)="exportExcel()"><i
-                  class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap align-items-center gap-3 bg-light p-2 rounded border">
-            <!-- Select Bulan -->
-            <div class="flex-grow-0">
-              <select class="form-select form-select-sm border-0 shadow-sm" style="min-width: 150px; font-weight: 500;"
-                [ngModel]="filterMonth()" (ngModelChange)="filterMonth.set($event); onSearchChange('tx')">
-                <option value="ALL">🗓️ Semua Bulan</option>
-                @for (m of availableMonths(); track m.value) {
-                <option [value]="m.value">{{m.label}}</option>
-                }
-              </select>
-            </div>
-
-            <!-- Styled Segmented Buttons for Flag -->
-            <div class="btn-group shadow-sm" role="group">
-              <input type="radio" class="btn-check" name="btnflag" id="flagAll" value="ALL"
-                [checked]="filterFlag() === 'ALL'" (change)="filterFlag.set('ALL'); onSearchChange('tx')">
-              <label class="btn btn-sm btn-outline-secondary" for="flagAll"><i class="bi bi-funnel"></i> Semua</label>
-
-              <input type="radio" class="btn-check" name="btnflag" id="flagCr" value="CR"
-                [checked]="filterFlag() === 'CR'" (change)="filterFlag.set('CR'); onSearchChange('tx')">
-              <label class="btn btn-sm btn-outline-success" for="flagCr"><i class="bi bi-plus-circle"></i>
-                Kredit</label>
-
-              <input type="radio" class="btn-check" name="btnflag" id="flagDb" value="DB"
-                [checked]="filterFlag() === 'DB'" (change)="filterFlag.set('DB'); onSearchChange('tx')">
-              <label class="btn btn-sm btn-outline-danger" for="flagDb"><i class="bi bi-dash-circle"></i> Debit</label>
-            </div>
-
-            <!-- Search -->
-            <div class="mu-search search-form-md ms-auto shadow-sm">
-              <i class="bi bi-search"></i>
-              <input type="text" class="form-control form-control-sm border-0" placeholder="Cari transaksi..."
-                [ngModel]="txSearch()" (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
-            </div>
-          </div>
         </div>
+      }
 
-        <div class="mu-card">
-          <div class="table-responsive table-scroll-500">
-            <table class="table mu-table">
-              <thead class="sticky-top">
-                <tr>
-                  <th class="text-center" style="width: 50px;" title="Kecualikan dari Export Excel">Excld</th>
-                  <th>Tanggal</th>
-                  <th>Keterangan</th>
-                  <th class="text-center">Flag</th>
-                  <th class="text-end">Jumlah</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (tx of pagedTransaksi(); track tx.id || tx.tanggal + tx.keterangan + tx.jumlah) {
-                <tr [ngClass]="getCategoryRowClass(tx.category)"
-                  [class.text-decoration-line-through]="!!tx.isExcluded" 
-                  [class.text-muted]="!!tx.isExcluded">
-                  <td class="text-center">
-                    <div class="form-check d-flex justify-content-center m-0">
-                      <input class="form-check-input flex-shrink-0" type="checkbox" [checked]="!!tx.isExcluded"
-                        (change)="toggleExclude(tx)">
-                    </div>
-                  </td>
-                  <td class="small">{{ tx.tanggal | date:'dd-MM-yyyy' }}</td>
-                  <td class="fw-medium" [class.text-mu-darker]="!tx.isExcluded">{{ tx.keterangan }}</td>
-                  <td class="text-center">
-                    @if (tx.flag === 'CR') {
-                    <span class="flag-cr" [class.text-muted]="!!tx.isExcluded"><i
-                        class="bi bi-plus-circle me-1"></i>CR</span>
-                    } @else {
-                    <span class="flag-db" [class.text-muted]="!!tx.isExcluded"><i
-                        class="bi bi-dash-circle me-1"></i>DB</span>
-                    }
-                  </td>
-                  <td class="text-end fw-semibold"
-                    [ngClass]="tx.isExcluded ? 'text-muted' : (tx.flag === 'CR' ? 'text-mu-green' : 'text-mu-red')">
-                    {{ tx.flag === 'DB' ? '- ' : '+ ' }}{{ formatCurrency(tx.jumlah) }}
-                  </td>
-                </tr>
-                } @empty {
-                <tr>
-                  <td colspan="5" class="text-center py-4 text-mu-slate-lighter">
-                    @if (txSearch()) {
-                    Tidak ada transaksi yang cocok dengan "<strong>{{ txSearch() }}</strong>"
-                    } @else {
-                    Belum ada data detail transaksi.
-                    }
-                  </td>
-                </tr>
-                }
-              </tbody>
-            </table>
+      <!-- BAGIAN III: DATA TRANSAKSI LENGKAP -->
+      @if (activeTab() === 'log') {
+      <div class="analytics-section fade-in">
+        <h5 class="section-group-title text-mu-primary"><i class="bi bi-database me-2"></i>III. DATA TRANSAKSI LENGKAP</h5>
+
+        <!-- 12. Detail Semua Transaksi -->
+        <div class="mb-3">
+          <div class="d-flex flex-column gap-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
+                (Bisa Exclude)</div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-mu-accent" (click)="applyWindress()"><i
+                    class="bi bi-magic me-2"></i>Terapkan Windress</button>
+                <button class="btn btn-mu-success" (click)="exportExcel()"><i
+                    class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
+              </div>
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center gap-3 bg-light p-2 rounded border">
+              <!-- Select Bulan -->
+              <div class="flex-grow-0">
+                <select class="form-select form-select-sm border-0 shadow-sm" style="min-width: 150px; font-weight: 500;"
+                  [ngModel]="filterMonth()" (ngModelChange)="filterMonth.set($event); onSearchChange('tx')">
+                  <option value="ALL">🗓️ Semua Bulan</option>
+                  @for (m of availableMonths(); track m.value) {
+                  <option [value]="m.value">{{m.label}}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Styled Segmented Buttons for Flag -->
+              <div class="btn-group shadow-sm" role="group">
+                <input type="radio" class="btn-check" name="btnflag" id="flagAll" value="ALL"
+                  [checked]="filterFlag() === 'ALL'" (change)="filterFlag.set('ALL'); onSearchChange('tx')">
+                <label class="btn btn-sm btn-outline-secondary" for="flagAll"><i class="bi bi-funnel"></i> Semua</label>
+
+                <input type="radio" class="btn-check" name="btnflag" id="flagCr" value="CR"
+                  [checked]="filterFlag() === 'CR'" (change)="filterFlag.set('CR'); onSearchChange('tx')">
+                <label class="btn btn-sm btn-outline-success" for="flagCr"><i class="bi bi-plus-circle"></i>
+                  Kredit</label>
+
+                <input type="radio" class="btn-check" name="btnflag" id="flagDb" value="DB"
+                  [checked]="filterFlag() === 'DB'" (change)="filterFlag.set('DB'); onSearchChange('tx')">
+                <label class="btn btn-sm btn-outline-danger" for="flagDb"><i class="bi bi-dash-circle"></i> Debit</label>
+              </div>
+
+              <!-- Search -->
+              <div class="mu-search search-form-md ms-auto shadow-sm">
+                <i class="bi bi-search"></i>
+                <input type="text" class="form-control form-control-sm border-0" placeholder="Cari transaksi..."
+                  [ngModel]="txSearch()" (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
+              </div>
+            </div>
           </div>
-          @if (txTotalPages() > 1) {
-          <div class="mu-pagination">
-            <button class="page-btn" [disabled]="txPage() === 1" (click)="goToPage('tx', txPage() - 1)"><i
-                class="bi bi-chevron-left"></i></button>
-            @for (p of getVisiblePages(txPage(), txTotalPages()); track $index) {
-            <button class="page-btn" [class.active]="txPage() === p" [disabled]="p === '...'"
-              (click)="p !== '...' ? goToPage('tx', +p) : null">{{ p }}</button>
+
+          <div class="mu-card">
+            <div class="table-responsive table-scroll-500">
+              <table class="table mu-table">
+                <thead class="sticky-top">
+                  <tr>
+                    <th class="text-center" style="width: 50px;" title="Kecualikan dari Export Excel">Excld</th>
+                    <th>Tanggal</th>
+                    <th>Keterangan</th>
+                    <th class="text-center">Flag</th>
+                    <th class="text-end">Jumlah</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (tx of pagedTransaksi(); track tx.id || tx.tanggal + tx.keterangan + tx.jumlah) {
+                  <tr [ngClass]="getCategoryRowClass(tx.category)"
+                    [class.text-decoration-line-through]="!!tx.isExcluded" 
+                    [class.text-muted]="!!tx.isExcluded">
+                    <td class="text-center">
+                      <div class="form-check d-flex justify-content-center m-0">
+                        <input class="form-check-input flex-shrink-0" type="checkbox" [checked]="!!tx.isExcluded"
+                          (change)="toggleExclude(tx)">
+                      </div>
+                    </td>
+                    <td class="small">{{ tx.tanggal | date:'dd-MM-yyyy' }}</td>
+                    <td class="fw-medium" [class.text-mu-darker]="!tx.isExcluded">{{ tx.keterangan }}</td>
+                    <td class="text-center">
+                      @if (tx.flag === 'CR') {
+                      <span class="flag-cr" [class.text-muted]="!!tx.isExcluded"><i
+                          class="bi bi-plus-circle me-1"></i>CR</span>
+                      } @else {
+                      <span class="flag-db" [class.text-muted]="!!tx.isExcluded"><i
+                          class="bi bi-dash-circle me-1"></i>DB</span>
+                      }
+                    </td>
+                    <td class="text-end fw-semibold"
+                      [ngClass]="tx.isExcluded ? 'text-muted' : (tx.flag === 'CR' ? 'text-mu-green' : 'text-mu-red')">
+                      {{ tx.flag === 'DB' ? '- ' : '+ ' }}{{ formatCurrency(tx.jumlah) }}
+                    </td>
+                  </tr>
+                  } @empty {
+                  <tr>
+                    <td colspan="5" class="text-center py-4 text-mu-slate-lighter">
+                      @if (txSearch()) {
+                      Tidak ada transaksi yang cocok dengan "<strong>{{ txSearch() }}</strong>"
+                      } @else {
+                      Belum ada data detail transaksi.
+                      }
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            @if (txTotalPages() > 1) {
+            <div class="mu-pagination">
+              <button class="page-btn" [disabled]="txPage() === 1" (click)="goToPage('tx', txPage() - 1)">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              @for (p of getVisiblePages(txPage(), txTotalPages()); track $index) {
+              <button class="page-btn" [class.active]="txPage() === p" [disabled]="p === '...'"
+                (click)="p !== '...' ? goToPage('tx', +p) : null">{{ p }}</button>
+              }
+              <button class="page-btn" [disabled]="txPage() === txTotalPages()" (click)="goToPage('tx', txPage() + 1)">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+              <span class="page-info">{{ filteredTransaksi().length }} transaksi</span>
+            </div>
             }
-            <button class="page-btn" [disabled]="txPage() === txTotalPages()" (click)="goToPage('tx', txPage() + 1)"><i
-                class="bi bi-chevron-right"></i></button>
-            <span class="page-info">{{ filteredTransaksi().length }} transaksi</span>
           </div>
-          }
         </div>
       </div>
-
+      }
     </div>
     }
 
