@@ -319,123 +319,88 @@
 
       <!-- BAGIAN I: ANALISIS UTAMA & TREN -->
       @if (activeTab() === 'ringkasan') {
-        <div class="analytics-section fade-in">
-          <h5 class="section-group-title"><i class="bi bi-graph-up-arrow me-2"></i>I. ANALISIS UTAMA & TREN ARUS KAS</h5>
-        
+      <div class="analytics-section fade-in">
+        <h5 class="section-group-title"><i class="bi bi-graph-up-arrow me-2"></i>I. ANALISIS UTAMA & TREN ARUS KAS</h5>
+
         <!-- 1. Ringkasan Saldo -->
         <div class="mb-3">
           <div class="section-title"><i class="bi bi-wallet2 me-2"></i>1. Ringkasan Saldo & Arus Kas ({{
             ringkasanSaldo().jumlahBulan }} Bulan)</div>
-        <div class="row row-cols-1 row-cols-md-5 g-2">
-          <div class="col">
-            <div class="summary-card card-combo-green">
-              <div class="card-content">
-                <div class="card-label">Rata-rata Credit</div>
-                <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgCredit) }}</div>
+          <div class="row row-cols-1 row-cols-md-5 g-2">
+            <div class="col">
+              <div class="summary-card card-combo-green">
+                <div class="card-content">
+                  <div class="card-label">Rata-rata Credit</div>
+                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgCredit) }}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col">
-            <div class="summary-card card-combo-red">
-              <div class="card-content">
-                <div class="card-label">Rata-rata Debit</div>
-                <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDebit) }}</div>
+            <div class="col">
+              <div class="summary-card card-combo-red">
+                <div class="card-content">
+                  <div class="card-label">Rata-rata Debit</div>
+                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDebit) }}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col">
-            <div class="summary-card card-combo-blue">
-              <div class="card-content">
-                <div class="card-label">Rata-rata Saldo (Harian)</div>
-                <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDailyBalance) }}</div>
+            <div class="col">
+              <div class="summary-card card-combo-blue">
+                <div class="card-content">
+                  <div class="card-label">Rata-rata Saldo (Harian)</div>
+                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDailyBalance) }}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col">
-            <div class="summary-card card-combo-gray">
-              <div class="card-content">
-                <div class="card-label">Total Credit</div>
-                <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalCredit) }}</div>
+            <div class="col">
+              <div class="summary-card card-combo-gray">
+                <div class="card-content">
+                  <div class="card-label">Total Credit</div>
+                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalCredit) }}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col">
-            <div class="summary-card card-combo-gray">
-              <div class="card-content">
-                <div class="card-label">Total Debit</div>
-                <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalDebit) }}</div>
+            <div class="col">
+              <div class="summary-card card-combo-gray">
+                <div class="card-content">
+                  <div class="card-label">Total Debit</div>
+                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalDebit) }}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 2. Summary Perbulan -->
-      <div class="mb-3 mt-3">
-        <div class="section-title"><i class="bi bi-calendar3 me-2"></i>2. Summary Perbulan</div>
-        <div class="mu-card">
-          <div class="table-responsive">
-            <table class="table mu-table text-nowrap">
-              <thead>
-                <tr>
-                  <th>Periode</th>
-                  <th>Saldo Akhir</th>
-                  <th class="text-mu-green"><i class="bi bi-arrow-down-left me-1"></i>Total Credit</th>
-                  <th class="text-mu-red"><i class="bi bi-arrow-up-right me-1"></i>Total Debit</th>
-                  <th class="text-center">Freq Credit</th>
-                  <th class="text-center">Freq Debit</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (item of summaryPerbulan(); track item.periode) {
-                <tr>
-                  <td class="fw-semibold">{{ item.periode }}</td>
-                  <td>{{ formatCurrency(item.saldoAkhir) }}</td>
-                  <td class="fw-medium text-mu-green">{{ formatCurrency(item.totalCredit) }}</td>
-                  <td class="fw-medium text-mu-red">{{ formatCurrency(item.totalDebit) }}</td>
-                  <td class="text-center"><span class="badge-freq-item">{{
-                      item.freqCredit }}x</span></td>
-                  <td class="text-center"><span class="badge-freq-item">{{
-                      item.freqDebit }}x</span></td>
-                </tr>
-                } @empty {
-                <tr>
-                  <td colspan="6" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
-                </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <hr class="mu-divider">
-
-      <!-- 3 & 4. Top 10 Amount -->
-      <div class="row g-3 mb-3">
-        <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-sort-down-alt me-2 text-mu-green"></i>3. Top
-            10 Credit Amount</div>
+        <!-- 2. Summary Perbulan -->
+        <div class="mb-3 mt-3">
+          <div class="section-title"><i class="bi bi-calendar3 me-2"></i>2. Summary Perbulan</div>
           <div class="mu-card">
-            <div class="table-responsive table-scroll-280">
-              <table class="table mu-table">
+            <div class="table-responsive">
+              <table class="table mu-table text-nowrap">
                 <thead>
                   <tr>
-                    <th>Keterangan</th>
-                    <th>Nominal</th>
-                    <th>Tanggal</th>
+                    <th>Periode</th>
+                    <th>Saldo Akhir</th>
+                    <th class="text-mu-green"><i class="bi bi-arrow-down-left me-1"></i>Total Credit</th>
+                    <th class="text-mu-red"><i class="bi bi-arrow-up-right me-1"></i>Total Debit</th>
+                    <th class="text-center">Freq Credit</th>
+                    <th class="text-center">Freq Debit</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @for (cr of top10Credit(); track cr.keterangan + cr.tanggal + cr.jumlah) {
+                  @for (item of summaryPerbulan(); track item.periode) {
                   <tr>
-                    <td class="text-break">{{ cr.keterangan }}</td>
-                    <td class="fw-semibold text-nowrap text-mu-green">{{ formatCurrency(cr.jumlah) }}</td>
-                    <td class="small text-mu-slate-lighter">{{ cr.tanggal | date:'dd MMM yy' }}</td>
+                    <td class="fw-semibold">{{ item.periode }}</td>
+                    <td>{{ formatCurrency(item.saldoAkhir) }}</td>
+                    <td class="fw-medium text-mu-green">{{ formatCurrency(item.totalCredit) }}</td>
+                    <td class="fw-medium text-mu-red">{{ formatCurrency(item.totalDebit) }}</td>
+                    <td class="text-center"><span class="badge-freq-item">{{
+                        item.freqCredit }}x</span></td>
+                    <td class="text-center"><span class="badge-freq-item">{{
+                        item.freqDebit }}x</span></td>
                   </tr>
                   } @empty {
                   <tr>
-                    <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
+                    <td colspan="6" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
                   </tr>
                   }
                 </tbody>
@@ -443,312 +408,365 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-sort-up me-2 text-mu-red"></i>4. Top 10
-            Debit Amount</div>
-          <div class="mu-card">
-            <div class="table-responsive table-scroll-280">
-              <table class="table mu-table">
-                <thead>
-                  <tr>
-                    <th>Keterangan</th>
-                    <th>Nominal</th>
-                    <th>Tanggal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (db of top10Debit(); track db.keterangan + db.tanggal + db.jumlah) {
-                  <tr>
-                    <td class="text-break">{{ db.keterangan }}</td>
-                    <td class="fw-semibold text-nowrap text-mu-red">{{ formatCurrency(db.jumlah) }}</td>
-                    <td class="small text-mu-slate-lighter">{{ db.tanggal | date:'dd MMM yy' }}</td>
-                  </tr>
-                  } @empty {
-                  <tr>
-                    <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
-                  </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- 5 & 6. Top 10 Freq -->
-      <div class="row g-3 mb-3">
-        <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-arrow-repeat me-2 text-mu-green"></i>5. Top 10
-            Credit Freq</div>
-          <div class="mu-card">
-            <div class="table-responsive table-scroll-250">
-              <table class="table mu-table">
-                <thead>
-                  <tr>
-                    <th class="w-75">Keterangan</th>
-                    <th class="text-center">Frekuensi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Menarik rentetan top 10 frekuensi keterangan via Angular Signal (hasil Response backend) -->
-                  @for (freq of top10CreditFreq(); track freq.keterangan) {
-                  <tr>
-                    <td>{{ freq.keterangan }}</td>
-                    <td class="text-center"><span class="freq-badge-cr">{{ freq.frekuensi }} x</span></td>
-                  </tr>
-                  } @empty {
-                  <tr>
-                    <td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
-                  </tr>
-                  }
-                </tbody>
-              </table>
+        <hr class="mu-divider">
+
+        <!-- 3 & 4. Top 10 Amount -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <div class="section-title"><i class="bi bi-sort-down-alt me-2 text-mu-green"></i>3. Top
+              10 Credit Amount</div>
+            <div class="mu-card">
+              <div class="table-responsive table-scroll-280">
+                <table class="table mu-table">
+                  <thead>
+                    <tr>
+                      <th>Keterangan</th>
+                      <th>Nominal</th>
+                      <th>Tanggal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (cr of top10Credit(); track cr.keterangan + cr.tanggal + cr.jumlah) {
+                    <tr>
+                      <td class="text-break">{{ cr.keterangan }}</td>
+                      <td class="fw-semibold text-nowrap text-mu-green">{{ formatCurrency(cr.jumlah) }}</td>
+                      <td class="small text-mu-slate-lighter">{{ cr.tanggal | date:'dd MMM yy' }}</td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                      <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="section-title"><i class="bi bi-sort-up me-2 text-mu-red"></i>4. Top 10
+              Debit Amount</div>
+            <div class="mu-card">
+              <div class="table-responsive table-scroll-280">
+                <table class="table mu-table">
+                  <thead>
+                    <tr>
+                      <th>Keterangan</th>
+                      <th>Nominal</th>
+                      <th>Tanggal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (db of top10Debit(); track db.keterangan + db.tanggal + db.jumlah) {
+                    <tr>
+                      <td class="text-break">{{ db.keterangan }}</td>
+                      <td class="fw-semibold text-nowrap text-mu-red">{{ formatCurrency(db.jumlah) }}</td>
+                      <td class="small text-mu-slate-lighter">{{ db.tanggal | date:'dd MMM yy' }}</td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                      <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-arrow-repeat me-2 text-mu-red"></i>6. Top 10
-            Debit Freq</div>
-          <div class="mu-card">
-            <div class="table-responsive table-scroll-250">
-              <table class="table mu-table">
-                <thead>
-                  <tr>
-                    <th class="w-75">Keterangan</th>
-                    <th class="text-center">Frekuensi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (freq of top10DebitFreq(); track freq.keterangan) {
-                  <tr>
-                    <td>{{ freq.keterangan }}</td>
-                    <td class="text-center"><span class="freq-badge-db">{{ freq.frekuensi }} x</span></td>
-                  </tr>
-                  } @empty {
-                  <tr>
-                    <td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
-                  </tr>
-                  }
-                </tbody>
-              </table>
+
+        <!-- 5 & 6. Top 10 Freq -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <div class="section-title"><i class="bi bi-arrow-repeat me-2 text-mu-green"></i>5. Top 10
+              Credit Freq</div>
+            <div class="mu-card">
+              <div class="table-responsive table-scroll-250">
+                <table class="table mu-table">
+                  <thead>
+                    <tr>
+                      <th class="w-75">Keterangan</th>
+                      <th class="text-center">Frekuensi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Menarik rentetan top 10 frekuensi keterangan via Angular Signal (hasil Response backend) -->
+                    @for (freq of top10CreditFreq(); track freq.keterangan) {
+                    <tr>
+                      <td>{{ freq.keterangan }}</td>
+                      <td class="text-center"><span class="freq-badge-cr">{{ freq.frekuensi }} x</span></td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                      <td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="section-title"><i class="bi bi-arrow-repeat me-2 text-mu-red"></i>6. Top 10
+              Debit Freq</div>
+            <div class="mu-card">
+              <div class="table-responsive table-scroll-250">
+                <table class="table mu-table">
+                  <thead>
+                    <tr>
+                      <th class="w-75">Keterangan</th>
+                      <th class="text-center">Frekuensi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (freq of top10DebitFreq(); track freq.keterangan) {
+                    <tr>
+                      <td>{{ freq.keterangan }}</td>
+                      <td class="text-center"><span class="freq-badge-db">{{ freq.frekuensi }} x</span></td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                      <td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
-        </div>
       }
 
       <!-- BAGIAN II: ANOMALI & PENGELUARAN KHUSUS -->
       @if (activeTab() === 'anomali') {
-        <div class="analytics-section fade-in">
-          <h5 class="section-group-title text-mu-amber"><i class="bi bi-exclamation-octagon me-2"></i>II. ANOMALI & PENGELUARAN KHUSUS</h5>
+      <div class="analytics-section fade-in">
+        <h5 class="section-group-title text-mu-amber"><i class="bi bi-exclamation-octagon me-2"></i>II. ANOMALI &
+          PENGELUARAN KHUSUS</h5>
 
         <!-- 7 & 8. Anomali -->
         <div class="row g-3 mb-3">
-        <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-exclamation-triangle-fill me-2 text-mu-amber"></i>7. Anomali Credit
+          <div class="col-md-6">
+            <div class="section-title"><i class="bi bi-exclamation-triangle-fill me-2 text-mu-amber"></i>7. Anomali
+              Credit
+            </div>
+            <div class="anomali-card">
+              <div class="anomali-accent"></div>
+              <div class="table-responsive table-scroll-200">
+                <table class="table mu-table">
+                  <thead>
+                    <tr>
+                      <th>Keterangan</th>
+                      <th>Nominal</th>
+                      <th>Tanggal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (an of anomalyCreditTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
+                    <tr>
+                      <td class="text-break">{{ an.keterangan }}</td>
+                      <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
+                      <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd MMM yy' }}</td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                      <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-          <div class="anomali-card">
-            <div class="anomali-accent"></div>
-            <div class="table-responsive table-scroll-200">
-              <table class="table mu-table">
-                <thead>
-                  <tr>
-                    <th>Keterangan</th>
-                    <th>Nominal</th>
-                    <th>Tanggal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (an of anomalyCreditTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
-                  <tr>
-                    <td class="text-break">{{ an.keterangan }}</td>
-                    <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
-                    <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd MMM yy' }}</td>
-                  </tr>
-                  } @empty {
-                  <tr>
-                    <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
-                  </tr>
-                  }
-                </tbody>
-              </table>
+          <div class="col-md-6">
+            <div class="section-title"><i class="bi bi-x-octagon-fill me-2 text-mu-red"></i>8.
+              Anomali Debit</div>
+            <div class="anomali-card">
+              <div class="anomali-accent"></div>
+              <div class="table-responsive table-scroll-200">
+                <table class="table mu-table">
+                  <thead>
+                    <tr>
+                      <th>Keterangan</th>
+                      <th>Nominal</th>
+                      <th>Tanggal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (an of anomalyDebitTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
+                    <tr>
+                      <td class="text-break">{{ an.keterangan }}</td>
+                      <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
+                      <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd MMM yy' }}</td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                      <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="section-title"><i class="bi bi-x-octagon-fill me-2 text-mu-red"></i>8.
-            Anomali Debit</div>
-          <div class="anomali-card">
-            <div class="anomali-accent"></div>
-            <div class="table-responsive table-scroll-200">
-              <table class="table mu-table">
-                <thead>
-                  <tr>
-                    <th>Keterangan</th>
-                    <th>Nominal</th>
-                    <th>Tanggal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (an of anomalyDebitTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
-                  <tr>
-                    <td class="text-break">{{ an.keterangan }}</td>
-                    <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
-                    <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd MMM yy' }}</td>
-                  </tr>
-                  } @empty {
-                  <tr>
-                    <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
-                  </tr>
-                  }
-                </tbody>
-              </table>
+
+        <hr class="mu-divider">
+
+        <!-- 9, 10, 11 (Pajak, Admin, Bunga) -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <div class="section-title">9. Pajak</div>
+            <div class="category-card h-100 d-flex flex-column">
+              <div class="cat-accent cat-accent-orange"></div>
+              <div class="flex-grow-1">
+                <table class="table mu-table">
+                  <thead>
+                    <tr>
+                      <th>Keterangan</th>
+                      <th>Nominal</th>
+                      <th>Tgl</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (tx of pagedTax(); track $index) {
+                    <tr>
+                      <td class="small">{{ tx.keterangan }}</td>
+                      <td class="fw-bold small text-mu-dark">{{ formatCurrency(tx.jumlah) }}</td>
+                      <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd MMM' }}</td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                      <td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Mini Pagination Pajak (Always Visible) -->
+              <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
+                <button class="btn btn-mini-nav btn-mini-orange" [disabled]="taxPage() === 1"
+                  (click)="goToPage('tax', taxPage() - 1)">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <span class="text-tiny text-mu-slate-light">
+                  Hal {{ taxPage() }} / {{ taxTotalPages() || 1 }}
+                  <span class="ms-1 opacity-75">({{ currentTaxData().length }} data)</span>
+                </span>
+                <button class="btn btn-mini-nav btn-mini-orange"
+                  [disabled]="taxPage() === taxTotalPages() || taxTotalPages() === 0"
+                  (click)="goToPage('tax', taxPage() + 1)">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="section-title">10. Biaya Admin</div>
+            <div class="category-card h-100 d-flex flex-column">
+              <div class="cat-accent cat-accent-purple"></div>
+              <div class="flex-grow-1">
+                <table class="table mu-table">
+                  <thead>
+                    <tr>
+                      <th>Keterangan</th>
+                      <th>Nominal</th>
+                      <th>Tgl</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (tx of pagedAdmin(); track $index) {
+                    <tr>
+                      <td class="small">{{ tx.keterangan }}</td>
+                      <td class="fw-bold small text-mu-dark">{{ formatCurrency(tx.jumlah) }}</td>
+                      <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd MMM' }}</td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                      <td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Mini Pagination Admin (Always Visible) -->
+              <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
+                <button class="btn btn-mini-nav btn-mini-purple" [disabled]="adminPage() === 1"
+                  (click)="goToPage('admin', adminPage() - 1)">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <span class="text-tiny text-mu-slate-light">
+                  Hal {{ adminPage() }} / {{ adminTotalPages() || 1 }}
+                  <span class="ms-1 opacity-75">({{ currentAdminData().length }} data)</span>
+                </span>
+                <button class="btn btn-mini-nav btn-mini-purple"
+                  [disabled]="adminPage() === adminTotalPages() || adminTotalPages() === 0"
+                  (click)="goToPage('admin', adminPage() + 1)">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="section-title">11. Bunga Pinjaman</div>
+            <div class="category-card h-100 d-flex flex-column">
+              <div class="cat-accent cat-accent-cyan"></div>
+              <div class="flex-grow-1">
+                <table class="table mu-table">
+                  <thead>
+                    <tr>
+                      <th>Keterangan</th>
+                      <th>Nominal</th>
+                      <th>Tgl</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (tx of pagedInterest(); track $index) {
+                    <tr>
+                      <td class="small">{{ tx.keterangan }}</td>
+                      <td class="fw-bold small text-mu-cyan">{{ formatCurrency(tx.jumlah) }}</td>
+                      <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd MMM' }}</td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                      <td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Mini Pagination Bunga (Always Visible) -->
+              <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
+                <button class="btn btn-mini-nav btn-mini-cyan" [disabled]="interestPage() === 1"
+                  (click)="goToPage('interest', interestPage() - 1)">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <span class="text-tiny text-mu-slate-light">
+                  Hal {{ interestPage() }} / {{ interestTotalPages() || 1 }}
+                  <span class="ms-1 opacity-75">({{ currentInterestData().length }} data)</span>
+                </span>
+                <button class="btn btn-mini-nav btn-mini-cyan"
+                  [disabled]="interestPage() === interestTotalPages() || interestTotalPages() === 0"
+                  (click)="goToPage('interest', interestPage() + 1)">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <hr class="mu-divider">
-
-      <!-- 9, 10, 11 (Pajak, Admin, Bunga) -->
-      <div class="row g-3 mb-3">
-        <div class="col-md-4">
-          <div class="section-title">9. Pajak</div>
-          <div class="category-card h-100 d-flex flex-column">
-            <div class="cat-accent cat-accent-orange"></div>
-            <div class="flex-grow-1">
-              <table class="table mu-table">
-                <thead>
-                  <tr>
-                    <th>Keterangan</th>
-                    <th>Nominal</th>
-                    <th>Tgl</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (tx of pagedTax(); track $index) {
-                      <tr>
-                          <td class="small">{{ tx.keterangan }}</td>
-                          <td class="fw-bold small text-mu-dark">{{ formatCurrency(tx.jumlah) }}</td>
-                          <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd MMM' }}</td>
-                      </tr>
-                  } @empty {
-                      <tr><td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td></tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Mini Pagination Pajak (Always Visible) -->
-            <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
-              <button class="btn btn-mini-nav btn-mini-orange" [disabled]="taxPage() === 1" (click)="goToPage('tax', taxPage() - 1)">
-                <i class="bi bi-chevron-left"></i>
-              </button>
-              <span class="text-tiny text-mu-slate-light">
-                Hal {{ taxPage() }} / {{ taxTotalPages() || 1 }} 
-                <span class="ms-1 opacity-75">({{ currentTaxData().length }} data)</span>
-              </span>
-              <button class="btn btn-mini-nav btn-mini-orange" [disabled]="taxPage() === taxTotalPages() || taxTotalPages() === 0" (click)="goToPage('tax', taxPage() + 1)">
-                <i class="bi bi-chevron-right"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="section-title">10. Biaya Admin</div>
-          <div class="category-card h-100 d-flex flex-column">
-            <div class="cat-accent cat-accent-purple"></div>
-            <div class="flex-grow-1">
-              <table class="table mu-table">
-                <thead>
-                  <tr>
-                    <th>Keterangan</th>
-                    <th>Nominal</th>
-                    <th>Tgl</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (tx of pagedAdmin(); track $index) {
-                      <tr>
-                          <td class="small">{{ tx.keterangan }}</td>
-                          <td class="fw-bold small text-mu-dark">{{ formatCurrency(tx.jumlah) }}</td>
-                          <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd MMM' }}</td>
-                      </tr>
-                  } @empty {
-                      <tr><td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td></tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Mini Pagination Admin (Always Visible) -->
-            <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
-              <button class="btn btn-mini-nav btn-mini-purple" [disabled]="adminPage() === 1" (click)="goToPage('admin', adminPage() - 1)">
-                <i class="bi bi-chevron-left"></i>
-              </button>
-              <span class="text-tiny text-mu-slate-light">
-                Hal {{ adminPage() }} / {{ adminTotalPages() || 1 }}
-                <span class="ms-1 opacity-75">({{ currentAdminData().length }} data)</span>
-              </span>
-              <button class="btn btn-mini-nav btn-mini-purple" [disabled]="adminPage() === adminTotalPages() || adminTotalPages() === 0" (click)="goToPage('admin', adminPage() + 1)">
-                <i class="bi bi-chevron-right"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="section-title">11. Bunga Pinjaman</div>
-          <div class="category-card h-100 d-flex flex-column">
-            <div class="cat-accent cat-accent-cyan"></div>
-            <div class="flex-grow-1">
-              <table class="table mu-table">
-                <thead>
-                  <tr>
-                    <th>Keterangan</th>
-                    <th>Nominal</th>
-                    <th>Tgl</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (tx of pagedInterest(); track $index) {
-                      <tr>
-                        <td class="small">{{ tx.keterangan }}</td>
-                        <td class="fw-bold small text-mu-cyan">{{ formatCurrency(tx.jumlah) }}</td>
-                        <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd MMM' }}</td>
-                      </tr>
-                  } @empty {
-                      <tr><td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td></tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Mini Pagination Bunga (Always Visible) -->
-            <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
-              <button class="btn btn-mini-nav btn-mini-cyan" [disabled]="interestPage() === 1" (click)="goToPage('interest', interestPage() - 1)">
-                <i class="bi bi-chevron-left"></i>
-              </button>
-              <span class="text-tiny text-mu-slate-light">
-                Hal {{ interestPage() }} / {{ interestTotalPages() || 1 }}
-                <span class="ms-1 opacity-75">({{ currentInterestData().length }} data)</span>
-              </span>
-              <button class="btn btn-mini-nav btn-mini-cyan" [disabled]="interestPage() === interestTotalPages() || interestTotalPages() === 0" (click)="goToPage('interest', interestPage() + 1)">
-                <i class="bi bi-chevron-right"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-        </div>
       }
 
       <!-- BAGIAN III: DATA TRANSAKSI LENGKAP -->
       @if (activeTab() === 'log') {
       <div class="analytics-section fade-in">
-        <h5 class="section-group-title text-mu-primary"><i class="bi bi-database me-2"></i>III. DATA TRANSAKSI LENGKAP</h5>
+        <h5 class="section-group-title text-mu-primary"><i class="bi bi-database me-2"></i>III. DATA TRANSAKSI LENGKAP
+        </h5>
 
         <!-- 12. Detail Semua Transaksi -->
         <div class="mb-3">
@@ -757,8 +775,8 @@
               <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
                 (Bisa Exclude)</div>
               <div class="d-flex gap-2">
-                <button class="btn btn-mu-accent" (click)="applyWindress()"><i
-                    class="bi bi-magic me-2"></i>Terapkan Windress</button>
+                <button class="btn btn-mu-accent" (click)="applyWindress()"><i class="bi bi-magic me-2"></i>Terapkan
+                  Windress</button>
                 <button class="btn btn-mu-success" (click)="exportExcel()"><i
                     class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
               </div>
@@ -767,8 +785,9 @@
             <div class="d-flex flex-wrap align-items-center gap-3 bg-light p-2 rounded border">
               <!-- Select Bulan -->
               <div class="flex-grow-0">
-                <select class="form-select form-select-sm border-0 shadow-sm" style="min-width: 150px; font-weight: 500;"
-                  [ngModel]="filterMonth()" (ngModelChange)="filterMonth.set($event); onSearchChange('tx')">
+                <select class="form-select form-select-sm border-0 shadow-sm"
+                  style="min-width: 150px; font-weight: 500;" [ngModel]="filterMonth()"
+                  (ngModelChange)="filterMonth.set($event); onSearchChange('tx')">
                   <option value="ALL">🗓️ Semua Bulan</option>
                   @for (m of availableMonths(); track m.value) {
                   <option [value]="m.value">{{m.label}}</option>
@@ -789,7 +808,8 @@
 
                 <input type="radio" class="btn-check" name="btnflag" id="flagDb" value="DB"
                   [checked]="filterFlag() === 'DB'" (change)="filterFlag.set('DB'); onSearchChange('tx')">
-                <label class="btn btn-sm btn-outline-danger" for="flagDb"><i class="bi bi-dash-circle"></i> Debit</label>
+                <label class="btn btn-sm btn-outline-danger" for="flagDb"><i class="bi bi-dash-circle"></i>
+                  Debit</label>
               </div>
 
               <!-- Search -->
@@ -816,8 +836,7 @@
                 <tbody>
                   @for (tx of pagedTransaksi(); track tx.id || tx.tanggal + tx.keterangan + tx.jumlah) {
                   <tr [ngClass]="getCategoryRowClass(tx.category)"
-                    [class.text-decoration-line-through]="!!tx.isExcluded" 
-                    [class.text-muted]="!!tx.isExcluded">
+                    [class.text-decoration-line-through]="!!tx.isExcluded" [class.text-muted]="!!tx.isExcluded">
                     <td class="text-center">
                       <div class="form-check d-flex justify-content-center m-0">
                         <input class="form-check-input flex-shrink-0" type="checkbox" [checked]="!!tx.isExcluded"
