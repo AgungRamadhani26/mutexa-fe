@@ -233,6 +233,16 @@ export class Dashboard implements OnInit {
   // ==========================================
   // NAVIGASI (PINDAH-PINDAH TAMPILAN/LEVEL)
   // ==========================================
+  
+  getCategoryRowClass(category?: string): string {
+    if (!category) return '';
+    switch (category) {
+      case 'ADMIN': return 'row-admin';
+      case 'TAX': return 'row-tax';
+      case 'INTEREST': return 'row-interest';
+      default: return '';
+    }
+  }
 
   // Dipanggil ketika user mengklik tombol "Lihat Dokumen" pada sebuah baris rekening
   viewDocuments(account: BankAccount) {
@@ -357,6 +367,11 @@ export class Dashboard implements OnInit {
   }
 
   // Men-trigger unduhan file Excel berdasarkan dokumen yang sedang aktif
+  // Fungsi placeholder untuk fitur Window Dressing di masa depan
+  applyWindress() {
+    alert("Fitur 'Terapkan Windress' sedang dikembangkan. Nantinya ini akan mengotomatisasi exclude dan menampilkan perbandingan Before/After.");
+  }
+
   exportExcel() {
     const doc = this.selectedDocument();
     if (doc) {

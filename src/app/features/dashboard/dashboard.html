@@ -731,6 +731,8 @@
             <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
               (Bisa Exclude)</div>
             <div class="d-flex gap-2">
+              <button class="btn btn-mu-accent" (click)="applyWindress()"><i
+                  class="bi bi-magic me-2"></i>Terapkan Windress</button>
               <button class="btn btn-mu-success" (click)="exportExcel()"><i
                   class="bi bi-file-earmark-excel me-2"></i>Export Excel</button>
             </div>
@@ -787,8 +789,9 @@
               </thead>
               <tbody>
                 @for (tx of pagedTransaksi(); track tx.id || tx.tanggal + tx.keterangan + tx.jumlah) {
-                <tr [class.text-decoration-line-through]="!!tx.isExcluded" [class.text-muted]="!!tx.isExcluded"
-                  [class.bg-light]="!!tx.isExcluded">
+                <tr [ngClass]="getCategoryRowClass(tx.category)"
+                  [class.text-decoration-line-through]="!!tx.isExcluded" 
+                  [class.text-muted]="!!tx.isExcluded">
                   <td class="text-center">
                     <div class="form-check d-flex justify-content-center m-0">
                       <input class="form-check-input flex-shrink-0" type="checkbox" [checked]="!!tx.isExcluded"

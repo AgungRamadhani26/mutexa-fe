@@ -9,4 +9,5 @@ export interface DetailTransaksi {
   flag: string;
   jumlah: number;
   isExcluded?: boolean;
+  category?: string;
 }
