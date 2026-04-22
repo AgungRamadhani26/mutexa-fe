@@ -7,6 +7,10 @@ export interface SummaryPerbulan {
   saldoAkhir: number;
   totalCredit: number;
   totalDebit: number;
+  cleanedTotalCredit?: number;
+  cleanedTotalDebit?: number;
   freqCredit: number;
   freqDebit: number;
+  cleanedFreqCredit?: number;
+  cleanedFreqDebit?: number;
 }

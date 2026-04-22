@@ -332,12 +332,27 @@
                 <div class="card-content">
                   <div class="card-label">Rata-rata Credit</div>
                   @if (!isWindressActive()) {
-                    <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgCredit) }}</div>
+                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgCredit) }}</div>
                   } @else {
-                    <div class="windress-compare">
-                      <div class="val-before">{{ formatCurrency(ringkasanSaldo().avgCredit) }} <span class="badge-wr">Before</span></div>
-                      <div class="val-after">{{ formatCurrency(ringkasanSaldo().cleanedAvgCredit || 0) }} <span class="badge-wr-active">After</span></div>
+                  <div class="windress-compare">
+                    <div class="val-before">
+                      <span>{{ formatCurrency(ringkasanSaldo().avgCredit) }}</span>
+                      <span class="badge-wr">Before</span>
                     </div>
+                    <div class="val-after">
+                      <span>{{ formatCurrency(ringkasanSaldo().cleanedAvgCredit || 0) }}</span>
+                      <span class="badge-wr-active">After</span>
+                    </div>
+                    @let diffCR = calculateDiff(ringkasanSaldo().avgCredit, ringkasanSaldo().cleanedAvgCredit);
+                    @let pctCR = calculatePercentage(ringkasanSaldo().avgCredit, ringkasanSaldo().cleanedAvgCredit);
+                    <div class="delta-impact">
+                      <span class="delta-pill" [class.delta-plus]="diffCR >= 0" [class.delta-minus]="diffCR < 0">
+                        <i class="bi" [class.bi-caret-up-fill]="diffCR >= 0" [class.bi-caret-down-fill]="diffCR < 0"></i>
+                        {{ formatCurrency(diffCR >= 0 ? diffCR : -diffCR) }}
+                      </span>
+                      <span class="percentage-tag">{{ pctCR >= 0 ? '+' : '' }}{{ pctCR.toFixed(1) }}% Change</span>
+                    </div>
+                  </div>
                   }
                 </div>
               </div>
@@ -347,12 +362,27 @@
                 <div class="card-content">
                   <div class="card-label">Rata-rata Debit</div>
                   @if (!isWindressActive()) {
-                    <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDebit) }}</div>
+                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDebit) }}</div>
                   } @else {
-                    <div class="windress-compare">
-                      <div class="val-before">{{ formatCurrency(ringkasanSaldo().avgDebit) }} <span class="badge-wr">Before</span></div>
-                      <div class="val-after">{{ formatCurrency(ringkasanSaldo().cleanedAvgDebit || 0) }} <span class="badge-wr-active">After</span></div>
+                  <div class="windress-compare">
+                    <div class="val-before">
+                      <span>{{ formatCurrency(ringkasanSaldo().avgDebit) }}</span>
+                      <span class="badge-wr">Before</span>
                     </div>
+                    <div class="val-after">
+                      <span>{{ formatCurrency(ringkasanSaldo().cleanedAvgDebit || 0) }}</span>
+                      <span class="badge-wr-active">After</span>
+                    </div>
+                    @let diffDB = calculateDiff(ringkasanSaldo().avgDebit, ringkasanSaldo().cleanedAvgDebit);
+                    @let pctDB = calculatePercentage(ringkasanSaldo().avgDebit, ringkasanSaldo().cleanedAvgDebit);
+                    <div class="delta-impact">
+                      <span class="delta-pill" [class.delta-plus]="diffDB <= 0" [class.delta-minus]="diffDB > 0">
+                        <i class="bi" [class.bi-caret-down-fill]="diffDB <= 0" [class.bi-caret-up-fill]="diffDB > 0"></i>
+                        {{ formatCurrency(diffDB >= 0 ? diffDB : -diffDB) }}
+                      </span>
+                      <span class="percentage-tag">{{ pctDB >= 0 ? '+' : '' }}{{ pctDB.toFixed(1) }}% Change</span>
+                    </div>
+                  </div>
                   }
                 </div>
               </div>
@@ -362,6 +392,7 @@
                 <div class="card-content">
                   <div class="card-label">Rata-rata Saldo (Harian)</div>
                   <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDailyBalance) }}</div>
+                  <div class="text-tiny text-muted mt-1"><i class="bi bi-info-circle me-1"></i>Tetap menggunakan data asli</div>
                 </div>
               </div>
             </div>
@@ -370,12 +401,27 @@
                 <div class="card-content">
                   <div class="card-label">Total Credit</div>
                   @if (!isWindressActive()) {
-                    <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalCredit) }}</div>
+                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalCredit) }}</div>
                   } @else {
-                    <div class="windress-compare">
-                      <div class="val-before">{{ formatCurrency(ringkasanSaldo().totalCredit) }} <span class="badge-wr">Before</span></div>
-                      <div class="val-after">{{ formatCurrency(ringkasanSaldo().cleanedTotalCredit || 0) }} <span class="badge-wr-active">After</span></div>
+                  <div class="windress-compare">
+                    <div class="val-before">
+                      <span>{{ formatCurrency(ringkasanSaldo().totalCredit) }}</span>
+                      <span class="badge-wr">Before</span>
                     </div>
+                    <div class="val-after">
+                      <span>{{ formatCurrency(ringkasanSaldo().cleanedTotalCredit || 0) }}</span>
+                      <span class="badge-wr-active">After</span>
+                    </div>
+                    @let diffTC = calculateDiff(ringkasanSaldo().totalCredit, ringkasanSaldo().cleanedTotalCredit);
+                    @let pctTC = calculatePercentage(ringkasanSaldo().totalCredit, ringkasanSaldo().cleanedTotalCredit);
+                    <div class="delta-impact">
+                      <span class="delta-pill" [class.delta-plus]="diffTC >= 0" [class.delta-minus]="diffTC < 0">
+                        <i class="bi" [class.bi-caret-up-fill]="diffTC >= 0" [class.bi-caret-down-fill]="diffTC < 0"></i>
+                        {{ formatCurrency(diffTC >= 0 ? diffTC : -diffTC) }}
+                      </span>
+                      <span class="percentage-tag">{{ pctTC >= 0 ? '+' : '' }}{{ pctTC.toFixed(1) }}% Change</span>
+                    </div>
+                  </div>
                   }
                 </div>
               </div>
@@ -385,12 +431,27 @@
                 <div class="card-content">
                   <div class="card-label">Total Debit</div>
                   @if (!isWindressActive()) {
-                    <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalDebit) }}</div>
+                  <div class="card-value">{{ formatCurrency(ringkasanSaldo().totalDebit) }}</div>
                   } @else {
-                    <div class="windress-compare">
-                      <div class="val-before">{{ formatCurrency(ringkasanSaldo().totalDebit) }} <span class="badge-wr">Before</span></div>
-                      <div class="val-after">{{ formatCurrency(ringkasanSaldo().cleanedTotalDebit || 0) }} <span class="badge-wr-active">After</span></div>
+                  <div class="windress-compare">
+                    <div class="val-before">
+                      <span>{{ formatCurrency(ringkasanSaldo().totalDebit) }}</span>
+                      <span class="badge-wr">Before</span>
                     </div>
+                    <div class="val-after">
+                      <span>{{ formatCurrency(ringkasanSaldo().cleanedTotalDebit || 0) }}</span>
+                      <span class="badge-wr-active">After</span>
+                    </div>
+                    @let diffTD = calculateDiff(ringkasanSaldo().totalDebit, ringkasanSaldo().cleanedTotalDebit);
+                    @let pctTD = calculatePercentage(ringkasanSaldo().totalDebit, ringkasanSaldo().cleanedTotalDebit);
+                    <div class="delta-impact">
+                      <span class="delta-pill" [class.delta-plus]="diffTD <= 0" [class.delta-minus]="diffTD > 0">
+                        <i class="bi" [class.bi-caret-down-fill]="diffTD <= 0" [class.bi-caret-up-fill]="diffTD > 0"></i>
+                        {{ formatCurrency(diffTD >= 0 ? diffTD : -diffTD) }}
+                      </span>
+                      <span class="percentage-tag">{{ pctTD >= 0 ? '+' : '' }}{{ pctTD.toFixed(1) }}% Change</span>
+                    </div>
+                  </div>
                   }
                 </div>
               </div>
@@ -400,37 +461,100 @@
 
         <!-- 2. Summary Perbulan -->
         <div class="mb-3 mt-3">
-          <div class="section-title"><i class="bi bi-calendar3 me-2"></i>2. Summary Perbulan</div>
+          <div class="section-title">
+            <i class="bi bi-calendar3 me-2"></i>2. Summary Perbulan
+            <small class="text-muted ms-2" style="font-size: 0.75rem;">(Menampilkan {{ summaryPerbulan().length }} bulan)</small>
+          </div>
           <div class="mu-card">
             <div class="table-responsive">
               <table class="table mu-table text-nowrap">
                 <thead>
                   <tr>
                     <th>Periode</th>
-                    <th>Saldo Akhir</th>
-                    <th class="text-mu-green"><i class="bi bi-arrow-down-left me-1"></i>Total Credit</th>
-                    <th class="text-mu-red"><i class="bi bi-arrow-up-right me-1"></i>Total Debit</th>
+                    @if (isWindressActive()) {
+                    <th class="text-center">Status</th>
+                    }
+                    <th class="text-end">Saldo Akhir</th>
+                    <th class="text-end text-mu-green"><i class="bi bi-arrow-down-left me-1"></i>Total Credit</th>
+                    <th class="text-end text-mu-red"><i class="bi bi-arrow-up-right me-1"></i>Total Debit</th>
                     <th class="text-center">Freq Credit</th>
                     <th class="text-center">Freq Debit</th>
                   </tr>
                 </thead>
                 <tbody>
                   @for (item of summaryPerbulan(); track item.periode) {
-                  <tr>
-                    <td class="fw-semibold">{{ item.periode }}</td>
-                    <td>{{ formatCurrency(item.saldoAkhir) }}</td>
-                    <td class="fw-medium text-mu-green">{{ formatCurrency(item.totalCredit) }}</td>
-                    <td class="fw-medium text-mu-red">{{ formatCurrency(item.totalDebit) }}</td>
-                    <td class="text-center"><span class="badge-freq-item">{{
-                        item.freqCredit }}x</span></td>
-                    <td class="text-center"><span class="badge-freq-item">{{
-                        item.freqDebit }}x</span></td>
-                  </tr>
-                  } @empty {
-                  <tr>
-                    <td colspan="6" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
-                  </tr>
-                  }
+                    @if (!isWindressActive()) {
+                    <tr>
+                      <td class="fw-semibold">{{ item.periode }}</td>
+                      <td class="text-end font-mono">{{ formatCurrency(item.saldoAkhir) }}</td>
+                      <td class="text-end fw-medium text-mu-green">{{ formatCurrency(item.totalCredit) }}</td>
+                      <td class="text-end fw-medium text-mu-red">{{ formatCurrency(item.totalDebit) }}</td>
+                      <td class="text-center"><span class="badge-freq-item">{{ item.freqCredit }}x</span></td>
+                      <td class="text-center"><span class="badge-freq-item">{{ item.freqDebit }}x</span></td>
+                    </tr>
+                    } @else {
+                    <!-- BARIS 1: BEFORE (Data Asli) -->
+                    <tr class="row-before">
+                      <td class="fw-bold align-middle border-bottom-0">{{ item.periode }}</td>
+                      <td class="text-center align-middle border-bottom-0">
+                        <span class="status-badge badge-outline-slate">Before</span>
+                      </td>
+                      <td class="text-end align-middle font-mono border-bottom-0">{{ formatCurrency(item.saldoAkhir) }}</td>
+                      <td class="text-end align-middle text-muted small border-bottom-0">{{ formatCurrency(item.totalCredit) }}</td>
+                      <td class="text-end align-middle text-muted small border-bottom-0">{{ formatCurrency(item.totalDebit) }}</td>
+                      <td class="text-center align-middle text-muted small border-bottom-0">{{ item.freqCredit }}x</td>
+                      <td class="text-center align-middle text-muted small border-bottom-0">{{ item.freqDebit }}x</td>
+                    </tr>
+                    <!-- BARIS 2: AFTER (Data Bersih) -->
+                    <tr class="row-after">
+                      <td></td> <!-- Grouping: Kosongkan periode -->
+                      <td class="text-center align-middle">
+                        <span class="status-badge badge-fill-blue">After</span>
+                      </td>
+                      <td class="text-end align-middle"></td>
+                      <td class="text-end align-middle text-mu-green-dark">
+                        {{ formatCurrency(item.cleanedTotalCredit || 0) }}
+                        @let diffCr = calculateDiff(item.totalCredit, item.cleanedTotalCredit);
+                        @let pctCr = calculatePercentage(item.totalCredit, item.cleanedTotalCredit);
+                        @if (diffCr !== 0) {
+                          <span class="impact-ind" [ngClass]="diffCr < 0 ? 'impact-bad' : 'impact-good'">
+                            <i class="bi" [class.bi-caret-down-fill]="diffCr < 0" [class.bi-caret-up-fill]="diffCr > 0"></i>
+                            {{ pctCr.toFixed(1) }}%
+                          </span>
+                        }
+                      </td>
+                      <td class="text-end align-middle text-mu-red-dark">
+                        {{ formatCurrency(item.cleanedTotalDebit || 0) }}
+                        @let diffDb = calculateDiff(item.totalDebit, item.cleanedTotalDebit);
+                        @let pctDb = calculatePercentage(item.totalDebit, item.cleanedTotalDebit);
+                        @if (diffDb !== 0) {
+                          <span class="impact-ind" [ngClass]="diffDb < 0 ? 'impact-good' : 'impact-bad'">
+                            <i class="bi" [class.bi-caret-down-fill]="diffDb < 0" [class.bi-caret-up-fill]="diffDb > 0"></i>
+                            {{ pctDb.toFixed(1) }}%
+                          </span>
+                        }
+                      </td>
+                      <td class="text-center align-middle fw-bold small text-mu-slate">
+                        {{ item.cleanedFreqCredit }}x
+                        @if ((item.cleanedFreqCredit || 0) < item.freqCredit) {
+                          <div class="text-tiny text-danger" style="font-size: 0.6rem;">({{ (item.cleanedFreqCredit || 0) - item.freqCredit }}x)</div>
+                        }
+                      </td>
+                      <td class="text-center align-middle fw-bold small text-mu-slate">
+                        {{ item.cleanedFreqDebit }}x
+                        @if ((item.cleanedFreqDebit || 0) < item.freqDebit) {
+                          <div class="text-tiny text-danger" style="font-size: 0.6rem;">({{ (item.cleanedFreqDebit || 0) - item.freqDebit }}x)</div>
+                        }
+                      </td>
+                    </tr>
+                    }
+                   } @empty {
+                   <tr>
+                     <td [attr.colspan]="isWindressActive() ? 7 : 6" class="text-center py-4 text-mu-slate-lighter">
+                       Belum ada data.
+                     </td>
+                   </tr>
+                   }
                 </tbody>
               </table>
             </div>

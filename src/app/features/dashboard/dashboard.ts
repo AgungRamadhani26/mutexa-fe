@@ -371,6 +371,22 @@ export class Dashboard implements OnInit {
   }
 
   // Men-trigger unduhan file Excel berdasarkan dokumen yang sedang aktif
+  // ==========================================
+  // LOGIKA WINDOW DRESSING (WINDRESS)
+  // ==========================================
+
+  // Helper Windress: Hitung selisih bersih (After - Before)
+  calculateDiff(before: number, after?: number): number {
+    return (after || 0) - (before || 0);
+  }
+
+  // Helper Windress: Hitung persentase perubahan
+  calculatePercentage(before: number, after?: number): number {
+    if (!before || before === 0) return 0;
+    const diff = (after || 0) - before;
+    return (diff / before) * 100;
+  }
+
   // Men-trigger tampilan perbandingan Before/After Windress
   applyWindress() {
     this.isWindressActive.update(v => !v);
