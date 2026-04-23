@@ -564,64 +564,105 @@
         <hr class="mu-divider">
 
         <!-- 3 & 4. Top 10 Amount -->
-        <div class="row g-3 mb-3">
+        <div class="row g-4 mb-4">
+          <!-- TOP 10 CREDIT AMOUNT -->
           <div class="col-md-6">
-            <div class="section-title"><i class="bi bi-sort-down-alt me-2 text-mu-green"></i>3. Top
-              10 Credit Amount</div>
-            <div class="mu-card">
-              <div class="table-responsive table-scroll-280">
-                <table class="table mu-table">
-                  <thead>
-                    <tr>
-                      <th>Keterangan</th>
-                      <th>Nominal</th>
-                      <th>Tanggal</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (cr of top10Credit(); track cr.keterangan + cr.tanggal + cr.jumlah) {
-                    <tr>
-                      <td class="text-break">{{ cr.keterangan }}</td>
-                      <td class="fw-semibold text-nowrap text-mu-green">{{ formatCurrency(cr.jumlah) }}</td>
-                      <td class="small text-mu-slate-lighter">{{ cr.tanggal | date:'dd MMM yy' }}</td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                      <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
-                    </tr>
-                    }
-                  </tbody>
-                </table>
+            <div class="section-title"><i class="bi bi-sort-down-alt me-2 text-mu-green"></i>3. Top 10 Credit Amount</div>
+            
+            <div class="d-flex flex-column gap-3">
+              <!-- BEFORE TABLE -->
+              <div class="mu-card p-0 overflow-hidden" [class.border-mu-amber]="isWindressActive()">
+                <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">BEFORE (ORIGINAL)</div>
+                <div class="table-responsive table-scroll-280">
+                  <table class="table mu-table m-0">
+                    <thead>
+                      <tr><th>KETERANGAN</th><th class="text-end" style="width: 140px;">NOMINAL</th><th class="text-center" style="width: 70px;">TGL</th></tr>
+                    </thead>
+                    <tbody>
+                      @for (cr of top10Credit(); track cr.keterangan + cr.tanggal) {
+                      <tr [class.text-muted]="isWindressActive() && cr.isExcluded">
+                        <td class="small">{{ cr.keterangan }}</td>
+                        <td class="text-end fw-bold text-mu-green text-nowrap">{{ formatCurrency(cr.jumlah) }}</td>
+                        <td class="text-center small text-mu-slate-lighter">{{ cr.tanggal | date:'dd/MM' }}</td>
+                      </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- AFTER TABLE (Visible only when Windress active) -->
+              <div class="mu-card p-0 overflow-hidden" *ngIf="isWindressActive()">
+                <div class="bg-light p-2 text-center small fw-bold text-mu-green border-bottom">AFTER (CLEANED)</div>
+                <div class="table-responsive table-scroll-280">
+                  <table class="table mu-table m-0">
+                    <thead>
+                      <tr><th>KETERANGAN</th><th class="text-end" style="width: 140px;">NOMINAL</th><th class="text-center" style="width: 70px;">TGL</th></tr>
+                    </thead>
+                    <tbody>
+                      @for (cr of top10CreditCleaned(); track cr.keterangan + cr.tanggal) {
+                      <tr>
+                        <td class="small">{{ cr.keterangan }}</td>
+                        <td class="text-end fw-bold text-mu-green text-nowrap">{{ formatCurrency(cr.jumlah) }}</td>
+                        <td class="text-center small text-mu-slate-lighter">{{ cr.tanggal | date:'dd/MM' }}</td>
+                      </tr>
+                      } @empty {
+                        <tr><td colspan="3" class="text-center py-4 text-muted small">Semua data ter-exclude.</td></tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
+
+          <!-- TOP 10 DEBIT AMOUNT -->
           <div class="col-md-6">
-            <div class="section-title"><i class="bi bi-sort-up me-2 text-mu-red"></i>4. Top 10
-              Debit Amount</div>
-            <div class="mu-card">
-              <div class="table-responsive table-scroll-280">
-                <table class="table mu-table">
-                  <thead>
-                    <tr>
-                      <th>Keterangan</th>
-                      <th>Nominal</th>
-                      <th>Tanggal</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (db of top10Debit(); track db.keterangan + db.tanggal + db.jumlah) {
-                    <tr>
-                      <td class="text-break">{{ db.keterangan }}</td>
-                      <td class="fw-semibold text-nowrap text-mu-red">{{ formatCurrency(db.jumlah) }}</td>
-                      <td class="small text-mu-slate-lighter">{{ db.tanggal | date:'dd MMM yy' }}</td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                      <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
-                    </tr>
-                    }
-                  </tbody>
-                </table>
+            <div class="section-title"><i class="bi bi-sort-up me-2 text-mu-red"></i>4. Top 10 Debit Amount</div>
+            
+            <div class="d-flex flex-column gap-3">
+              <!-- BEFORE TABLE -->
+              <div class="mu-card p-0 overflow-hidden" [class.border-mu-amber]="isWindressActive()">
+                <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">BEFORE (ORIGINAL)</div>
+                <div class="table-responsive table-scroll-280">
+                  <table class="table mu-table m-0">
+                    <thead>
+                      <tr><th>KETERANGAN</th><th class="text-end" style="width: 140px;">NOMINAL</th><th class="text-center" style="width: 70px;">TGL</th></tr>
+                    </thead>
+                    <tbody>
+                      @for (db of top10Debit(); track db.keterangan + db.tanggal) {
+                      <tr [class.text-muted]="isWindressActive() && db.isExcluded">
+                        <td class="small">{{ db.keterangan }}</td>
+                        <td class="text-end fw-bold text-mu-red text-nowrap">{{ formatCurrency(db.jumlah) }}</td>
+                        <td class="text-center small text-mu-slate-lighter">{{ db.tanggal | date:'dd/MM' }}</td>
+                      </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- AFTER TABLE -->
+              <div class="mu-card p-0 overflow-hidden" *ngIf="isWindressActive()">
+                <div class="bg-light p-2 text-center small fw-bold text-mu-red border-bottom">AFTER (CLEANED)</div>
+                <div class="table-responsive table-scroll-280">
+                  <table class="table mu-table m-0">
+                    <thead>
+                      <tr><th>KETERANGAN</th><th class="text-end" style="width: 140px;">NOMINAL</th><th class="text-center" style="width: 70px;">TGL</th></tr>
+                    </thead>
+                    <tbody>
+                      @for (db of top10DebitCleaned(); track db.keterangan + db.tanggal) {
+                      <tr>
+                        <td class="small">{{ db.keterangan }}</td>
+                        <td class="text-end fw-bold text-mu-red text-nowrap">{{ formatCurrency(db.jumlah) }}</td>
+                        <td class="text-center small text-mu-slate-lighter">{{ db.tanggal | date:'dd/MM' }}</td>
+                      </tr>
+                      } @empty {
+                        <tr><td colspan="3" class="text-center py-4 text-muted small">Semua data ter-exclude.</td></tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -1051,5 +1092,69 @@
     </div>
     }
 
+  </div>
+</div>
+
+<!-- MODAL AFTER CREDIT -->
+<div class="mu-modal-overlay" *ngIf="showAfterCreditModal()" (click)="showAfterCreditModal.set(false)">
+  <div class="mu-modal-content" (click)="$event.stopPropagation()">
+    <div class="mu-modal-header bg-mu-green text-white">
+      <h5 class="mb-0"><i class="bi bi-magic me-2"></i>Top 10 Credit Amount (AFTER WINDRESS)</h5>
+      <button class="btn-close btn-close-white" (click)="showAfterCreditModal.set(false)"></button>
+    </div>
+    <div class="mu-modal-body p-0">
+      <div class="table-responsive">
+        <table class="table mu-table m-0">
+          <thead>
+            <tr>
+              <th>Keterangan</th>
+              <th class="text-end">Nominal</th>
+              <th class="text-center">Tanggal</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (cr of top10CreditCleaned(); track cr.keterangan + cr.tanggal) {
+              <tr>
+                <td>{{ cr.keterangan }}</td>
+                <td class="text-end fw-bold text-mu-green">{{ formatCurrency(cr.jumlah) }}</td>
+                <td class="text-center small text-mu-slate-lighter">{{ cr.tanggal | date:'dd/MM/yy' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AFTER DEBIT -->
+<div class="mu-modal-overlay" *ngIf="showAfterDebitModal()" (click)="showAfterDebitModal.set(false)">
+  <div class="mu-modal-content" (click)="$event.stopPropagation()">
+    <div class="mu-modal-header bg-mu-red text-white">
+      <h5 class="mb-0"><i class="bi bi-magic me-2"></i>Top 10 Debit Amount (AFTER WINDRESS)</h5>
+      <button class="btn-close btn-close-white" (click)="showAfterDebitModal.set(false)"></button>
+    </div>
+    <div class="mu-modal-body p-0">
+      <div class="table-responsive">
+        <table class="table mu-table m-0">
+          <thead>
+            <tr>
+              <th>Keterangan</th>
+              <th class="text-end">Nominal</th>
+              <th class="text-center">Tanggal</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (db of top10DebitCleaned(); track db.keterangan + db.tanggal) {
+              <tr>
+                <td>{{ db.keterangan }}</td>
+                <td class="text-end fw-bold text-mu-red">{{ formatCurrency(db.jumlah) }}</td>
+                <td class="text-center small text-mu-slate-lighter">{{ db.tanggal | date:'dd/MM/yy' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

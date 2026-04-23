@@ -11,12 +11,10 @@ import { SummaryPerbulan } from '../../models/summary-perbulan.model';
 import { DetailTransaksi } from '../../models/detail-transaksi.model';
 import { RingkasanSaldo } from '../../models/ringkasan-saldo.model';
 import { TopFreq } from '../../models/top-freq.model';
+import { ApiResponse } from '../../models/api-response.model';
 
 /**
  * Komponen utama tampilan Dashboard mutasi.
- * Prinsip SOLID:
- * - SRP: Komponen ini sekarang lebih ramping dengan memisahkan antarmuka (interfaces)
- *   ke folder models/ sehingga file ini hanya berfokus pada logika presentasi UI.
  */
 @Component({
   selector: 'app-dashboard',
@@ -33,34 +31,30 @@ export class Dashboard implements OnInit {
 
   // ==========================================
   // STATE MACHINE (PENGATUR TAMPILAN)
-  // Aplikasi ini menggunakan sistem 'Single Page' bergaya drill-down:
-  // 1. 'accounts'  : Menampilkan daftar rekening utama
-  // 2. 'documents' : Menampilkan daftar dokumen mutasi milik 1 rekening spesifik
-  // 3. 'analytics' : Menampilkan visualisasi data dari 1 dokumen spesifik
   // ==========================================
   currentView = signal<'accounts' | 'documents' | 'analytics'>('accounts');
   activeTab = signal<'ringkasan' | 'anomali' | 'log'>('ringkasan');
-  isWindressActive = signal(false); // Flag Window Dressing
+  isWindressActive = signal<boolean>(false);
   selectedAccount = signal<BankAccount | null>(null);
   selectedDocument = signal<MutationDocument | null>(null);
 
+  // Modal Flags
+  showAfterCreditModal = signal<boolean>(false);
+  showAfterDebitModal = signal<boolean>(false);
+
   // Upload form
-  showUploadForm = signal(false);
+  showUploadForm = signal<boolean>(false);
   uploadForm = {
     bankName: '',
     accountNumber: '',
     accountName: '',
     file: null as File | null,
   };
-  isUploading = signal(false);
+  isUploading = signal<boolean>(false);
 
-  // ==========================================
-  // SEARCH & PAGINATION
-  // ==========================================
-
-  // Level 1: Account search + pagination
-  accountSearch = signal('');
-  accountPage = signal(1);
+  // Level 1: Account
+  accountSearch = signal<string>('');
+  accountPage = signal<number>(1);
   accountPageSize = 5;
 
   filteredAccounts = computed(() => {
@@ -79,9 +73,9 @@ export class Dashboard implements OnInit {
 
   accountTotalPages = computed(() => Math.ceil(this.filteredAccounts().length / this.accountPageSize));
 
-  // Level 2: Document search + pagination
-  docSearch = signal('');
-  docPage = signal(1);
+  // Level 2: Document
+  docSearch = signal<string>('');
+  docPage = signal<number>(1);
   docPageSize = 5;
 
   filteredDocuments = computed(() => {
@@ -99,9 +93,9 @@ export class Dashboard implements OnInit {
 
   docTotalPages = computed(() => Math.ceil(this.filteredDocuments().length / this.docPageSize));
 
-  // Level 3: Transaction search + pagination
-  txSearch = signal('');
-  txPage = signal(1);
+  // Level 3: Transaction
+  txSearch = signal<string>('');
+  txPage = signal<number>(1);
   txPageSize = 10;
 
   filterMonth = signal<string>('ALL');
@@ -114,7 +108,7 @@ export class Dashboard implements OnInit {
 
     txs.forEach(tx => {
       if (tx.tanggal) {
-        const yyyyMm = tx.tanggal.substring(0, 7); // "YYYY-MM"
+        const yyyyMm = tx.tanggal.substring(0, 7);
         if (!monthsMap.has(yyyyMm)) {
           const parts = yyyyMm.split('-');
           if (parts.length === 2) {
@@ -154,10 +148,10 @@ export class Dashboard implements OnInit {
 
   txTotalPages = computed(() => Math.ceil(this.filteredTransaksi().length / this.txPageSize));
 
-  // Category Tables Pagination (Pajak, Admin, Bunga)
-  taxPage = signal(1);
-  adminPage = signal(1);
-  interestPage = signal(1);
+  // Category Pagination
+  taxPage = signal<number>(1);
+  adminPage = signal<number>(1);
+  interestPage = signal<number>(1);
   categoryPageSize = 5;
 
   currentTaxData = computed(() => this.taxTransactions());
@@ -182,9 +176,9 @@ export class Dashboard implements OnInit {
   interestTotalPages = computed(() => Math.ceil(this.currentInterestData().length / this.categoryPageSize));
 
   // Loading states
-  isLoadingAccounts = signal(false);
-  isLoadingDocuments = signal(false);
-  isLoadingAnalytics = signal(false);
+  isLoadingAccounts = signal<boolean>(false);
+  isLoadingDocuments = signal<boolean>(false);
+  isLoadingAnalytics = signal<boolean>(false);
 
   accounts = signal<BankAccount[]>([]);
   documents = signal<MutationDocument[]>([]);
@@ -200,41 +194,29 @@ export class Dashboard implements OnInit {
   anomalyCreditTransactions = signal<DetailTransaksi[]>([]);
   anomalyDebitTransactions = signal<DetailTransaksi[]>([]);
 
-  // Ringkasan Saldo & Arus Kas (dari backend, exclude-aware)
   ringkasanSaldo = signal<RingkasanSaldo>({
     totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0, avgDailyBalance: 0
   });
-  // ==========================================
-  // FUNGSI INIT & PEMANGGILAN API PERTAMA
-  // ==========================================
+
+  top10CreditCleaned = signal<DetailTransaksi[]>([]);
+  top10DebitCleaned = signal<DetailTransaksi[]>([]);
+
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Saat komponen dashboard pertama kali dirender di browser, panggil API untuk ambil daftar rekening
       this.fetchAccounts();
     }
   }
 
   fetchAccounts() {
     this.isLoadingAccounts.set(true);
-    // Memanggil endpoint backend '/api/documents/by-account' via DocumentService
     this.documentService.getAccounts().subscribe({
-      next: (res) => {
-        if (res.success) {
-          // Simpan data rekening yang didapat ke dalam signal 'accounts'
-          this.accounts.set(res.data as unknown as BankAccount[]);
-        }
+      next: (res: ApiResponse<any>) => {
+        if (res.success) this.accounts.set(res.data as unknown as BankAccount[]);
         this.isLoadingAccounts.set(false);
       },
-      error: (err: HttpErrorResponse) => {
-        console.error('Failed to fetch accounts', err);
-        this.isLoadingAccounts.set(false);
-      }
+      error: () => this.isLoadingAccounts.set(false)
     });
   }
-
-  // ==========================================
-  // NAVIGASI (PINDAH-PINDAH TAMPILAN/LEVEL)
-  // ==========================================
 
   getCategoryRowClass(category?: string): string {
     if (!category) return '';
@@ -246,209 +228,103 @@ export class Dashboard implements OnInit {
     }
   }
 
-  // Dipanggil ketika user mengklik tombol "Lihat Dokumen" pada sebuah baris rekening
   viewDocuments(account: BankAccount) {
-    this.selectedAccount.set(account);     // Ingat rekening mana yang sedang dipilih
-    this.currentView.set('documents');     // Ganti tampilan ke level 2 (Daftar Dokumen)
-    this.docSearch.set('');
-    this.docPage.set(1);
-
+    this.selectedAccount.set(account);
+    this.currentView.set('documents');
     this.isLoadingDocuments.set(true);
-    // Memanggil API backend untuk mengambil dokumen spesifik untuk rekening ini
     this.documentService.getDocumentsByAccount(account.id).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.documents.set(res.data as unknown as MutationDocument[]);
-        }
+      next: (res: ApiResponse<any>) => {
+        if (res.success) this.documents.set(res.data as unknown as MutationDocument[]);
         this.isLoadingDocuments.set(false);
       },
-      error: (err) => {
-        console.error('Failed to fetch documents', err);
-        this.isLoadingDocuments.set(false);
-      }
+      error: () => this.isLoadingDocuments.set(false)
     });
   }
 
-  // Dipanggil ketika user mengklik "Lihat Rincian" pada sebuah dokumen sukses
   viewAnalytics(doc: MutationDocument) {
-    this.selectedDocument.set(doc);        // Ingat dokumen mana yang sedang dipilih
-    this.currentView.set('analytics');     // Ganti tampilan ke level 3 (Dashboard Analytics)
-    this.txSearch.set('');
-    this.txPage.set(1);
-    this.taxPage.set(1);
-    this.adminPage.set(1);
-    this.interestPage.set(1);
-
+    this.selectedDocument.set(doc);
+    this.currentView.set('analytics');
     this.isLoadingAnalytics.set(true);
-    this.activeTab.set('ringkasan'); // Reset ke tab pertama
-    this.isWindressActive.set(false); // Reset status windress
+    this.activeTab.set('ringkasan');
+    this.isWindressActive.set(false);
 
-    // Ambil data visualisasi kotak-kotak dashboard dari backend untuk dokumen ini
-    this.dashboardService.getSummaryPerbulan(doc.id).subscribe({
-      next: (res) => {
-        if (res.success) this.summaryPerbulan.set(res.data);
-      },
-      error: (err) => console.error(err)
-    });
+    this.dashboardService.getSummaryPerbulan(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.summaryPerbulan.set(res.data); });
+    this.dashboardService.getRingkasanSaldo(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.ringkasanSaldo.set(res.data); });
+    this.dashboardService.getTop10CreditAmount(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10Credit.set(res.data); });
+    this.dashboardService.getTop10DebitAmount(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10Debit.set(res.data); });
+    this.dashboardService.getTop10CreditFreq(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10CreditFreq.set(res.data); });
+    this.dashboardService.getTop10DebitFreq(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10DebitFreq.set(res.data); });
+    this.dashboardService.getAdminTransactions(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.adminTransactions.set(res.data); });
+    this.dashboardService.getTaxTransactions(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.taxTransactions.set(res.data); });
+    this.dashboardService.getInterestTransactions(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.interestTransactions.set(res.data); });
+    this.dashboardService.getAnomalyCreditTransactions(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.anomalyCreditTransactions.set(res.data); });
+    this.dashboardService.getAnomalyDebitTransactions(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.anomalyDebitTransactions.set(res.data); });
 
-    // Ambil Ringkasan Saldo & Arus Kas (exclude-aware)
-    this.dashboardService.getRingkasanSaldo(doc.id).subscribe({
-      next: (res) => {
-        if (res.success) this.ringkasanSaldo.set(res.data);
-      },
-      error: (err) => console.error(err)
-    });
+    // Ambil data Top 10 Cleaned dari Backend
+    this.dashboardService.getTop10CreditAmountCleaned(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10CreditCleaned.set(res.data); });
+    this.dashboardService.getTop10DebitAmountCleaned(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10DebitCleaned.set(res.data); });
 
-    // Ambil data Top 10 Credit Amount
-    this.dashboardService.getTop10CreditAmount(doc.id).subscribe({
-      next: (res) => {
-        if (res.success) this.top10Credit.set(res.data);
-      },
-      error: (err) => console.error(err)
-    });
-
-    // Ambil data Top 10 Debit Amount
-    this.dashboardService.getTop10DebitAmount(doc.id).subscribe({
-      next: (res) => {
-        if (res.success) this.top10Debit.set(res.data);
-      },
-      error: (err) => console.error(err)
-    });
-
-    // Ambil data Top 10 Credit Freq
-    this.dashboardService.getTop10CreditFreq(doc.id).subscribe({
-      next: (res) => {
-        if (res.success) this.top10CreditFreq.set(res.data);
-      },
-      error: (err) => console.error(err)
-    });
-
-    // Ambil data Top 10 Debit Freq
-    this.dashboardService.getTop10DebitFreq(doc.id).subscribe({
-      next: (res) => {
-        if (res.success) this.top10DebitFreq.set(res.data);
-      },
-      error: (err) => console.error(err)
-    });
-
-    // Ambil data biaya admin
-    this.dashboardService.getAdminTransactions(doc.id).subscribe({
-      next: (res) => {
-        if (res.success) this.adminTransactions.set(res.data);
-      },
-      error: (err) => console.error(err)
-    });
-
-    // Ambil data pajak
-    this.dashboardService.getTaxTransactions(doc.id).subscribe({
-      next: (res) => {
-        if (res.success) this.taxTransactions.set(res.data);
-      },
-      error: (err) => console.error(err)
-    });
-
-    // Ambil data bunga
-    this.dashboardService.getInterestTransactions(doc.id).subscribe({
-      next: (res) => {
-        if (res.success) this.interestTransactions.set(res.data);
-      },
-      error: (err) => console.error(err)
-    });
-
-    // Ambil isi rincian tabel transaksi mentah untuk ditampilkan di bagian bawah
     this.dashboardService.getDetailSemuaTransaksi(doc.id).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.detailTransaksi.set(res.data);
-          this.isLoadingAnalytics.set(false); // Sembunyikan loading setelah selesai
-        }
-      },
-      error: (err) => {
-        console.error(err);
+      next: (res: ApiResponse<any>) => {
+        if (res.success) this.detailTransaksi.set(res.data);
         this.isLoadingAnalytics.set(false);
-      }
+      },
+      error: () => this.isLoadingAnalytics.set(false)
     });
   }
 
-  // Men-trigger unduhan file Excel berdasarkan dokumen yang sedang aktif
-  // ==========================================
-  // LOGIKA WINDOW DRESSING (WINDRESS)
-  // ==========================================
-
-  // Helper Windress: Hitung selisih bersih (After - Before)
-  calculateDiff(before: number, after?: number): number {
-    return (after || 0) - (before || 0);
-  }
-
-  // Helper Windress: Hitung persentase perubahan
+  calculateDiff(before: number, after?: number): number { return (after || 0) - (before || 0); }
   calculatePercentage(before: number, after?: number): number {
     if (!before || before === 0) return 0;
-    const diff = (after || 0) - before;
-    return (diff / before) * 100;
+    return ((after || 0) - before) / before * 100;
   }
 
-  // Men-trigger tampilan perbandingan Before/After Windress
-  applyWindress() {
-    this.isWindressActive.update(v => !v);
-  }
+  applyWindress() { this.isWindressActive.update((v: boolean) => !v); }
 
   exportExcel() {
     const doc = this.selectedDocument();
     if (doc) {
-      // Periksa apakah ada transaksi yang di-exclude
-      const excludedCount = this.detailTransaksi().filter(t => t.isExcluded).length;
-      if (excludedCount > 0) {
-        if (!confirm(`Anda telah mengecualikan (exclude) ${excludedCount} transaksi.\n\nTransaksi-transaksi ini TIDAK akan disertakan di dalam file ekspor Excel.\n\nLanjutkan mengunduh?`)) {
-          return; // Batal download
-        }
-      }
-
       let url = this.dashboardService.exportExcelUrl(doc.id);
-      if (this.filterMonth() !== 'ALL') {
-        url += '&month=' + this.filterMonth();
-      }
-      if (this.filterFlag() !== 'ALL') {
-        url += '&flag=' + this.filterFlag();
-      }
+      if (this.filterMonth() !== 'ALL') url += '&month=' + this.filterMonth();
+      if (this.filterFlag() !== 'ALL') url += '&flag=' + this.filterFlag();
       window.location.href = url;
     }
   }
 
-  // Mengubah status exclude transaksi secara langsung (Optimistic UI)
   toggleExclude(tx: DetailTransaksi) {
     if (!tx.id) return;
     const oldStatus = tx.isExcluded;
-    tx.isExcluded = !tx.isExcluded; // UI update seketika
+    tx.isExcluded = !tx.isExcluded;
 
     this.dashboardService.toggleExclude(tx.id).subscribe({
-      next: (res) => {
-        if (!res.success) {
-          tx.isExcluded = oldStatus; // Revert jika gagal
-        } else {
-          // Jika berhasil, panggil ulang ringkasan saldo agar angka di dashboard terupdate
+      next: (res: ApiResponse<any>) => {
+        if (!res.success) tx.isExcluded = oldStatus;
+        else {
           const doc = this.selectedDocument();
           if (doc) {
-            this.dashboardService.getRingkasanSaldo(doc.id).subscribe(res => {
+            this.dashboardService.getRingkasanSaldo(doc.id).subscribe((res: ApiResponse<any>) => {
               if (res.success) this.ringkasanSaldo.set(res.data);
+            });
+            // Refresh Top 10 Cleaned dari Backend saat ada perubahan exclude
+            this.dashboardService.getTop10CreditAmountCleaned(doc.id).subscribe((res: ApiResponse<any>) => {
+              if (res.success) this.top10CreditCleaned.set(res.data);
+            });
+            this.dashboardService.getTop10DebitAmountCleaned(doc.id).subscribe((res: ApiResponse<any>) => {
+              if (res.success) this.top10DebitCleaned.set(res.data);
             });
           }
         }
       },
-      error: (err) => {
-        console.error("Gagal toggle exclude", err);
-        tx.isExcluded = oldStatus; // Revert jika gagal
-      }
+      error: () => { tx.isExcluded = oldStatus; }
     });
   }
 
-  // Fungsi tombol "Kembali" dari Level 2 ke Level 1
   backToAccounts() {
     this.selectedAccount.set(null);
     this.documents.set([]);
     this.currentView.set('accounts');
   }
 
-  // Fungsi tombol "Kembali" dari Level 3 ke Level 2
   backToDocuments() {
     this.selectedDocument.set(null);
     this.summaryPerbulan.set([]);
@@ -460,18 +336,10 @@ export class Dashboard implements OnInit {
     this.adminTransactions.set([]);
     this.taxTransactions.set([]);
     this.interestTransactions.set([]);
-    this.taxPage.set(1);
-    this.adminPage.set(1);
-    this.interestPage.set(1);
-    this.ringkasanSaldo.set({ totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0, avgDailyBalance: 0 });
     this.currentView.set('documents');
   }
 
-  // ==========================================
-  // PAGINATION
-  // ==========================================
-
-  goToPage(type: 'account' | 'doc' | 'tx' | 'tax' | 'admin' | 'interest', page: number) {
+  goToPage(type: string, page: number) {
     if (type === 'account') this.accountPage.set(page);
     else if (type === 'doc') this.docPage.set(page);
     else if (type === 'tx') this.txPage.set(page);
@@ -481,152 +349,77 @@ export class Dashboard implements OnInit {
   }
 
   getVisiblePages(currentPage: number, totalPages: number): (number | string)[] {
-    if (totalPages <= 7) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
+    if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
     const pages: (number | string)[] = [1];
-    let startPage = Math.max(2, currentPage - 2);
-    let endPage = Math.min(totalPages - 1, currentPage + 2);
-
-    if (currentPage <= 4) {
-      endPage = 5;
-    }
-    if (currentPage >= totalPages - 3) {
-      startPage = totalPages - 4;
-    }
-
-    if (startPage > 2) {
-      pages.push('...');
-    }
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
-    if (endPage < totalPages - 1) {
-      pages.push('...');
-    }
-    if (totalPages > 1) {
-      pages.push(totalPages);
-    }
+    if (currentPage > 3) pages.push('...');
+    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) pages.push(i);
+    if (currentPage < totalPages - 2) pages.push('...');
+    if (totalPages > 1) pages.push(totalPages);
     return pages;
   }
 
-  onSearchChange(type: 'account' | 'doc' | 'tx') {
+  onSearchChange(type: string) {
     if (type === 'account') this.accountPage.set(1);
     else if (type === 'doc') this.docPage.set(1);
     else this.txPage.set(1);
   }
 
-  // ==========================================
-  // UPLOAD
-  // ==========================================
-
-  toggleUploadForm() {
-    this.showUploadForm.update(v => !v);
-  }
-
+  toggleUploadForm() { this.showUploadForm.update((v: boolean) => !v); }
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.uploadForm.file = input.files[0];
-    }
+    if (input.files) this.uploadForm.file = input.files[0];
   }
 
   submitUpload() {
-    if (!this.uploadForm.file || !this.uploadForm.bankName || !this.uploadForm.accountNumber || !this.uploadForm.accountName) {
-      alert("Mohon lengkapi semua isian.");
-      return;
+    if (!this.uploadForm.file || !this.uploadForm.bankName) {
+      alert("Lengkapi data!"); return;
     }
-
     this.isUploading.set(true);
-
     const formData = new FormData();
-    formData.append('accountId', '0'); // Backend creates or updates by account number anyway
+    formData.append('accountId', '0');
     formData.append('accountNumber', this.uploadForm.accountNumber);
     formData.append('accountName', this.uploadForm.accountName);
     formData.append('bankName', this.uploadForm.bankName);
-    if (this.uploadForm.file) {
-      formData.append('file', this.uploadForm.file);
-    }
+    formData.append('file', this.uploadForm.file);
 
     this.documentService.uploadDocument(formData).subscribe({
-      next: (res) => {
+      next: (res: ApiResponse<any>) => {
         if (res.success) {
-          alert('Upload Sukses! ' + res.message);
-          this.showUploadForm.set(false);
-          this.uploadForm = { bankName: '', accountNumber: '', accountName: '', file: null };
-          this.fetchAccounts(); // refresh list
+          alert('Berhasil!'); this.showUploadForm.set(false); this.fetchAccounts();
         }
         this.isUploading.set(false);
       },
-      error: (err) => {
-        console.error('Upload Error:', err);
-        alert('Gagal mengunggah file. ' + (err.error?.message || err.message));
-        this.isUploading.set(false);
-      }
+      error: () => this.isUploading.set(false)
     });
   }
-
-  // ==========================================
-  // HELPERS
-  // ==========================================
 
   getStatusBadgeClass(status: string): string {
     switch (status) {
       case 'SUCCESS': return 'badge-success';
       case 'FAILED': return 'badge-danger';
       case 'PARSING': return 'badge-warning';
-      case 'UPLOADED': return 'badge-info';
       default: return 'badge-secondary';
     }
   }
 
   getStatusLabel(status: string): string {
-    switch (status) {
-      case 'SUCCESS': return 'Selesai';
-      case 'FAILED': return 'Gagal';
-      case 'PARSING': return 'Diproses...';
-      case 'UPLOADED': return 'Diunggah';
-      default: return status;
-    }
+    return status === 'SUCCESS' ? 'Selesai' : (status === 'FAILED' ? 'Gagal' : 'Proses');
   }
 
   getStatusIcon(status: string): string {
-    switch (status) {
-      case 'SUCCESS': return 'bi-check-circle-fill';
-      case 'FAILED': return 'bi-x-circle-fill';
-      case 'PARSING': return 'bi-arrow-repeat';
-      default: return 'bi-question-circle';
-    }
+    return status === 'SUCCESS' ? 'bi-check-circle-fill' : (status === 'FAILED' ? 'bi-x-circle-fill' : 'bi-arrow-repeat');
   }
 
   getBankBadgeClass(bank: string): string {
-    switch (bank) {
-      case 'BCA': return 'bank-badge-bca';
-      case 'BNI': return 'bank-badge-bni';
-      case 'BRI': return 'bank-badge-bri';
-      case 'MANDIRI':
-      case 'MANDIRI KOPRA': return 'bank-badge-mandiri';
-      case 'UOB': return 'bank-badge-uob';
-      default: return 'bank-badge-default';
-    }
+    return 'bank-badge-' + bank.toLowerCase().replace(' ', '-');
   }
 
   formatPeriod(start: string | null, end: string | null): string {
     if (!start || !end) return '-';
-    const s = new Date(start);
-    const e = new Date(end);
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-    return `${months[s.getMonth()]} ${s.getFullYear()} - ${months[e.getMonth()]} ${e.getFullYear()}`;
+    const s = new Date(start), e = new Date(end);
+    return `${s.getMonth() + 1}/${s.getFullYear()} - ${e.getMonth() + 1}/${e.getFullYear()}`;
   }
 
-  formatDate(dateStr: string): string {
-    const d = new Date(dateStr);
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}, ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
-  }
-
-  formatCurrency(amount: number): string {
-    return 'Rp ' + amount.toLocaleString('id-ID');
-  }
+  formatDate(d: string): string { return new Date(d).toLocaleDateString(); }
+  formatCurrency(a: number): string { return 'Rp ' + a.toLocaleString('id-ID'); }
 }
-

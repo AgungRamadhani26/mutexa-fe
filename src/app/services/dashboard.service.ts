@@ -50,6 +50,18 @@ export class DashboardService {
     return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/top10-debit`, { params });
   }
 
+  // Mengambil data top 10 credit amount (cleaned)
+  getTop10CreditAmountCleaned(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/top10-credit-cleaned`, { params });
+  }
+
+  // Mengambil data top 10 debit amount (cleaned)
+  getTop10DebitAmountCleaned(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/top10-debit-cleaned`, { params });
+  }
+
   // Mengambil data frekuensi keterangan paling sering muncul (Kredit)
   getTop10CreditFreq(documentId: number): Observable<ApiResponse<TopFreq[]>> {
     const params = new HttpParams().set('documentId', documentId.toString());
@@ -78,6 +90,16 @@ export class DashboardService {
   getInterestTransactions(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
     const params = new HttpParams().set('documentId', documentId.toString());
     return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/interest-transactions`, { params });
+  }
+
+  getAnomalyCreditTransactions(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/anomaly-credit`, { params });
+  }
+
+  getAnomalyDebitTransactions(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/anomaly-debit`, { params });
   }
 
   // Menghasilkan URL download File Excel untuk rincian transaksi dokumen terkait
