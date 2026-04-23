@@ -347,7 +347,8 @@
                     @let pctCR = calculatePercentage(ringkasanSaldo().avgCredit, ringkasanSaldo().cleanedAvgCredit);
                     <div class="delta-impact">
                       <span class="delta-pill" [class.delta-plus]="diffCR >= 0" [class.delta-minus]="diffCR < 0">
-                        <i class="bi" [class.bi-caret-up-fill]="diffCR >= 0" [class.bi-caret-down-fill]="diffCR < 0"></i>
+                        <i class="bi" [class.bi-caret-up-fill]="diffCR >= 0"
+                          [class.bi-caret-down-fill]="diffCR < 0"></i>
                         {{ formatCurrency(diffCR >= 0 ? diffCR : -diffCR) }}
                       </span>
                       <span class="percentage-tag">{{ pctCR >= 0 ? '+' : '' }}{{ pctCR.toFixed(1) }}% Change</span>
@@ -377,7 +378,8 @@
                     @let pctDB = calculatePercentage(ringkasanSaldo().avgDebit, ringkasanSaldo().cleanedAvgDebit);
                     <div class="delta-impact">
                       <span class="delta-pill" [class.delta-plus]="diffDB <= 0" [class.delta-minus]="diffDB > 0">
-                        <i class="bi" [class.bi-caret-down-fill]="diffDB <= 0" [class.bi-caret-up-fill]="diffDB > 0"></i>
+                        <i class="bi" [class.bi-caret-down-fill]="diffDB <= 0"
+                          [class.bi-caret-up-fill]="diffDB > 0"></i>
                         {{ formatCurrency(diffDB >= 0 ? diffDB : -diffDB) }}
                       </span>
                       <span class="percentage-tag">{{ pctDB >= 0 ? '+' : '' }}{{ pctDB.toFixed(1) }}% Change</span>
@@ -392,7 +394,8 @@
                 <div class="card-content">
                   <div class="card-label">Rata-rata Saldo (Harian)</div>
                   <div class="card-value">{{ formatCurrency(ringkasanSaldo().avgDailyBalance) }}</div>
-                  <div class="text-tiny text-muted mt-1"><i class="bi bi-info-circle me-1"></i>Tetap menggunakan data asli</div>
+                  <div class="text-tiny text-muted mt-1"><i class="bi bi-info-circle me-1"></i>Tetap menggunakan data
+                    asli</div>
                 </div>
               </div>
             </div>
@@ -416,7 +419,8 @@
                     @let pctTC = calculatePercentage(ringkasanSaldo().totalCredit, ringkasanSaldo().cleanedTotalCredit);
                     <div class="delta-impact">
                       <span class="delta-pill" [class.delta-plus]="diffTC >= 0" [class.delta-minus]="diffTC < 0">
-                        <i class="bi" [class.bi-caret-up-fill]="diffTC >= 0" [class.bi-caret-down-fill]="diffTC < 0"></i>
+                        <i class="bi" [class.bi-caret-up-fill]="diffTC >= 0"
+                          [class.bi-caret-down-fill]="diffTC < 0"></i>
                         {{ formatCurrency(diffTC >= 0 ? diffTC : -diffTC) }}
                       </span>
                       <span class="percentage-tag">{{ pctTC >= 0 ? '+' : '' }}{{ pctTC.toFixed(1) }}% Change</span>
@@ -446,7 +450,8 @@
                     @let pctTD = calculatePercentage(ringkasanSaldo().totalDebit, ringkasanSaldo().cleanedTotalDebit);
                     <div class="delta-impact">
                       <span class="delta-pill" [class.delta-plus]="diffTD <= 0" [class.delta-minus]="diffTD > 0">
-                        <i class="bi" [class.bi-caret-down-fill]="diffTD <= 0" [class.bi-caret-up-fill]="diffTD > 0"></i>
+                        <i class="bi" [class.bi-caret-down-fill]="diffTD <= 0"
+                          [class.bi-caret-up-fill]="diffTD > 0"></i>
                         {{ formatCurrency(diffTD >= 0 ? diffTD : -diffTD) }}
                       </span>
                       <span class="percentage-tag">{{ pctTD >= 0 ? '+' : '' }}{{ pctTD.toFixed(1) }}% Change</span>
@@ -463,7 +468,8 @@
         <div class="mb-3 mt-3">
           <div class="section-title">
             <i class="bi bi-calendar3 me-2"></i>2. Summary Perbulan
-            <small class="text-muted ms-2" style="font-size: 0.75rem;">(Menampilkan {{ summaryPerbulan().length }} bulan)</small>
+            <small class="text-muted ms-2" style="font-size: 0.75rem;">(Menampilkan {{ summaryPerbulan().length }}
+              bulan)</small>
           </div>
           <div class="mu-card">
             <div class="table-responsive">
@@ -483,616 +489,697 @@
                 </thead>
                 <tbody>
                   @for (item of summaryPerbulan(); track item.periode) {
-                    @if (!isWindressActive()) {
-                    <tr>
-                      <td class="fw-semibold">{{ item.periode }}</td>
-                      <td class="text-end font-mono">{{ formatCurrency(item.saldoAkhir) }}</td>
-                      <td class="text-end fw-medium text-mu-green">{{ formatCurrency(item.totalCredit) }}</td>
-                      <td class="text-end fw-medium text-mu-red">{{ formatCurrency(item.totalDebit) }}</td>
-                      <td class="text-center"><span class="badge-freq-item">{{ item.freqCredit }}x</span></td>
-                      <td class="text-center"><span class="badge-freq-item">{{ item.freqDebit }}x</span></td>
-                    </tr>
-                    } @else {
-                    <!-- BARIS 1: BEFORE (Data Asli) -->
-                    <tr class="row-before">
-                      <td class="fw-bold align-middle border-bottom-0">{{ item.periode }}</td>
-                      <td class="text-center align-middle border-bottom-0">
-                        <span class="status-badge badge-outline-slate">Before</span>
-                      </td>
-                      <td class="text-end align-middle font-mono border-bottom-0">{{ formatCurrency(item.saldoAkhir) }}</td>
-                      <td class="text-end align-middle text-muted small border-bottom-0">{{ formatCurrency(item.totalCredit) }}</td>
-                      <td class="text-end align-middle text-muted small border-bottom-0">{{ formatCurrency(item.totalDebit) }}</td>
-                      <td class="text-center align-middle text-muted small border-bottom-0">{{ item.freqCredit }}x</td>
-                      <td class="text-center align-middle text-muted small border-bottom-0">{{ item.freqDebit }}x</td>
-                    </tr>
-                    <!-- BARIS 2: AFTER (Data Bersih) -->
-                    <tr class="row-after">
-                      <td></td> <!-- Grouping: Kosongkan periode -->
-                      <td class="text-center align-middle">
-                        <span class="status-badge badge-fill-blue">After</span>
-                      </td>
-                      <td class="text-end align-middle"></td>
-                      <td class="text-end align-middle text-mu-green-dark">
-                        {{ formatCurrency(item.cleanedTotalCredit || 0) }}
-                        @let diffCr = calculateDiff(item.totalCredit, item.cleanedTotalCredit);
-                        @let pctCr = calculatePercentage(item.totalCredit, item.cleanedTotalCredit);
-                        @if (diffCr !== 0) {
-                          <span class="impact-ind" [ngClass]="diffCr < 0 ? 'impact-bad' : 'impact-good'">
-                            <i class="bi" [class.bi-caret-down-fill]="diffCr < 0" [class.bi-caret-up-fill]="diffCr > 0"></i>
-                            {{ pctCr.toFixed(1) }}%
-                          </span>
-                        }
-                      </td>
-                      <td class="text-end align-middle text-mu-red-dark">
-                        {{ formatCurrency(item.cleanedTotalDebit || 0) }}
-                        @let diffDb = calculateDiff(item.totalDebit, item.cleanedTotalDebit);
-                        @let pctDb = calculatePercentage(item.totalDebit, item.cleanedTotalDebit);
-                        @if (diffDb !== 0) {
-                          <span class="impact-ind" [ngClass]="diffDb < 0 ? 'impact-good' : 'impact-bad'">
-                            <i class="bi" [class.bi-caret-down-fill]="diffDb < 0" [class.bi-caret-up-fill]="diffDb > 0"></i>
-                            {{ pctDb.toFixed(1) }}%
-                          </span>
-                        }
-                      </td>
-                      <td class="text-center align-middle fw-bold small text-mu-slate">
-                        {{ item.cleanedFreqCredit }}x
-                        @if ((item.cleanedFreqCredit || 0) < item.freqCredit) {
-                          <div class="text-tiny text-danger" style="font-size: 0.6rem;">({{ (item.cleanedFreqCredit || 0) - item.freqCredit }}x)</div>
-                        }
-                      </td>
-                      <td class="text-center align-middle fw-bold small text-mu-slate">
-                        {{ item.cleanedFreqDebit }}x
-                        @if ((item.cleanedFreqDebit || 0) < item.freqDebit) {
-                          <div class="text-tiny text-danger" style="font-size: 0.6rem;">({{ (item.cleanedFreqDebit || 0) - item.freqDebit }}x)</div>
-                        }
-                      </td>
-                    </tr>
-                    }
-                   } @empty {
-                   <tr>
-                     <td [attr.colspan]="isWindressActive() ? 7 : 6" class="text-center py-4 text-mu-slate-lighter">
-                       Belum ada data.
-                     </td>
-                   </tr>
-                   }
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <hr class="mu-divider">
-
-        <!-- 3 & 4. Top 10 Amount -->
-        <div class="row g-4 mb-4">
-          <!-- TOP 10 CREDIT AMOUNT -->
-          <div class="col-md-6">
-            <div class="section-title"><i class="bi bi-sort-down-alt me-2 text-mu-green"></i>3. Top 10 Credit Amount</div>
-            
-            <div class="d-flex flex-column gap-3">
-              <!-- BEFORE TABLE -->
-              <div class="mu-card p-0 overflow-hidden" [class.border-mu-amber]="isWindressActive()">
-                <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">BEFORE (ORIGINAL)</div>
-                <div class="table-responsive table-scroll-280">
-                  <table class="table mu-table m-0">
-                    <thead>
-                      <tr><th>KETERANGAN</th><th class="text-end" style="width: 140px;">NOMINAL</th><th class="text-center" style="width: 70px;">TGL</th></tr>
-                    </thead>
-                    <tbody>
-                      @for (cr of top10Credit(); track cr.keterangan + cr.tanggal) {
-                      <tr [class.text-muted]="isWindressActive() && cr.isExcluded">
-                        <td class="small">{{ cr.keterangan }}</td>
-                        <td class="text-end fw-bold text-mu-green text-nowrap">{{ formatCurrency(cr.jumlah) }}</td>
-                        <td class="text-center small text-mu-slate-lighter">{{ cr.tanggal | date:'dd/MM' }}</td>
-                      </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <!-- AFTER TABLE (Visible only when Windress active) -->
-              <div class="mu-card p-0 overflow-hidden" *ngIf="isWindressActive()">
-                <div class="bg-light p-2 text-center small fw-bold text-mu-green border-bottom">AFTER (CLEANED)</div>
-                <div class="table-responsive table-scroll-280">
-                  <table class="table mu-table m-0">
-                    <thead>
-                      <tr><th>KETERANGAN</th><th class="text-end" style="width: 140px;">NOMINAL</th><th class="text-center" style="width: 70px;">TGL</th></tr>
-                    </thead>
-                    <tbody>
-                      @for (cr of top10CreditCleaned(); track cr.keterangan + cr.tanggal) {
-                      <tr>
-                        <td class="small">{{ cr.keterangan }}</td>
-                        <td class="text-end fw-bold text-mu-green text-nowrap">{{ formatCurrency(cr.jumlah) }}</td>
-                        <td class="text-center small text-mu-slate-lighter">{{ cr.tanggal | date:'dd/MM' }}</td>
-                      </tr>
-                      } @empty {
-                        <tr><td colspan="3" class="text-center py-4 text-muted small">Semua data ter-exclude.</td></tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- TOP 10 DEBIT AMOUNT -->
-          <div class="col-md-6">
-            <div class="section-title"><i class="bi bi-sort-up me-2 text-mu-red"></i>4. Top 10 Debit Amount</div>
-            
-            <div class="d-flex flex-column gap-3">
-              <!-- BEFORE TABLE -->
-              <div class="mu-card p-0 overflow-hidden" [class.border-mu-amber]="isWindressActive()">
-                <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">BEFORE (ORIGINAL)</div>
-                <div class="table-responsive table-scroll-280">
-                  <table class="table mu-table m-0">
-                    <thead>
-                      <tr><th>KETERANGAN</th><th class="text-end" style="width: 140px;">NOMINAL</th><th class="text-center" style="width: 70px;">TGL</th></tr>
-                    </thead>
-                    <tbody>
-                      @for (db of top10Debit(); track db.keterangan + db.tanggal) {
-                      <tr [class.text-muted]="isWindressActive() && db.isExcluded">
-                        <td class="small">{{ db.keterangan }}</td>
-                        <td class="text-end fw-bold text-mu-red text-nowrap">{{ formatCurrency(db.jumlah) }}</td>
-                        <td class="text-center small text-mu-slate-lighter">{{ db.tanggal | date:'dd/MM' }}</td>
-                      </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <!-- AFTER TABLE -->
-              <div class="mu-card p-0 overflow-hidden" *ngIf="isWindressActive()">
-                <div class="bg-light p-2 text-center small fw-bold text-mu-red border-bottom">AFTER (CLEANED)</div>
-                <div class="table-responsive table-scroll-280">
-                  <table class="table mu-table m-0">
-                    <thead>
-                      <tr><th>KETERANGAN</th><th class="text-end" style="width: 140px;">NOMINAL</th><th class="text-center" style="width: 70px;">TGL</th></tr>
-                    </thead>
-                    <tbody>
-                      @for (db of top10DebitCleaned(); track db.keterangan + db.tanggal) {
-                      <tr>
-                        <td class="small">{{ db.keterangan }}</td>
-                        <td class="text-end fw-bold text-mu-red text-nowrap">{{ formatCurrency(db.jumlah) }}</td>
-                        <td class="text-center small text-mu-slate-lighter">{{ db.tanggal | date:'dd/MM' }}</td>
-                      </tr>
-                      } @empty {
-                        <tr><td colspan="3" class="text-center py-4 text-muted small">Semua data ter-exclude.</td></tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 5 & 6. Top 10 Freq -->
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <div class="section-title"><i class="bi bi-arrow-repeat me-2 text-mu-green"></i>5. Top 10
-              Credit Freq</div>
-            <div class="mu-card">
-              <div class="table-responsive table-scroll-250">
-                <table class="table mu-table">
-                  <thead>
-                    <tr>
-                      <th class="w-75">Keterangan</th>
-                      <th class="text-center">Frekuensi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- Menarik rentetan top 10 frekuensi keterangan via Angular Signal (hasil Response backend) -->
-                    @for (freq of top10CreditFreq(); track freq.keterangan) {
-                    <tr>
-                      <td>{{ freq.keterangan }}</td>
-                      <td class="text-center"><span class="freq-badge-cr">{{ freq.frekuensi }} x</span></td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                      <td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
-                    </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="section-title"><i class="bi bi-arrow-repeat me-2 text-mu-red"></i>6. Top 10
-              Debit Freq</div>
-            <div class="mu-card">
-              <div class="table-responsive table-scroll-250">
-                <table class="table mu-table">
-                  <thead>
-                    <tr>
-                      <th class="w-75">Keterangan</th>
-                      <th class="text-center">Frekuensi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (freq of top10DebitFreq(); track freq.keterangan) {
-                    <tr>
-                      <td>{{ freq.keterangan }}</td>
-                      <td class="text-center"><span class="freq-badge-db">{{ freq.frekuensi }} x</span></td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                      <td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
-                    </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      }
-
-      <!-- BAGIAN II: ANOMALI & PENGELUARAN KHUSUS -->
-      @if (activeTab() === 'anomali') {
-      <div class="analytics-section fade-in">
-        <h5 class="section-group-title text-mu-amber"><i class="bi bi-exclamation-octagon me-2"></i>II. ANOMALI &
-          PENGELUARAN KHUSUS</h5>
-
-        <!-- 7 & 8. Anomali -->
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <div class="section-title"><i class="bi bi-exclamation-triangle-fill me-2 text-mu-amber"></i>7. Anomali
-              Credit
-            </div>
-            <div class="anomali-card">
-              <div class="anomali-accent"></div>
-              <div class="table-responsive table-scroll-200">
-                <table class="table mu-table">
-                  <thead>
-                    <tr>
-                      <th>Keterangan</th>
-                      <th>Nominal</th>
-                      <th>Tanggal</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (an of anomalyCreditTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
-                    <tr>
-                      <td class="text-break">{{ an.keterangan }}</td>
-                      <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
-                      <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd MMM yy' }}</td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                      <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
-                    </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="section-title"><i class="bi bi-x-octagon-fill me-2 text-mu-red"></i>8.
-              Anomali Debit</div>
-            <div class="anomali-card">
-              <div class="anomali-accent"></div>
-              <div class="table-responsive table-scroll-200">
-                <table class="table mu-table">
-                  <thead>
-                    <tr>
-                      <th>Keterangan</th>
-                      <th>Nominal</th>
-                      <th>Tanggal</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (an of anomalyDebitTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
-                    <tr>
-                      <td class="text-break">{{ an.keterangan }}</td>
-                      <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
-                      <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd MMM yy' }}</td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                      <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
-                    </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <hr class="mu-divider">
-
-        <!-- 9, 10, 11 (Pajak, Admin, Bunga) -->
-        <div class="row g-3 mb-3">
-          <div class="col-md-4">
-            <div class="section-title">9. Pajak</div>
-            <div class="category-card h-100 d-flex flex-column">
-              <div class="cat-accent cat-accent-orange"></div>
-              <div class="flex-grow-1">
-                <table class="table mu-table">
-                  <thead>
-                    <tr>
-                      <th>Keterangan</th>
-                      <th>Nominal</th>
-                      <th>Tgl</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (tx of pagedTax(); track $index) {
-                    <tr>
-                      <td class="small">{{ tx.keterangan }}</td>
-                      <td class="fw-bold small text-mu-dark">{{ formatCurrency(tx.jumlah) }}</td>
-                      <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd MMM' }}</td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                      <td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td>
-                    </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- Mini Pagination Pajak (Always Visible) -->
-              <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
-                <button class="btn btn-mini-nav btn-mini-orange" [disabled]="taxPage() === 1"
-                  (click)="goToPage('tax', taxPage() - 1)">
-                  <i class="bi bi-chevron-left"></i>
-                </button>
-                <span class="text-tiny text-mu-slate-light">
-                  Hal {{ taxPage() }} / {{ taxTotalPages() || 1 }}
-                  <span class="ms-1 opacity-75">({{ currentTaxData().length }} data)</span>
-                </span>
-                <button class="btn btn-mini-nav btn-mini-orange"
-                  [disabled]="taxPage() === taxTotalPages() || taxTotalPages() === 0"
-                  (click)="goToPage('tax', taxPage() + 1)">
-                  <i class="bi bi-chevron-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="section-title">10. Biaya Admin</div>
-            <div class="category-card h-100 d-flex flex-column">
-              <div class="cat-accent cat-accent-purple"></div>
-              <div class="flex-grow-1">
-                <table class="table mu-table">
-                  <thead>
-                    <tr>
-                      <th>Keterangan</th>
-                      <th>Nominal</th>
-                      <th>Tgl</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (tx of pagedAdmin(); track $index) {
-                    <tr>
-                      <td class="small">{{ tx.keterangan }}</td>
-                      <td class="fw-bold small text-mu-dark">{{ formatCurrency(tx.jumlah) }}</td>
-                      <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd MMM' }}</td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                      <td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td>
-                    </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- Mini Pagination Admin (Always Visible) -->
-              <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
-                <button class="btn btn-mini-nav btn-mini-purple" [disabled]="adminPage() === 1"
-                  (click)="goToPage('admin', adminPage() - 1)">
-                  <i class="bi bi-chevron-left"></i>
-                </button>
-                <span class="text-tiny text-mu-slate-light">
-                  Hal {{ adminPage() }} / {{ adminTotalPages() || 1 }}
-                  <span class="ms-1 opacity-75">({{ currentAdminData().length }} data)</span>
-                </span>
-                <button class="btn btn-mini-nav btn-mini-purple"
-                  [disabled]="adminPage() === adminTotalPages() || adminTotalPages() === 0"
-                  (click)="goToPage('admin', adminPage() + 1)">
-                  <i class="bi bi-chevron-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="section-title">11. Bunga Pinjaman</div>
-            <div class="category-card h-100 d-flex flex-column">
-              <div class="cat-accent cat-accent-cyan"></div>
-              <div class="flex-grow-1">
-                <table class="table mu-table">
-                  <thead>
-                    <tr>
-                      <th>Keterangan</th>
-                      <th>Nominal</th>
-                      <th>Tgl</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (tx of pagedInterest(); track $index) {
-                    <tr>
-                      <td class="small">{{ tx.keterangan }}</td>
-                      <td class="fw-bold small text-mu-cyan">{{ formatCurrency(tx.jumlah) }}</td>
-                      <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd MMM' }}</td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                      <td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td>
-                    </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- Mini Pagination Bunga (Always Visible) -->
-              <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
-                <button class="btn btn-mini-nav btn-mini-cyan" [disabled]="interestPage() === 1"
-                  (click)="goToPage('interest', interestPage() - 1)">
-                  <i class="bi bi-chevron-left"></i>
-                </button>
-                <span class="text-tiny text-mu-slate-light">
-                  Hal {{ interestPage() }} / {{ interestTotalPages() || 1 }}
-                  <span class="ms-1 opacity-75">({{ currentInterestData().length }} data)</span>
-                </span>
-                <button class="btn btn-mini-nav btn-mini-cyan"
-                  [disabled]="interestPage() === interestTotalPages() || interestTotalPages() === 0"
-                  (click)="goToPage('interest', interestPage() + 1)">
-                  <i class="bi bi-chevron-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      }
-
-      <!-- BAGIAN III: DATA TRANSAKSI LENGKAP -->
-      @if (activeTab() === 'log') {
-      <div class="analytics-section fade-in">
-        <h5 class="section-group-title text-mu-primary"><i class="bi bi-database me-2"></i>III. DATA TRANSAKSI LENGKAP
-        </h5>
-
-        <!-- 12. Detail Semua Transaksi -->
-        <div class="mb-3">
-          <div class="d-flex flex-column gap-3 mb-3">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
-                (Bisa Exclude)</div>
-              <div class="d-flex gap-2">
-                <button class="btn" [ngClass]="isWindressActive() ? 'btn-mu-amber' : 'btn-mu-accent'" (click)="applyWindress()">
-                  <i class="bi bi-magic me-2"></i>
-                  {{ isWindressActive() ? 'Matikan Windress' : 'Terapkan Windress' }}
-                </button>
-                <button class="btn btn-mu-success" (click)="exportExcel()">
-                  <i class="bi bi-file-earmark-excel me-2"></i>Export Excel
-                </button>
-              </div>
-            </div>
-
-            <div class="d-flex flex-wrap align-items-center gap-3 bg-light p-2 rounded border">
-              <!-- Select Bulan -->
-              <div class="flex-grow-0">
-                <select class="form-select form-select-sm border-0 shadow-sm"
-                  style="min-width: 150px; font-weight: 500;" [ngModel]="filterMonth()"
-                  (ngModelChange)="filterMonth.set($event); onSearchChange('tx')">
-                  <option value="ALL">🗓️ Semua Bulan</option>
-                  @for (m of availableMonths(); track m.value) {
-                  <option [value]="m.value">{{m.label}}</option>
-                  }
-                </select>
-              </div>
-
-              <!-- Styled Segmented Buttons for Flag -->
-              <div class="btn-group shadow-sm" role="group">
-                <input type="radio" class="btn-check" name="btnflag" id="flagAll" value="ALL"
-                  [checked]="filterFlag() === 'ALL'" (change)="filterFlag.set('ALL'); onSearchChange('tx')">
-                <label class="btn btn-sm btn-outline-secondary" for="flagAll"><i class="bi bi-funnel"></i> Semua</label>
-
-                <input type="radio" class="btn-check" name="btnflag" id="flagCr" value="CR"
-                  [checked]="filterFlag() === 'CR'" (change)="filterFlag.set('CR'); onSearchChange('tx')">
-                <label class="btn btn-sm btn-outline-success" for="flagCr"><i class="bi bi-plus-circle"></i>
-                  Kredit</label>
-
-                <input type="radio" class="btn-check" name="btnflag" id="flagDb" value="DB"
-                  [checked]="filterFlag() === 'DB'" (change)="filterFlag.set('DB'); onSearchChange('tx')">
-                <label class="btn btn-sm btn-outline-danger" for="flagDb"><i class="bi bi-dash-circle"></i>
-                  Debit</label>
-              </div>
-
-              <!-- Search -->
-              <div class="mu-search search-form-md ms-auto shadow-sm">
-                <i class="bi bi-search"></i>
-                <input type="text" class="form-control form-control-sm border-0" placeholder="Cari transaksi..."
-                  [ngModel]="txSearch()" (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
-              </div>
-            </div>
-          </div>
-
-          <div class="mu-card">
-            <div class="table-responsive table-scroll-500">
-              <table class="table mu-table">
-                <thead class="sticky-top">
+                  @if (!isWindressActive()) {
                   <tr>
-                    <th class="text-center" style="width: 50px;" title="Kecualikan dari Export Excel">Excld</th>
-                    <th>Tanggal</th>
-                    <th>Keterangan</th>
-                    <th class="text-center">Flag</th>
-                    <th class="text-end">Jumlah</th>
+                    <td class="fw-semibold">{{ item.periode }}</td>
+                    <td class="text-end font-mono">{{ formatCurrency(item.saldoAkhir) }}</td>
+                    <td class="text-end fw-medium text-mu-green">{{ formatCurrency(item.totalCredit) }}</td>
+                    <td class="text-end fw-medium text-mu-red">{{ formatCurrency(item.totalDebit) }}</td>
+                    <td class="text-center"><span class="badge-freq-item">{{ item.freqCredit }}x</span></td>
+                    <td class="text-center"><span class="badge-freq-item">{{ item.freqDebit }}x</span></td>
+                  </tr>
+                  } @else {
+                  <!-- BARIS 1: BEFORE (Data Asli) -->
+                  <tr class="row-before">
+                    <td class="fw-bold align-middle border-bottom-0">{{ item.periode }}</td>
+                    <td class="text-center align-middle border-bottom-0">
+                      <span class="status-badge badge-outline-slate">Before</span>
+                    </td>
+                    <td class="text-end align-middle font-mono border-bottom-0">{{ formatCurrency(item.saldoAkhir) }}
+                    </td>
+                    <td class="text-end align-middle text-muted small border-bottom-0">{{
+                      formatCurrency(item.totalCredit) }}</td>
+                    <td class="text-end align-middle text-muted small border-bottom-0">{{
+                      formatCurrency(item.totalDebit) }}</td>
+                    <td class="text-center align-middle text-muted small border-bottom-0">{{ item.freqCredit }}x</td>
+                    <td class="text-center align-middle text-muted small border-bottom-0">{{ item.freqDebit }}x</td>
+                  </tr>
+                  <!-- BARIS 2: AFTER (Data Bersih) -->
+                  <tr class="row-after">
+                    <td></td> <!-- Grouping: Kosongkan periode -->
+                    <td class="text-center align-middle">
+                      <span class="status-badge badge-fill-blue">After</span>
+                    </td>
+                    <td class="text-end align-middle"></td>
+                    <td class="text-end align-middle text-mu-green-dark">
+                      {{ formatCurrency(item.cleanedTotalCredit || 0) }}
+                      @let diffCr = calculateDiff(item.totalCredit, item.cleanedTotalCredit);
+                      @let pctCr = calculatePercentage(item.totalCredit, item.cleanedTotalCredit);
+                      @if (diffCr !== 0) {
+                      <span class="impact-ind" [ngClass]="diffCr < 0 ? 'impact-bad' : 'impact-good'">
+                        <i class="bi" [class.bi-caret-down-fill]="diffCr < 0" [class.bi-caret-up-fill]="diffCr > 0"></i>
+                        {{ pctCr.toFixed(1) }}%
+                      </span>
+                      }
+                    </td>
+                    <td class="text-end align-middle text-mu-red-dark">
+                      {{ formatCurrency(item.cleanedTotalDebit || 0) }}
+                      @let diffDb = calculateDiff(item.totalDebit, item.cleanedTotalDebit);
+                      @let pctDb = calculatePercentage(item.totalDebit, item.cleanedTotalDebit);
+                      @if (diffDb !== 0) {
+                      <span class="impact-ind" [ngClass]="diffDb < 0 ? 'impact-good' : 'impact-bad'">
+                        <i class="bi" [class.bi-caret-down-fill]="diffDb < 0" [class.bi-caret-up-fill]="diffDb > 0"></i>
+                        {{ pctDb.toFixed(1) }}%
+                      </span>
+                      }
+                    </td>
+                    <td class="text-center align-middle fw-bold small text-mu-slate">
+                      {{ item.cleanedFreqCredit }}x
+                      @if ((item.cleanedFreqCredit || 0) < item.freqCredit) { <div class="text-tiny text-danger"
+                        style="font-size: 0.6rem;">({{ (item.cleanedFreqCredit || 0) - item.freqCredit }}x)
+            </div>
+            }
+            </td>
+            <td class="text-center align-middle fw-bold small text-mu-slate">
+              {{ item.cleanedFreqDebit }}x
+              @if ((item.cleanedFreqDebit || 0) < item.freqDebit) { <div class="text-tiny text-danger"
+                style="font-size: 0.6rem;">({{ (item.cleanedFreqDebit || 0) - item.freqDebit }}x)
+          </div>
+          }
+          </td>
+          </tr>
+          }
+          } @empty {
+          <tr>
+            <td [attr.colspan]="isWindressActive() ? 7 : 6" class="text-center py-4 text-mu-slate-lighter">
+              Belum ada data.
+            </td>
+          </tr>
+          }
+          </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <hr class="mu-divider">
+
+    <!-- 3 & 4. Top 10 Amount -->
+    <div class="row g-4 mb-4">
+      <!-- TOP 10 CREDIT AMOUNT -->
+      <div class="col-md-6">
+        <div class="section-title"><i class="bi bi-sort-down-alt me-2 text-mu-green"></i>3. Top 10 Credit Amount</div>
+
+        <div class="d-flex flex-column gap-3">
+          <!-- BEFORE TABLE -->
+          <div class="mu-card p-0 overflow-hidden" [class.border-mu-amber]="isWindressActive()">
+            <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">
+              BEFORE (ORIGINAL)</div>
+            <div class="table-responsive table-scroll-280">
+              <table class="table mu-table m-0">
+                <thead>
+                  <tr>
+                    <th>KETERANGAN</th>
+                    <th class="text-end" style="width: 140px;">NOMINAL</th>
+                    <th class="text-center" style="width: 70px;">TGL</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @for (tx of pagedTransaksi(); track tx.id || tx.tanggal + tx.keterangan + tx.jumlah) {
-                  <tr [ngClass]="getCategoryRowClass(tx.category)"
-                    [class.text-decoration-line-through]="!!tx.isExcluded" [class.text-muted]="!!tx.isExcluded">
-                    <td class="text-center">
-                      <div class="form-check d-flex justify-content-center m-0">
-                        <input class="form-check-input flex-shrink-0" type="checkbox" [checked]="!!tx.isExcluded"
-                          (change)="toggleExclude(tx)">
-                      </div>
-                    </td>
-                    <td class="small">{{ tx.tanggal | date:'dd-MM-yyyy' }}</td>
-                    <td class="fw-medium" [class.text-mu-darker]="!tx.isExcluded">{{ tx.keterangan }}</td>
-                    <td class="text-center">
-                      @if (tx.flag === 'CR') {
-                      <span class="flag-cr" [class.text-muted]="!!tx.isExcluded"><i
-                          class="bi bi-plus-circle me-1"></i>CR</span>
-                      } @else {
-                      <span class="flag-db" [class.text-muted]="!!tx.isExcluded"><i
-                          class="bi bi-dash-circle me-1"></i>DB</span>
-                      }
-                    </td>
-                    <td class="text-end fw-semibold"
-                      [ngClass]="tx.isExcluded ? 'text-muted' : (tx.flag === 'CR' ? 'text-mu-green' : 'text-mu-red')">
-                      {{ tx.flag === 'DB' ? '- ' : '+ ' }}{{ formatCurrency(tx.jumlah) }}
-                    </td>
-                  </tr>
-                  } @empty {
-                  <tr>
-                    <td colspan="5" class="text-center py-4 text-mu-slate-lighter">
-                      @if (txSearch()) {
-                      Tidak ada transaksi yang cocok dengan "<strong>{{ txSearch() }}</strong>"
-                      } @else {
-                      Belum ada data detail transaksi.
-                      }
-                    </td>
+                  @for (cr of top10Credit(); track cr.keterangan + cr.tanggal) {
+                  <tr [class.text-muted]="isWindressActive() && cr.isExcluded">
+                    <td class="small" [class.text-decoration-line-through]="isWindressActive() && cr.isExcluded">{{
+                      cr.keterangan }}</td>
+                    <td class="text-end fw-bold text-mu-green text-nowrap"
+                      [class.text-decoration-line-through]="isWindressActive() && cr.isExcluded">{{
+                      formatCurrency(cr.jumlah) }}</td>
+                    <td class="text-center small text-mu-slate-lighter"
+                      [class.text-decoration-line-through]="isWindressActive() && cr.isExcluded">{{ cr.tanggal |
+                      date:'dd/MM/yyyy' }}</td>
                   </tr>
                   }
                 </tbody>
               </table>
             </div>
+          </div>
 
-            @if (txTotalPages() > 1) {
-            <div class="mu-pagination">
-              <button class="page-btn" [disabled]="txPage() === 1" (click)="goToPage('tx', txPage() - 1)">
-                <i class="bi bi-chevron-left"></i>
-              </button>
-              @for (p of getVisiblePages(txPage(), txTotalPages()); track $index) {
-              <button class="page-btn" [class.active]="txPage() === p" [disabled]="p === '...'"
-                (click)="p !== '...' ? goToPage('tx', +p) : null">{{ p }}</button>
-              }
-              <button class="page-btn" [disabled]="txPage() === txTotalPages()" (click)="goToPage('tx', txPage() + 1)">
-                <i class="bi bi-chevron-right"></i>
-              </button>
-              <span class="page-info">{{ filteredTransaksi().length }} transaksi</span>
+          <!-- AFTER TABLE (Visible only when Windress active) -->
+          <div class="mu-card p-0 overflow-hidden" *ngIf="isWindressActive()">
+            <div class="bg-light p-2 text-center small fw-bold text-mu-green border-bottom">AFTER (CLEANED)</div>
+            <div class="table-responsive table-scroll-280">
+              <table class="table mu-table m-0">
+                <thead>
+                  <tr>
+                    <th>KETERANGAN</th>
+                    <th class="text-end" style="width: 140px;">NOMINAL</th>
+                    <th class="text-center" style="width: 70px;">TGL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (cr of top10CreditCleaned(); track cr.keterangan + cr.tanggal) {
+                  <tr>
+                    <td class="small">{{ cr.keterangan }}</td>
+                    <td class="text-end fw-bold text-mu-green text-nowrap">{{ formatCurrency(cr.jumlah) }}</td>
+                    <td class="text-center small text-mu-slate-lighter">{{ cr.tanggal | date:'dd/MM/yyyy' }}</td>
+                  </tr>
+                  } @empty {
+                  <tr>
+                    <td colspan="3" class="text-center py-4 text-muted small">Semua data ter-exclude.</td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
             </div>
-            }
           </div>
         </div>
       </div>
-      }
-    </div>
-    }
 
+      <!-- TOP 10 DEBIT AMOUNT -->
+      <div class="col-md-6">
+        <div class="section-title"><i class="bi bi-sort-up me-2 text-mu-red"></i>4. Top 10 Debit Amount</div>
+
+        <div class="d-flex flex-column gap-3">
+          <!-- BEFORE TABLE -->
+          <div class="mu-card p-0 overflow-hidden" [class.border-mu-amber]="isWindressActive()">
+            <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">
+              BEFORE (ORIGINAL)</div>
+            <div class="table-responsive table-scroll-280">
+              <table class="table mu-table m-0">
+                <thead>
+                  <tr>
+                    <th>KETERANGAN</th>
+                    <th class="text-end" style="width: 140px;">NOMINAL</th>
+                    <th class="text-center" style="width: 70px;">TGL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (db of top10Debit(); track db.keterangan + db.tanggal) {
+                  <tr [class.text-muted]="isWindressActive() && db.isExcluded">
+                    <td class="small" [class.text-decoration-line-through]="isWindressActive() && db.isExcluded">{{
+                      db.keterangan }}</td>
+                    <td class="text-end fw-bold text-mu-red text-nowrap"
+                      [class.text-decoration-line-through]="isWindressActive() && db.isExcluded">{{
+                      formatCurrency(db.jumlah) }}</td>
+                    <td class="text-center small text-mu-slate-lighter"
+                      [class.text-decoration-line-through]="isWindressActive() && db.isExcluded">{{ db.tanggal |
+                      date:'dd/MM/yyyy' }}</td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- AFTER TABLE -->
+          <div class="mu-card p-0 overflow-hidden" *ngIf="isWindressActive()">
+            <div class="bg-light p-2 text-center small fw-bold text-mu-red border-bottom">AFTER (CLEANED)</div>
+            <div class="table-responsive table-scroll-280">
+              <table class="table mu-table m-0">
+                <thead>
+                  <tr>
+                    <th>KETERANGAN</th>
+                    <th class="text-end" style="width: 140px;">NOMINAL</th>
+                    <th class="text-center" style="width: 70px;">TGL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (db of top10DebitCleaned(); track db.keterangan + db.tanggal) {
+                  <tr>
+                    <td class="small">{{ db.keterangan }}</td>
+                    <td class="text-end fw-bold text-mu-red text-nowrap">{{ formatCurrency(db.jumlah) }}</td>
+                    <td class="text-center small text-mu-slate-lighter">{{ db.tanggal | date:'dd/MM/yyyy' }}</td>
+                  </tr>
+                  } @empty {
+                  <tr>
+                    <td colspan="3" class="text-center py-4 text-muted small">Semua data ter-exclude.</td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 & 6. Top 10 Freq -->
+    <div class="row g-4 mb-4">
+      <!-- TOP 10 CREDIT FREQ -->
+      <div class="col-md-6">
+        <div class="section-title"><i class="bi bi-arrow-repeat me-2 text-mu-green"></i>5. Top 10 Credit Freq</div>
+
+        <div class="d-flex flex-column gap-3">
+          <!-- BEFORE TABLE -->
+          <div class="mu-card p-0 overflow-hidden" [class.border-mu-amber]="isWindressActive()">
+            <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">BEFORE (ORIGINAL)</div>
+            <div class="table-responsive table-scroll-250">
+              <table class="table mu-table m-0">
+                <thead>
+                  <tr><th class="w-75">KETERANGAN</th><th class="text-center">FREKUENSI</th></tr>
+                </thead>
+                <tbody>
+                  @for (freq of top10CreditFreq(); track freq.keterangan) {
+                  <tr>
+                    <td class="small">{{ freq.keterangan }}</td>
+                    <td class="text-center"><span class="freq-badge-cr">{{ freq.frekuensi }} x</span></td>
+                  </tr>
+                  } @empty {
+                  <tr><td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- AFTER TABLE -->
+          <div class="mu-card p-0 overflow-hidden" *ngIf="isWindressActive()">
+            <div class="bg-light p-2 text-center small fw-bold text-mu-green border-bottom">AFTER (CLEANED)</div>
+            <div class="table-responsive table-scroll-250">
+              <table class="table mu-table m-0">
+                <thead>
+                  <tr><th class="w-75">KETERANGAN</th><th class="text-center">FREKUENSI</th></tr>
+                </thead>
+                <tbody>
+                  @for (freq of top10CreditFreqCleaned(); track freq.keterangan) {
+                  <tr>
+                    <td class="small">{{ freq.keterangan }}</td>
+                    <td class="text-center"><span class="freq-badge-cr">{{ freq.frekuensi }} x</span></td>
+                  </tr>
+                  } @empty {
+                  <tr><td colspan="2" class="text-center py-4 text-mu-slate-lighter small text-muted">Belum ada data.</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOP 10 DEBIT FREQ -->
+      <div class="col-md-6">
+        <div class="section-title"><i class="bi bi-arrow-repeat me-2 text-mu-red"></i>6. Top 10 Debit Freq</div>
+
+        <div class="d-flex flex-column gap-3">
+          <!-- BEFORE TABLE -->
+          <div class="mu-card p-0 overflow-hidden" [class.border-mu-amber]="isWindressActive()">
+            <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">BEFORE (ORIGINAL)</div>
+            <div class="table-responsive table-scroll-250">
+              <table class="table mu-table m-0">
+                <thead>
+                  <tr><th class="w-75">KETERANGAN</th><th class="text-center">FREKUENSI</th></tr>
+                </thead>
+                <tbody>
+                  @for (freq of top10DebitFreq(); track freq.keterangan) {
+                  <tr>
+                    <td class="small">{{ freq.keterangan }}</td>
+                    <td class="text-center"><span class="freq-badge-db">{{ freq.frekuensi }} x</span></td>
+                  </tr>
+                  } @empty {
+                  <tr><td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- AFTER TABLE -->
+          <div class="mu-card p-0 overflow-hidden" *ngIf="isWindressActive()">
+            <div class="bg-light p-2 text-center small fw-bold text-mu-red border-bottom">AFTER (CLEANED)</div>
+            <div class="table-responsive table-scroll-250">
+              <table class="table mu-table m-0">
+                <thead>
+                  <tr><th class="w-75">KETERANGAN</th><th class="text-center">FREKUENSI</th></tr>
+                </thead>
+                <tbody>
+                  @for (freq of top10DebitFreqCleaned(); track freq.keterangan) {
+                  <tr>
+                    <td class="small">{{ freq.keterangan }}</td>
+                    <td class="text-center"><span class="freq-badge-db">{{ freq.frekuensi }} x</span></td>
+                  </tr>
+                  } @empty {
+                  <tr><td colspan="2" class="text-center py-4 text-mu-slate-lighter small text-muted">Belum ada data.</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+  }
+
+  <!-- BAGIAN II: ANOMALI & PENGELUARAN KHUSUS -->
+  @if (activeTab() === 'anomali') {
+  <div class="analytics-section fade-in">
+    <h5 class="section-group-title text-mu-amber"><i class="bi bi-exclamation-octagon me-2"></i>II. ANOMALI &
+      PENGELUARAN KHUSUS</h5>
+
+    <!-- 7 & 8. Anomali -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <div class="section-title"><i class="bi bi-exclamation-triangle-fill me-2 text-mu-amber"></i>7. Anomali
+          Credit
+        </div>
+        <div class="anomali-card">
+          <div class="anomali-accent"></div>
+          <div class="table-responsive table-scroll-200">
+            <table class="table mu-table">
+              <thead>
+                <tr>
+                  <th>Keterangan</th>
+                  <th>Nominal</th>
+                  <th>Tanggal</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (an of anomalyCreditTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
+                <tr>
+                  <td class="text-break">{{ an.keterangan }}</td>
+                  <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
+                  <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd/MM/yyyy' }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="section-title"><i class="bi bi-x-octagon-fill me-2 text-mu-red"></i>8.
+          Anomali Debit</div>
+        <div class="anomali-card">
+          <div class="anomali-accent"></div>
+          <div class="table-responsive table-scroll-200">
+            <table class="table mu-table">
+              <thead>
+                <tr>
+                  <th>Keterangan</th>
+                  <th>Nominal</th>
+                  <th>Tanggal</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (an of anomalyDebitTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
+                <tr>
+                  <td class="text-break">{{ an.keterangan }}</td>
+                  <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
+                  <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd/MM/yyyy' }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="mu-divider">
+
+    <!-- 9, 10, 11 (Pajak, Admin, Bunga) -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <div class="section-title">9. Pajak</div>
+        <div class="category-card h-100 d-flex flex-column">
+          <div class="cat-accent cat-accent-orange"></div>
+          <div class="flex-grow-1">
+            <table class="table mu-table">
+              <thead>
+                <tr>
+                  <th>Keterangan</th>
+                  <th>Nominal</th>
+                  <th>Tgl</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (tx of pagedTax(); track $index) {
+                <tr>
+                  <td class="small">{{ tx.keterangan }}</td>
+                  <td class="fw-bold small text-mu-dark">{{ formatCurrency(tx.jumlah) }}</td>
+                  <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd/MM/yyyy' }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mini Pagination Pajak (Always Visible) -->
+          <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
+            <button class="btn btn-mini-nav btn-mini-orange" [disabled]="taxPage() === 1"
+              (click)="goToPage('tax', taxPage() - 1)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <span class="text-tiny text-mu-slate-light">
+              Hal {{ taxPage() }} / {{ taxTotalPages() || 1 }}
+              <span class="ms-1 opacity-75">({{ currentTaxData().length }} data)</span>
+            </span>
+            <button class="btn btn-mini-nav btn-mini-orange"
+              [disabled]="taxPage() === taxTotalPages() || taxTotalPages() === 0"
+              (click)="goToPage('tax', taxPage() + 1)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="section-title">10. Biaya Admin</div>
+        <div class="category-card h-100 d-flex flex-column">
+          <div class="cat-accent cat-accent-purple"></div>
+          <div class="flex-grow-1">
+            <table class="table mu-table">
+              <thead>
+                <tr>
+                  <th>Keterangan</th>
+                  <th>Nominal</th>
+                  <th>Tgl</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (tx of pagedAdmin(); track $index) {
+                <tr>
+                  <td class="small">{{ tx.keterangan }}</td>
+                  <td class="fw-bold small text-mu-dark">{{ formatCurrency(tx.jumlah) }}</td>
+                  <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd/MM/yyyy' }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mini Pagination Admin (Always Visible) -->
+          <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
+            <button class="btn btn-mini-nav btn-mini-purple" [disabled]="adminPage() === 1"
+              (click)="goToPage('admin', adminPage() - 1)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <span class="text-tiny text-mu-slate-light">
+              Hal {{ adminPage() }} / {{ adminTotalPages() || 1 }}
+              <span class="ms-1 opacity-75">({{ currentAdminData().length }} data)</span>
+            </span>
+            <button class="btn btn-mini-nav btn-mini-purple"
+              [disabled]="adminPage() === adminTotalPages() || adminTotalPages() === 0"
+              (click)="goToPage('admin', adminPage() + 1)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="section-title">11. Bunga Pinjaman</div>
+        <div class="category-card h-100 d-flex flex-column">
+          <div class="cat-accent cat-accent-cyan"></div>
+          <div class="flex-grow-1">
+            <table class="table mu-table">
+              <thead>
+                <tr>
+                  <th>Keterangan</th>
+                  <th>Nominal</th>
+                  <th>Tgl</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (tx of pagedInterest(); track $index) {
+                <tr>
+                  <td class="small">{{ tx.keterangan }}</td>
+                  <td class="fw-bold small text-mu-cyan">{{ formatCurrency(tx.jumlah) }}</td>
+                  <td class="small text-mu-slate-lighter">{{ tx.tanggal | date:'dd/MM/yyyy' }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="3" class="text-center py-4 small text-muted">Data tidak tersedia.</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mini Pagination Bunga (Always Visible) -->
+          <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1">
+            <button class="btn btn-mini-nav btn-mini-cyan" [disabled]="interestPage() === 1"
+              (click)="goToPage('interest', interestPage() - 1)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <span class="text-tiny text-mu-slate-light">
+              Hal {{ interestPage() }} / {{ interestTotalPages() || 1 }}
+              <span class="ms-1 opacity-75">({{ currentInterestData().length }} data)</span>
+            </span>
+            <button class="btn btn-mini-nav btn-mini-cyan"
+              [disabled]="interestPage() === interestTotalPages() || interestTotalPages() === 0"
+              (click)="goToPage('interest', interestPage() + 1)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- BAGIAN III: DATA TRANSAKSI LENGKAP -->
+  @if (activeTab() === 'log') {
+  <div class="analytics-section fade-in">
+    <h5 class="section-group-title text-mu-primary"><i class="bi bi-database me-2"></i>III. DATA TRANSAKSI LENGKAP
+    </h5>
+
+    <!-- 12. Detail Semua Transaksi -->
+    <div class="mb-3">
+      <div class="d-flex flex-column gap-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
+            (Bisa Exclude)</div>
+          <div class="d-flex gap-2">
+            <button class="btn" [ngClass]="isWindressActive() ? 'btn-mu-amber' : 'btn-mu-accent'"
+              (click)="applyWindress()">
+              <i class="bi bi-magic me-2"></i>
+              {{ isWindressActive() ? 'Matikan Windress' : 'Terapkan Windress' }}
+            </button>
+            <button class="btn btn-mu-success" (click)="exportExcel()">
+              <i class="bi bi-file-earmark-excel me-2"></i>Export Excel
+            </button>
+          </div>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center gap-3 bg-light p-2 rounded border">
+          <!-- Select Bulan -->
+          <div class="flex-grow-0">
+            <select class="form-select form-select-sm border-0 shadow-sm" style="min-width: 150px; font-weight: 500;"
+              [ngModel]="filterMonth()" (ngModelChange)="filterMonth.set($event); onSearchChange('tx')">
+              <option value="ALL">🗓️ Semua Bulan</option>
+              @for (m of availableMonths(); track m.value) {
+              <option [value]="m.value">{{m.label}}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Styled Segmented Buttons for Flag -->
+          <div class="btn-group shadow-sm" role="group">
+            <input type="radio" class="btn-check" name="btnflag" id="flagAll" value="ALL"
+              [checked]="filterFlag() === 'ALL'" (change)="filterFlag.set('ALL'); onSearchChange('tx')">
+            <label class="btn btn-sm btn-outline-secondary" for="flagAll"><i class="bi bi-funnel"></i> Semua</label>
+
+            <input type="radio" class="btn-check" name="btnflag" id="flagCr" value="CR"
+              [checked]="filterFlag() === 'CR'" (change)="filterFlag.set('CR'); onSearchChange('tx')">
+            <label class="btn btn-sm btn-outline-success" for="flagCr"><i class="bi bi-plus-circle"></i>
+              Kredit</label>
+
+            <input type="radio" class="btn-check" name="btnflag" id="flagDb" value="DB"
+              [checked]="filterFlag() === 'DB'" (change)="filterFlag.set('DB'); onSearchChange('tx')">
+            <label class="btn btn-sm btn-outline-danger" for="flagDb"><i class="bi bi-dash-circle"></i>
+              Debit</label>
+          </div>
+
+          <!-- Search -->
+          <div class="mu-search search-form-md ms-auto shadow-sm">
+            <i class="bi bi-search"></i>
+            <input type="text" class="form-control form-control-sm border-0" placeholder="Cari transaksi..."
+              [ngModel]="txSearch()" (ngModelChange)="txSearch.set($event); onSearchChange('tx')">
+          </div>
+        </div>
+      </div>
+
+      <div class="mu-card">
+        <div class="table-responsive table-scroll-500">
+          <table class="table mu-table">
+            <thead class="sticky-top">
+              <tr>
+                <th class="text-center" style="width: 50px;" title="Kecualikan dari Export Excel">Excld</th>
+                <th>Tanggal</th>
+                <th>Keterangan</th>
+                <th class="text-center">Flag</th>
+                <th class="text-end">Jumlah</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (tx of pagedTransaksi(); track tx.id || tx.tanggal + tx.keterangan + tx.jumlah) {
+              <tr [ngClass]="getCategoryRowClass(tx.category)" [class.text-decoration-line-through]="!!tx.isExcluded"
+                [class.text-muted]="!!tx.isExcluded">
+                <td class="text-center">
+                  <div class="form-check d-flex justify-content-center m-0">
+                    <input class="form-check-input flex-shrink-0" type="checkbox" [checked]="!!tx.isExcluded"
+                      (change)="toggleExclude(tx)">
+                  </div>
+                </td>
+                <td class="small">{{ tx.tanggal | date:'dd-MM-yyyy' }}</td>
+                <td class="fw-medium" [class.text-mu-darker]="!tx.isExcluded">{{ tx.keterangan }}</td>
+                <td class="text-center">
+                  @if (tx.flag === 'CR') {
+                  <span class="flag-cr" [class.text-muted]="!!tx.isExcluded"><i
+                      class="bi bi-plus-circle me-1"></i>CR</span>
+                  } @else {
+                  <span class="flag-db" [class.text-muted]="!!tx.isExcluded"><i
+                      class="bi bi-dash-circle me-1"></i>DB</span>
+                  }
+                </td>
+                <td class="text-end fw-semibold"
+                  [ngClass]="tx.isExcluded ? 'text-muted' : (tx.flag === 'CR' ? 'text-mu-green' : 'text-mu-red')">
+                  {{ tx.flag === 'DB' ? '- ' : '+ ' }}{{ formatCurrency(tx.jumlah) }}
+                </td>
+              </tr>
+              } @empty {
+              <tr>
+                <td colspan="5" class="text-center py-4 text-mu-slate-lighter">
+                  @if (txSearch()) {
+                  Tidak ada transaksi yang cocok dengan "<strong>{{ txSearch() }}</strong>"
+                  } @else {
+                  Belum ada data detail transaksi.
+                  }
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (txTotalPages() > 1) {
+        <div class="mu-pagination">
+          <button class="page-btn" [disabled]="txPage() === 1" (click)="goToPage('tx', txPage() - 1)">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          @for (p of getVisiblePages(txPage(), txTotalPages()); track $index) {
+          <button class="page-btn" [class.active]="txPage() === p" [disabled]="p === '...'"
+            (click)="p !== '...' ? goToPage('tx', +p) : null">{{ p }}</button>
+          }
+          <button class="page-btn" [disabled]="txPage() === txTotalPages()" (click)="goToPage('tx', txPage() + 1)">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+          <span class="page-info">{{ filteredTransaksi().length }} transaksi</span>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>
+}
+
+</div>
 </div>
 
 <!-- MODAL AFTER CREDIT -->
@@ -1114,11 +1201,11 @@
           </thead>
           <tbody>
             @for (cr of top10CreditCleaned(); track cr.keterangan + cr.tanggal) {
-              <tr>
-                <td>{{ cr.keterangan }}</td>
-                <td class="text-end fw-bold text-mu-green">{{ formatCurrency(cr.jumlah) }}</td>
-                <td class="text-center small text-mu-slate-lighter">{{ cr.tanggal | date:'dd/MM/yy' }}</td>
-              </tr>
+            <tr>
+              <td>{{ cr.keterangan }}</td>
+              <td class="text-end fw-bold text-mu-green">{{ formatCurrency(cr.jumlah) }}</td>
+              <td class="text-center small text-mu-slate-lighter">{{ cr.tanggal | date:'dd/MM/yy' }}</td>
+            </tr>
             }
           </tbody>
         </table>
@@ -1146,11 +1233,11 @@
           </thead>
           <tbody>
             @for (db of top10DebitCleaned(); track db.keterangan + db.tanggal) {
-              <tr>
-                <td>{{ db.keterangan }}</td>
-                <td class="text-end fw-bold text-mu-red">{{ formatCurrency(db.jumlah) }}</td>
-                <td class="text-center small text-mu-slate-lighter">{{ db.tanggal | date:'dd/MM/yy' }}</td>
-              </tr>
+            <tr>
+              <td>{{ db.keterangan }}</td>
+              <td class="text-end fw-bold text-mu-red">{{ formatCurrency(db.jumlah) }}</td>
+              <td class="text-center small text-mu-slate-lighter">{{ db.tanggal | date:'dd/MM/yy' }}</td>
+            </tr>
             }
           </tbody>
         </table>

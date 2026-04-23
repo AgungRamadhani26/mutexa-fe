@@ -188,6 +188,8 @@ export class Dashboard implements OnInit {
   top10Debit = signal<DetailTransaksi[]>([]);
   top10CreditFreq = signal<TopFreq[]>([]);
   top10DebitFreq = signal<TopFreq[]>([]);
+  top10CreditFreqCleaned = signal<TopFreq[]>([]);
+  top10DebitFreqCleaned = signal<TopFreq[]>([]);
   adminTransactions = signal<DetailTransaksi[]>([]);
   taxTransactions = signal<DetailTransaksi[]>([]);
   interestTransactions = signal<DetailTransaksi[]>([]);
@@ -247,24 +249,27 @@ export class Dashboard implements OnInit {
     this.isLoadingAnalytics.set(true);
     this.activeTab.set('ringkasan');
     this.isWindressActive.set(false);
+    this.refreshAllDashboardData(doc.id);
+  }
 
-    this.dashboardService.getSummaryPerbulan(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.summaryPerbulan.set(res.data); });
-    this.dashboardService.getRingkasanSaldo(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.ringkasanSaldo.set(res.data); });
-    this.dashboardService.getTop10CreditAmount(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10Credit.set(res.data); });
-    this.dashboardService.getTop10DebitAmount(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10Debit.set(res.data); });
-    this.dashboardService.getTop10CreditFreq(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10CreditFreq.set(res.data); });
-    this.dashboardService.getTop10DebitFreq(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10DebitFreq.set(res.data); });
-    this.dashboardService.getAdminTransactions(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.adminTransactions.set(res.data); });
-    this.dashboardService.getTaxTransactions(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.taxTransactions.set(res.data); });
-    this.dashboardService.getInterestTransactions(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.interestTransactions.set(res.data); });
-    this.dashboardService.getAnomalyCreditTransactions(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.anomalyCreditTransactions.set(res.data); });
-    this.dashboardService.getAnomalyDebitTransactions(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.anomalyDebitTransactions.set(res.data); });
+  refreshAllDashboardData(documentId: number) {
+    this.dashboardService.getSummaryPerbulan(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.summaryPerbulan.set(res.data); });
+    this.dashboardService.getRingkasanSaldo(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.ringkasanSaldo.set(res.data); });
+    this.dashboardService.getTop10CreditAmount(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10Credit.set(res.data); });
+    this.dashboardService.getTop10DebitAmount(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10Debit.set(res.data); });
+    this.dashboardService.getTop10CreditFreq(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10CreditFreq.set(res.data); });
+    this.dashboardService.getTop10DebitFreq(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10DebitFreq.set(res.data); });
+    this.dashboardService.getAdminTransactions(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.adminTransactions.set(res.data); });
+    this.dashboardService.getTaxTransactions(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.taxTransactions.set(res.data); });
+    this.dashboardService.getInterestTransactions(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.interestTransactions.set(res.data); });
+    this.dashboardService.getAnomalyCreditTransactions(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.anomalyCreditTransactions.set(res.data); });
+    this.dashboardService.getAnomalyDebitTransactions(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.anomalyDebitTransactions.set(res.data); });
+    this.dashboardService.getTop10CreditAmountCleaned(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10CreditCleaned.set(res.data); });
+    this.dashboardService.getTop10DebitAmountCleaned(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10DebitCleaned.set(res.data); });
+    this.dashboardService.getTop10CreditFreqCleaned(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10CreditFreqCleaned.set(res.data); });
+    this.dashboardService.getTop10DebitFreqCleaned(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10DebitFreqCleaned.set(res.data); });
 
-    // Ambil data Top 10 Cleaned dari Backend
-    this.dashboardService.getTop10CreditAmountCleaned(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10CreditCleaned.set(res.data); });
-    this.dashboardService.getTop10DebitAmountCleaned(doc.id).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10DebitCleaned.set(res.data); });
-
-    this.dashboardService.getDetailSemuaTransaksi(doc.id).subscribe({
+    this.dashboardService.getDetailSemuaTransaksi(documentId).subscribe({
       next: (res: ApiResponse<any>) => {
         if (res.success) this.detailTransaksi.set(res.data);
         this.isLoadingAnalytics.set(false);
@@ -302,16 +307,7 @@ export class Dashboard implements OnInit {
         else {
           const doc = this.selectedDocument();
           if (doc) {
-            this.dashboardService.getRingkasanSaldo(doc.id).subscribe((res: ApiResponse<any>) => {
-              if (res.success) this.ringkasanSaldo.set(res.data);
-            });
-            // Refresh Top 10 Cleaned dari Backend saat ada perubahan exclude
-            this.dashboardService.getTop10CreditAmountCleaned(doc.id).subscribe((res: ApiResponse<any>) => {
-              if (res.success) this.top10CreditCleaned.set(res.data);
-            });
-            this.dashboardService.getTop10DebitAmountCleaned(doc.id).subscribe((res: ApiResponse<any>) => {
-              if (res.success) this.top10DebitCleaned.set(res.data);
-            });
+            this.refreshAllDashboardData(doc.id);
           }
         }
       },
@@ -333,6 +329,8 @@ export class Dashboard implements OnInit {
     this.top10Debit.set([]);
     this.top10CreditFreq.set([]);
     this.top10DebitFreq.set([]);
+    this.top10CreditFreqCleaned.set([]);
+    this.top10DebitFreqCleaned.set([]);
     this.adminTransactions.set([]);
     this.taxTransactions.set([]);
     this.interestTransactions.set([]);

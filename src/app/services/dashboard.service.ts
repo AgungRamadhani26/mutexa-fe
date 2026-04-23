@@ -74,6 +74,16 @@ export class DashboardService {
     return this.http.get<ApiResponse<TopFreq[]>>(`${this.apiUrl}/top10-debit-freq`, { params });
   }
 
+  getTop10CreditFreqCleaned(documentId: number): Observable<ApiResponse<TopFreq[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<TopFreq[]>>(`${this.apiUrl}/top10-credit-freq-cleaned`, { params });
+  }
+
+  getTop10DebitFreqCleaned(documentId: number): Observable<ApiResponse<TopFreq[]>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<TopFreq[]>>(`${this.apiUrl}/top10-debit-freq-cleaned`, { params });
+  }
+
   // Mengambil data transaksi spesifik kategori ADMIN
   getAdminTransactions(documentId: number): Observable<ApiResponse<DetailTransaksi[]>> {
     const params = new HttpParams().set('documentId', documentId.toString());
