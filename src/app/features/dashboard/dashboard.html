@@ -492,7 +492,7 @@
                   @if (!isWindressActive()) {
                   <tr>
                     <td class="fw-semibold">{{ item.periode }}</td>
-                    <td class="text-end font-mono">{{ formatCurrency(item.saldoAkhir) }}</td>
+                    <td class="text-end fw-medium">{{ formatCurrency(item.saldoAkhir) }}</td>
                     <td class="text-end fw-medium text-mu-green">{{ formatCurrency(item.totalCredit) }}</td>
                     <td class="text-end fw-medium text-mu-red">{{ formatCurrency(item.totalDebit) }}</td>
                     <td class="text-center"><span class="badge-freq-item">{{ item.freqCredit }}x</span></td>
@@ -505,7 +505,7 @@
                     <td class="text-center align-middle border-bottom-0">
                       <span class="status-badge badge-outline-slate">Before</span>
                     </td>
-                    <td class="text-end align-middle font-mono border-bottom-0">{{ formatCurrency(item.saldoAkhir) }}
+                    <td class="text-end align-middle fw-medium border-bottom-0">{{ formatCurrency(item.saldoAkhir) }}
                     </td>
                     <td class="text-end align-middle text-muted small border-bottom-0">{{
                       formatCurrency(item.totalCredit) }}</td>
@@ -832,7 +832,7 @@
         </div>
         <div class="anomali-card">
           <div class="anomali-accent"></div>
-          <div class="table-responsive table-scroll-200">
+          <div class="table-responsive">
             <table class="table mu-table">
               <thead>
                 <tr>
@@ -843,7 +843,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for (an of anomalyCreditTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
+                @for (an of pagedAnomalyCredit(); track an.tanggal + an.keterangan + an.jumlah) {
                 <tr>
                   <td class="text-break">{{ an.keterangan }}</td>
                   <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
@@ -858,6 +858,22 @@
               </tbody>
             </table>
           </div>
+          <!-- Mini Pagination Anomali Credit -->
+          <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1 bg-light border-top">
+            <button class="btn btn-sm btn-outline-secondary border-0" [disabled]="anomalyCreditPage() === 1"
+              (click)="goToPage('anomalyCredit', anomalyCreditPage() - 1)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <span class="text-muted" style="font-size: 0.75rem;">
+              Hal {{ anomalyCreditPage() }} / {{ anomalyCreditTotalPages() || 1 }}
+              <span class="ms-1 opacity-75">({{ currentAnomalyCreditData().length }} data)</span>
+            </span>
+            <button class="btn btn-sm btn-outline-secondary border-0"
+              [disabled]="anomalyCreditPage() === anomalyCreditTotalPages() || anomalyCreditTotalPages() === 0"
+              (click)="goToPage('anomalyCredit', anomalyCreditPage() + 1)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
         </div>
       </div>
       <div class="col-12">
@@ -865,7 +881,7 @@
           Anomali Debit</div>
         <div class="anomali-card">
           <div class="anomali-accent"></div>
-          <div class="table-responsive table-scroll-200">
+          <div class="table-responsive">
             <table class="table mu-table">
               <thead>
                 <tr>
@@ -876,7 +892,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for (an of anomalyDebitTransactions(); track an.tanggal + an.keterangan + an.jumlah) {
+                @for (an of pagedAnomalyDebit(); track an.tanggal + an.keterangan + an.jumlah) {
                 <tr>
                   <td class="text-break">{{ an.keterangan }}</td>
                   <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
@@ -890,6 +906,22 @@
                 }
               </tbody>
             </table>
+          </div>
+          <!-- Mini Pagination Anomali Debit -->
+          <div class="mini-pagination d-flex justify-content-between align-items-center px-2 py-1 bg-light border-top">
+            <button class="btn btn-sm btn-outline-secondary border-0" [disabled]="anomalyDebitPage() === 1"
+              (click)="goToPage('anomalyDebit', anomalyDebitPage() - 1)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <span class="text-muted" style="font-size: 0.75rem;">
+              Hal {{ anomalyDebitPage() }} / {{ anomalyDebitTotalPages() || 1 }}
+              <span class="ms-1 opacity-75">({{ currentAnomalyDebitData().length }} data)</span>
+            </span>
+            <button class="btn btn-sm btn-outline-secondary border-0"
+              [disabled]="anomalyDebitPage() === anomalyDebitTotalPages() || anomalyDebitTotalPages() === 0"
+              (click)="goToPage('anomalyDebit', anomalyDebitPage() + 1)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
           </div>
         </div>
       </div>

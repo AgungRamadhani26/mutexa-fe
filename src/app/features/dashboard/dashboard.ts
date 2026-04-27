@@ -152,6 +152,8 @@ export class Dashboard implements OnInit {
   taxPage = signal<number>(1);
   adminPage = signal<number>(1);
   interestPage = signal<number>(1);
+  anomalyCreditPage = signal<number>(1);
+  anomalyDebitPage = signal<number>(1);
   categoryPageSize = 5;
 
   currentTaxData = computed(() => this.taxTransactions());
@@ -174,6 +176,20 @@ export class Dashboard implements OnInit {
     return this.currentInterestData().slice(start, start + this.categoryPageSize);
   });
   interestTotalPages = computed(() => Math.ceil(this.currentInterestData().length / this.categoryPageSize));
+
+  currentAnomalyCreditData = computed(() => this.anomalyCreditTransactions());
+  pagedAnomalyCredit = computed(() => {
+    const start = (this.anomalyCreditPage() - 1) * this.categoryPageSize;
+    return this.currentAnomalyCreditData().slice(start, start + this.categoryPageSize);
+  });
+  anomalyCreditTotalPages = computed(() => Math.ceil(this.currentAnomalyCreditData().length / this.categoryPageSize));
+
+  currentAnomalyDebitData = computed(() => this.anomalyDebitTransactions());
+  pagedAnomalyDebit = computed(() => {
+    const start = (this.anomalyDebitPage() - 1) * this.categoryPageSize;
+    return this.currentAnomalyDebitData().slice(start, start + this.categoryPageSize);
+  });
+  anomalyDebitTotalPages = computed(() => Math.ceil(this.currentAnomalyDebitData().length / this.categoryPageSize));
 
   // Loading states
   isLoadingAccounts = signal<boolean>(false);
@@ -344,6 +360,8 @@ export class Dashboard implements OnInit {
     else if (type === 'tax') this.taxPage.set(page);
     else if (type === 'admin') this.adminPage.set(page);
     else if (type === 'interest') this.interestPage.set(page);
+    else if (type === 'anomalyCredit') this.anomalyCreditPage.set(page);
+    else if (type === 'anomalyDebit') this.anomalyDebitPage.set(page);
   }
 
   getVisiblePages(currentPage: number, totalPages: number): (number | string)[] {
