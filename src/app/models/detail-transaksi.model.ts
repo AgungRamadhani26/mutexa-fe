@@ -10,4 +10,5 @@ export interface DetailTransaksi {
   jumlah: number;
   isExcluded?: boolean;
   category?: string;
+  anomalyReason?: string;
 }

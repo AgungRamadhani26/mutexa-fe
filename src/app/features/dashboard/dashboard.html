@@ -826,7 +826,7 @@
 
     <!-- 7 & 8. Anomali -->
     <div class="row g-3 mb-3">
-      <div class="col-md-6">
+      <div class="col-12">
         <div class="section-title"><i class="bi bi-exclamation-triangle-fill me-2 text-mu-amber"></i>7. Anomali
           Credit
         </div>
@@ -839,6 +839,7 @@
                   <th>Keterangan</th>
                   <th>Nominal</th>
                   <th>Tanggal</th>
+                  <th>Alasan Anomali</th>
                 </tr>
               </thead>
               <tbody>
@@ -847,10 +848,11 @@
                   <td class="text-break">{{ an.keterangan }}</td>
                   <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
                   <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd/MM/yyyy' }}</td>
+                  <td class="small text-mu-amber fw-medium">{{ an.anomalyReason }}</td>
                 </tr>
                 } @empty {
                 <tr>
-                  <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
+                  <td colspan="4" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
                 </tr>
                 }
               </tbody>
@@ -858,7 +860,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-12">
         <div class="section-title"><i class="bi bi-x-octagon-fill me-2 text-mu-red"></i>8.
           Anomali Debit</div>
         <div class="anomali-card">
@@ -870,6 +872,7 @@
                   <th>Keterangan</th>
                   <th>Nominal</th>
                   <th>Tanggal</th>
+                  <th>Alasan Anomali</th>
                 </tr>
               </thead>
               <tbody>
@@ -878,10 +881,11 @@
                   <td class="text-break">{{ an.keterangan }}</td>
                   <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
                   <td class="small text-mu-slate-lighter">{{ an.tanggal | date:'dd/MM/yyyy' }}</td>
+                  <td class="small text-mu-amber fw-medium">{{ an.anomalyReason }}</td>
                 </tr>
                 } @empty {
                 <tr>
-                  <td colspan="3" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
+                  <td colspan="4" class="text-center py-4 text-mu-slate-lighter">Tidak ada anomali terdeteksi.</td>
                 </tr>
                 }
               </tbody>
