@@ -196,7 +196,8 @@
   display: inline-block;
 }
 
-.bank-badge-mandiri {
+.bank-badge-mandiri,
+.bank-badge-mandiri-kopra {
   background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
   color: white;
   font-weight: 600;
