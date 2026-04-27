@@ -397,8 +397,15 @@
   border-left: 5px solid #06b6d4 !important;
 }
 
+.row-anomaly td {
+  background-color: rgba(239, 68, 68, 0.18) !important; /* Enhanced Red Tint */
+}
+.row-anomaly {
+  border-left: 5px solid #ef4444 !important;
+}
+
 /* Ensure hover doesn't completely wipe out the category color */
-.row-admin:hover td, .row-tax:hover td, .row-interest:hover td {
+.row-admin:hover td, .row-tax:hover td, .row-interest:hover td, .row-anomaly:hover td {
   filter: brightness(0.92);
 }
 

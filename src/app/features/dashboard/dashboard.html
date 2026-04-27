@@ -720,11 +720,15 @@
         <div class="d-flex flex-column gap-3">
           <!-- BEFORE TABLE -->
           <div class="mu-card p-0 overflow-hidden" [class.border-mu-amber]="isWindressActive()">
-            <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">BEFORE (ORIGINAL)</div>
+            <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">
+              BEFORE (ORIGINAL)</div>
             <div class="table-responsive table-scroll-250">
               <table class="table mu-table m-0">
                 <thead>
-                  <tr><th class="w-75">KETERANGAN</th><th class="text-center">FREKUENSI</th></tr>
+                  <tr>
+                    <th class="w-75">KETERANGAN</th>
+                    <th class="text-center">FREKUENSI</th>
+                  </tr>
                 </thead>
                 <tbody>
                   @for (freq of top10CreditFreq(); track freq.keterangan) {
@@ -733,7 +737,9 @@
                     <td class="text-center"><span class="freq-badge-cr">{{ freq.frekuensi }} x</span></td>
                   </tr>
                   } @empty {
-                  <tr><td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td></tr>
+                  <tr>
+                    <td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
+                  </tr>
                   }
                 </tbody>
               </table>
@@ -746,7 +752,10 @@
             <div class="table-responsive table-scroll-250">
               <table class="table mu-table m-0">
                 <thead>
-                  <tr><th class="w-75">KETERANGAN</th><th class="text-center">FREKUENSI</th></tr>
+                  <tr>
+                    <th class="w-75">KETERANGAN</th>
+                    <th class="text-center">FREKUENSI</th>
+                  </tr>
                 </thead>
                 <tbody>
                   @for (freq of top10CreditFreqCleaned(); track freq.keterangan) {
@@ -755,7 +764,9 @@
                     <td class="text-center"><span class="freq-badge-cr">{{ freq.frekuensi }} x</span></td>
                   </tr>
                   } @empty {
-                  <tr><td colspan="2" class="text-center py-4 text-mu-slate-lighter small text-muted">Belum ada data.</td></tr>
+                  <tr>
+                    <td colspan="2" class="text-center py-4 text-mu-slate-lighter small text-muted">Belum ada data.</td>
+                  </tr>
                   }
                 </tbody>
               </table>
@@ -771,11 +782,15 @@
         <div class="d-flex flex-column gap-3">
           <!-- BEFORE TABLE -->
           <div class="mu-card p-0 overflow-hidden" [class.border-mu-amber]="isWindressActive()">
-            <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">BEFORE (ORIGINAL)</div>
+            <div class="bg-light p-2 text-center small fw-bold text-mu-dark border-bottom" *ngIf="isWindressActive()">
+              BEFORE (ORIGINAL)</div>
             <div class="table-responsive table-scroll-250">
               <table class="table mu-table m-0">
                 <thead>
-                  <tr><th class="w-75">KETERANGAN</th><th class="text-center">FREKUENSI</th></tr>
+                  <tr>
+                    <th class="w-75">KETERANGAN</th>
+                    <th class="text-center">FREKUENSI</th>
+                  </tr>
                 </thead>
                 <tbody>
                   @for (freq of top10DebitFreq(); track freq.keterangan) {
@@ -784,7 +799,9 @@
                     <td class="text-center"><span class="freq-badge-db">{{ freq.frekuensi }} x</span></td>
                   </tr>
                   } @empty {
-                  <tr><td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td></tr>
+                  <tr>
+                    <td colspan="2" class="text-center py-4 text-mu-slate-lighter">Belum ada data.</td>
+                  </tr>
                   }
                 </tbody>
               </table>
@@ -797,7 +814,10 @@
             <div class="table-responsive table-scroll-250">
               <table class="table mu-table m-0">
                 <thead>
-                  <tr><th class="w-75">KETERANGAN</th><th class="text-center">FREKUENSI</th></tr>
+                  <tr>
+                    <th class="w-75">KETERANGAN</th>
+                    <th class="text-center">FREKUENSI</th>
+                  </tr>
                 </thead>
                 <tbody>
                   @for (freq of top10DebitFreqCleaned(); track freq.keterangan) {
@@ -806,7 +826,9 @@
                     <td class="text-center"><span class="freq-badge-db">{{ freq.frekuensi }} x</span></td>
                   </tr>
                   } @empty {
-                  <tr><td colspan="2" class="text-center py-4 text-mu-slate-lighter small text-muted">Belum ada data.</td></tr>
+                  <tr>
+                    <td colspan="2" class="text-center py-4 text-mu-slate-lighter small text-muted">Belum ada data.</td>
+                  </tr>
                   }
                 </tbody>
               </table>
@@ -1154,7 +1176,7 @@
             </thead>
             <tbody>
               @for (tx of pagedTransaksi(); track tx.id || tx.tanggal + tx.keterangan + tx.jumlah) {
-              <tr [ngClass]="getCategoryRowClass(tx.category)" [class.text-decoration-line-through]="!!tx.isExcluded"
+              <tr [ngClass]="getRowClass(tx)" [class.text-decoration-line-through]="!!tx.isExcluded"
                 [class.text-muted]="!!tx.isExcluded">
                 <td class="text-center">
                   <div class="form-check d-flex justify-content-center m-0">

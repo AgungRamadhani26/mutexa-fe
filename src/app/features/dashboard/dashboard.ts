@@ -236,9 +236,10 @@ export class Dashboard implements OnInit {
     });
   }
 
-  getCategoryRowClass(category?: string): string {
-    if (!category) return '';
-    switch (category) {
+  getRowClass(tx: DetailTransaksi): string {
+    if (tx.anomalyReason) return 'row-anomaly';
+    if (!tx.category) return '';
+    switch (tx.category) {
       case 'ADMIN': return 'row-admin';
       case 'TAX': return 'row-tax';
       case 'INTEREST': return 'row-interest';
