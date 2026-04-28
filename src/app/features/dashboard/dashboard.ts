@@ -100,6 +100,14 @@ export class Dashboard implements OnInit {
 
   filterMonth = signal<string>('ALL');
   filterFlag = signal<string>('ALL');
+  filterExcludeStatus = signal<'ALL' | 'ACTIVE' | 'EXCLUDED'>('ALL');
+
+  // Computed counts for exclude status badges (pre-filter by month/flag/search)
+  excludedCount = computed(() => this.detailTransaksi().filter(tx => !!tx.isExcluded).length);
+  activeCount = computed(() => this.detailTransaksi().filter(tx => !tx.isExcluded).length);
+
+  // Saldo hanya muncul di Excel jika Flag=Semua DAN Status=Semua
+  isExportWithSaldo = computed(() => this.filterFlag() === 'ALL' && this.filterExcludeStatus() === 'ALL');
 
   availableMonths = computed(() => {
     const txs = this.detailTransaksi();
@@ -128,6 +136,7 @@ export class Dashboard implements OnInit {
     const search = this.txSearch().toLowerCase();
     const flagFilt = this.filterFlag();
     const monthFilt = this.filterMonth();
+    const excludeStatus = this.filterExcludeStatus();
 
     return this.detailTransaksi().filter(tx => {
       const matchSearch = tx.keterangan.toLowerCase().includes(search) ||
@@ -137,7 +146,12 @@ export class Dashboard implements OnInit {
       const matchFlag = flagFilt === 'ALL' ? true : tx.flag === flagFilt;
       const matchMonth = monthFilt === 'ALL' ? true : tx.tanggal.startsWith(monthFilt);
 
-      return matchSearch && matchFlag && matchMonth;
+      // Filter by exclude status
+      const matchExclude = excludeStatus === 'ALL' ? true :
+        excludeStatus === 'ACTIVE' ? !tx.isExcluded :
+          !!tx.isExcluded;
+
+      return matchSearch && matchFlag && matchMonth && matchExclude;
     });
   });
 
@@ -305,10 +319,13 @@ export class Dashboard implements OnInit {
 
   exportExcel() {
     const doc = this.selectedDocument();
+    const account = this.selectedAccount();
     if (doc) {
       let url = this.dashboardService.exportExcelUrl(doc.id);
+      if (account) url += '&accountName=' + encodeURIComponent(account.accountName);
       if (this.filterMonth() !== 'ALL') url += '&month=' + this.filterMonth();
       if (this.filterFlag() !== 'ALL') url += '&flag=' + this.filterFlag();
+      if (this.filterExcludeStatus() !== 'ALL') url += '&excludeStatus=' + this.filterExcludeStatus();
       window.location.href = url;
     }
   }
@@ -379,6 +396,11 @@ export class Dashboard implements OnInit {
     if (type === 'account') this.accountPage.set(1);
     else if (type === 'doc') this.docPage.set(1);
     else this.txPage.set(1);
+  }
+
+  onExcludeFilterChange(status: 'ALL' | 'ACTIVE' | 'EXCLUDED') {
+    this.filterExcludeStatus.set(status);
+    this.txPage.set(1);
   }
 
   toggleUploadForm() { this.showUploadForm.update((v: boolean) => !v); }

@@ -503,6 +503,63 @@
   transform: translateY(-1px);
 }
 
+/* ---- Windress Toggle Button (Distinctive Design) ---- */
+.btn-windress {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: #e2e8f0;
+  border: 1.5px solid rgba(148, 163, 184, 0.3);
+  border-radius: 25px;
+  padding: 0.5rem 1.3rem;
+  font-weight: 600;
+  font-size: 0.82rem;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.btn-windress:hover {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-color: rgba(148, 163, 184, 0.5);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-windress-active {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  box-shadow: 0 2px 12px rgba(217, 119, 6, 0.35);
+}
+
+.btn-windress-active:hover {
+  background: linear-gradient(135deg, #92400e 0%, #b45309 100%) !important;
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.45);
+}
+
+.windress-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #64748b;
+  margin-left: 0.4rem;
+  transition: all 0.3s ease;
+}
+
+.windress-dot.active {
+  background: #fbbf24;
+  box-shadow: 0 0 6px rgba(251, 191, 36, 0.7);
+  animation: windress-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes windress-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(251, 191, 36, 0.5); }
+  50% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.9); }
+}
+
 /* ---- Summary Cards ---- */
 .summary-card {
   background: #ffffff;
