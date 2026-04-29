@@ -41,6 +41,9 @@ export class Dashboard implements OnInit {
   // Modal Flags
   showAfterCreditModal = signal<boolean>(false);
   showAfterDebitModal = signal<boolean>(false);
+  showMassExcludeModal = signal<boolean>(false);
+  isMassActionLoading = signal<boolean>(false);
+  massActionSuccessMsg = signal<string>('');
 
   // Upload form
   showUploadForm = signal<boolean>(false);
@@ -205,6 +208,22 @@ export class Dashboard implements OnInit {
   });
   anomalyDebitTotalPages = computed(() => Math.ceil(this.currentAnomalyDebitData().length / this.categoryPageSize));
 
+  // Mass Exclude Computed States
+  isAdminAllExcluded = computed(() => this.adminTransactions().length > 0 && this.adminTransactions().every(tx => tx.isExcluded));
+  isAdminAllIncluded = computed(() => this.adminTransactions().length > 0 && this.adminTransactions().every(tx => !tx.isExcluded));
+
+  isTaxAllExcluded = computed(() => this.taxTransactions().length > 0 && this.taxTransactions().every(tx => tx.isExcluded));
+  isTaxAllIncluded = computed(() => this.taxTransactions().length > 0 && this.taxTransactions().every(tx => !tx.isExcluded));
+
+  isInterestAllExcluded = computed(() => this.interestTransactions().length > 0 && this.interestTransactions().every(tx => tx.isExcluded));
+  isInterestAllIncluded = computed(() => this.interestTransactions().length > 0 && this.interestTransactions().every(tx => !tx.isExcluded));
+
+  isAnomalyCrAllExcluded = computed(() => this.anomalyCreditTransactions().length > 0 && this.anomalyCreditTransactions().every(tx => tx.isExcluded));
+  isAnomalyCrAllIncluded = computed(() => this.anomalyCreditTransactions().length > 0 && this.anomalyCreditTransactions().every(tx => !tx.isExcluded));
+
+  isAnomalyDbAllExcluded = computed(() => this.anomalyDebitTransactions().length > 0 && this.anomalyDebitTransactions().every(tx => tx.isExcluded));
+  isAnomalyDbAllIncluded = computed(() => this.anomalyDebitTransactions().length > 0 && this.anomalyDebitTransactions().every(tx => !tx.isExcluded));
+
   // Loading states
   isLoadingAccounts = signal<boolean>(false);
   isLoadingDocuments = signal<boolean>(false);
@@ -346,6 +365,36 @@ export class Dashboard implements OnInit {
         }
       },
       error: () => { tx.isExcluded = oldStatus; }
+    });
+  }
+
+  openMassExcludeModal() {
+    this.massActionSuccessMsg.set('');
+    this.showMassExcludeModal.set(true);
+  }
+
+  massExcludeCategory(category: string, isExcluded: boolean) {
+    const doc = this.selectedDocument();
+    if (!doc) return;
+
+    this.isMassActionLoading.set(true);
+    this.massActionSuccessMsg.set('');
+    
+    this.dashboardService.massToggleExclude(doc.id, category, isExcluded).subscribe({
+      next: (res) => {
+        this.isMassActionLoading.set(false);
+        if (res.success) {
+          this.refreshAllDashboardData(doc.id);
+          this.massActionSuccessMsg.set(`Berhasil ${isExcluded ? 'mengecualikan' : 'membatalkan pengecualian'} kategori ${category}`);
+          setTimeout(() => this.massActionSuccessMsg.set(''), 3000);
+        } else {
+          alert('Gagal melakukan aksi massal.');
+        }
+      },
+      error: () => {
+        this.isMassActionLoading.set(false);
+        alert('Terjadi kesalahan pada server.');
+      }
     });
   }
 

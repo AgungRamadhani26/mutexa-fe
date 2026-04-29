@@ -121,4 +121,13 @@ export class DashboardService {
   toggleExclude(transactionId: number): Observable<ApiResponse<string>> {
     return this.http.post<ApiResponse<string>>(`${this.apiUrl}/toggle-exclude/${transactionId}`, {});
   }
+
+  // Mass toggle exclude based on category
+  massToggleExclude(documentId: number, category: string, isExcluded: boolean): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/mass-toggle-exclude`, {
+      documentId,
+      category,
+      isExcluded
+    });
+  }
 }
