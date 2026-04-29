@@ -379,7 +379,7 @@ export class Dashboard implements OnInit {
 
     this.isMassActionLoading.set(true);
     this.massActionSuccessMsg.set('');
-    
+
     this.dashboardService.massToggleExclude(doc.id, category, isExcluded).subscribe({
       next: (res) => {
         this.isMassActionLoading.set(false);

@@ -1328,8 +1328,9 @@
       <button class="btn-close btn-close-white" (click)="showMassExcludeModal.set(false)"></button>
     </div>
     <div class="mu-modal-body p-3">
-      <p class="text-muted small mb-3">Pilih aksi untuk menyembunyikan (exclude) atau menampilkan kembali (include) seluruh transaksi berdasarkan kategori berikut secara sekaligus.</p>
-      
+      <p class="text-muted small mb-3">Pilih aksi untuk menyembunyikan (exclude) atau menampilkan kembali (include)
+        seluruh transaksi berdasarkan kategori berikut secara sekaligus.</p>
+
       <div class="list-group list-group-flush mb-3">
         <!-- ADMIN -->
         <div class="list-group-item d-flex justify-content-between align-items-center py-3">
@@ -1338,10 +1339,14 @@
             <small class="text-muted">{{ adminTransactions().length }} transaksi terdeteksi</small>
           </div>
           <div class="btn-group btn-group-sm">
-            <button class="btn" [ngClass]="isAdminAllExcluded() ? 'btn-danger' : 'btn-outline-danger'" (click)="massExcludeCategory('ADMIN', true)" [disabled]="isMassActionLoading() || adminTransactions().length === 0">
+            <button class="btn" [ngClass]="isAdminAllExcluded() ? 'btn-danger' : 'btn-outline-danger'"
+              (click)="massExcludeCategory('ADMIN', true)"
+              [disabled]="isMassActionLoading() || adminTransactions().length === 0">
               <i class="bi bi-eye-slash me-1"></i>Exclude Semua
             </button>
-            <button class="btn" [ngClass]="isAdminAllIncluded() ? 'btn-success' : 'btn-outline-success'" (click)="massExcludeCategory('ADMIN', false)" [disabled]="isMassActionLoading() || adminTransactions().length === 0">
+            <button class="btn" [ngClass]="isAdminAllIncluded() ? 'btn-success' : 'btn-outline-success'"
+              (click)="massExcludeCategory('ADMIN', false)"
+              [disabled]="isMassActionLoading() || adminTransactions().length === 0">
               <i class="bi bi-eye me-1"></i>Batalkan Exclude
             </button>
           </div>
@@ -1354,10 +1359,14 @@
             <small class="text-muted">{{ taxTransactions().length }} transaksi terdeteksi</small>
           </div>
           <div class="btn-group btn-group-sm">
-            <button class="btn" [ngClass]="isTaxAllExcluded() ? 'btn-danger' : 'btn-outline-danger'" (click)="massExcludeCategory('TAX', true)" [disabled]="isMassActionLoading() || taxTransactions().length === 0">
+            <button class="btn" [ngClass]="isTaxAllExcluded() ? 'btn-danger' : 'btn-outline-danger'"
+              (click)="massExcludeCategory('TAX', true)"
+              [disabled]="isMassActionLoading() || taxTransactions().length === 0">
               <i class="bi bi-eye-slash me-1"></i>Exclude Semua
             </button>
-            <button class="btn" [ngClass]="isTaxAllIncluded() ? 'btn-success' : 'btn-outline-success'" (click)="massExcludeCategory('TAX', false)" [disabled]="isMassActionLoading() || taxTransactions().length === 0">
+            <button class="btn" [ngClass]="isTaxAllIncluded() ? 'btn-success' : 'btn-outline-success'"
+              (click)="massExcludeCategory('TAX', false)"
+              [disabled]="isMassActionLoading() || taxTransactions().length === 0">
               <i class="bi bi-eye me-1"></i>Batalkan Exclude
             </button>
           </div>
@@ -1370,10 +1379,14 @@
             <small class="text-muted">{{ interestTransactions().length }} transaksi terdeteksi</small>
           </div>
           <div class="btn-group btn-group-sm">
-            <button class="btn" [ngClass]="isInterestAllExcluded() ? 'btn-danger' : 'btn-outline-danger'" (click)="massExcludeCategory('INTEREST', true)" [disabled]="isMassActionLoading() || interestTransactions().length === 0">
+            <button class="btn" [ngClass]="isInterestAllExcluded() ? 'btn-danger' : 'btn-outline-danger'"
+              (click)="massExcludeCategory('INTEREST', true)"
+              [disabled]="isMassActionLoading() || interestTransactions().length === 0">
               <i class="bi bi-eye-slash me-1"></i>Exclude Semua
             </button>
-            <button class="btn" [ngClass]="isInterestAllIncluded() ? 'btn-success' : 'btn-outline-success'" (click)="massExcludeCategory('INTEREST', false)" [disabled]="isMassActionLoading() || interestTransactions().length === 0">
+            <button class="btn" [ngClass]="isInterestAllIncluded() ? 'btn-success' : 'btn-outline-success'"
+              (click)="massExcludeCategory('INTEREST', false)"
+              [disabled]="isMassActionLoading() || interestTransactions().length === 0">
               <i class="bi bi-eye me-1"></i>Batalkan Exclude
             </button>
           </div>
@@ -1382,14 +1395,19 @@
         <!-- ANOMALY CR -->
         <div class="list-group-item d-flex justify-content-between align-items-center py-3">
           <div>
-            <h6 class="mb-0 fw-bold"><i class="bi bi-exclamation-triangle-fill me-2 text-mu-amber"></i>Anomali Credit</h6>
+            <h6 class="mb-0 fw-bold"><i class="bi bi-exclamation-triangle-fill me-2 text-mu-amber"></i>Anomali Credit
+            </h6>
             <small class="text-muted">{{ anomalyCreditTransactions().length }} transaksi terdeteksi</small>
           </div>
           <div class="btn-group btn-group-sm">
-            <button class="btn" [ngClass]="isAnomalyCrAllExcluded() ? 'btn-danger' : 'btn-outline-danger'" (click)="massExcludeCategory('ANOMALY_CR', true)" [disabled]="isMassActionLoading() || anomalyCreditTransactions().length === 0">
+            <button class="btn" [ngClass]="isAnomalyCrAllExcluded() ? 'btn-danger' : 'btn-outline-danger'"
+              (click)="massExcludeCategory('ANOMALY_CR', true)"
+              [disabled]="isMassActionLoading() || anomalyCreditTransactions().length === 0">
               <i class="bi bi-eye-slash me-1"></i>Exclude Semua
             </button>
-            <button class="btn" [ngClass]="isAnomalyCrAllIncluded() ? 'btn-success' : 'btn-outline-success'" (click)="massExcludeCategory('ANOMALY_CR', false)" [disabled]="isMassActionLoading() || anomalyCreditTransactions().length === 0">
+            <button class="btn" [ngClass]="isAnomalyCrAllIncluded() ? 'btn-success' : 'btn-outline-success'"
+              (click)="massExcludeCategory('ANOMALY_CR', false)"
+              [disabled]="isMassActionLoading() || anomalyCreditTransactions().length === 0">
               <i class="bi bi-eye me-1"></i>Batalkan Exclude
             </button>
           </div>
@@ -1402,23 +1420,27 @@
             <small class="text-muted">{{ anomalyDebitTransactions().length }} transaksi terdeteksi</small>
           </div>
           <div class="btn-group btn-group-sm">
-            <button class="btn" [ngClass]="isAnomalyDbAllExcluded() ? 'btn-danger' : 'btn-outline-danger'" (click)="massExcludeCategory('ANOMALY_DB', true)" [disabled]="isMassActionLoading() || anomalyDebitTransactions().length === 0">
+            <button class="btn" [ngClass]="isAnomalyDbAllExcluded() ? 'btn-danger' : 'btn-outline-danger'"
+              (click)="massExcludeCategory('ANOMALY_DB', true)"
+              [disabled]="isMassActionLoading() || anomalyDebitTransactions().length === 0">
               <i class="bi bi-eye-slash me-1"></i>Exclude Semua
             </button>
-            <button class="btn" [ngClass]="isAnomalyDbAllIncluded() ? 'btn-success' : 'btn-outline-success'" (click)="massExcludeCategory('ANOMALY_DB', false)" [disabled]="isMassActionLoading() || anomalyDebitTransactions().length === 0">
+            <button class="btn" [ngClass]="isAnomalyDbAllIncluded() ? 'btn-success' : 'btn-outline-success'"
+              (click)="massExcludeCategory('ANOMALY_DB', false)"
+              [disabled]="isMassActionLoading() || anomalyDebitTransactions().length === 0">
               <i class="bi bi-eye me-1"></i>Batalkan Exclude
             </button>
           </div>
         </div>
       </div>
-      
+
       @if (massActionSuccessMsg()) {
       <div class="alert alert-success py-2 mt-2 mb-0 d-flex align-items-center">
         <i class="bi bi-check-circle-fill me-2"></i>
         <span>{{ massActionSuccessMsg() }}</span>
       </div>
       }
-      
+
       @if (isMassActionLoading()) {
       <div class="text-center py-2 text-mu-primary">
         <div class="spinner-border spinner-border-sm me-2" role="status"></div> Memproses...
@@ -1426,7 +1448,8 @@
       }
     </div>
     <div class="mu-modal-footer bg-light border-top p-2 text-end">
-      <button class="btn btn-secondary btn-sm" (click)="showMassExcludeModal.set(false)" [disabled]="isMassActionLoading()">Tutup</button>
+      <button class="btn btn-secondary btn-sm" (click)="showMassExcludeModal.set(false)"
+        [disabled]="isMassActionLoading()">Tutup</button>
     </div>
   </div>
 </div>
