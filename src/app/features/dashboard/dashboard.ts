@@ -45,6 +45,12 @@ export class Dashboard implements OnInit {
   isMassActionLoading = signal<boolean>(false);
   massActionSuccessMsg = signal<string>('');
 
+  // Custom Keyword Exclude State
+  customKeyword = signal<string>('');
+  keywordResults = signal<DetailTransaksi[]>([]);
+  isSearchingKeyword = signal<boolean>(false);
+  showKeywordResults = signal<boolean>(false);
+
   // Upload form
   showUploadForm = signal<boolean>(false);
   uploadForm = {
@@ -224,6 +230,17 @@ export class Dashboard implements OnInit {
   isAnomalyDbAllExcluded = computed(() => this.anomalyDebitTransactions().length > 0 && this.anomalyDebitTransactions().every(tx => tx.isExcluded));
   isAnomalyDbAllIncluded = computed(() => this.anomalyDebitTransactions().length > 0 && this.anomalyDebitTransactions().every(tx => !tx.isExcluded));
 
+  // Keyword Search Computed Stats
+  keywordTotalCredit = computed(() => this.keywordResults().reduce((acc, tx) => tx.flag === 'CR' ? acc + (tx.jumlah || 0) : acc, 0));
+  keywordTotalDebit = computed(() => this.keywordResults().reduce((acc, tx) => tx.flag === 'DB' ? acc + (tx.jumlah || 0) : acc, 0));
+  isKeywordAllExcluded = computed(() => this.keywordResults().length > 0 && this.keywordResults().every(tx => tx.isExcluded));
+  isKeywordAllIncluded = computed(() => this.keywordResults().length > 0 && this.keywordResults().every(tx => !tx.isExcluded));
+
+  // Keyword Results Breakdown
+  keywordActiveCount = computed(() => this.keywordResults().filter(tx => !tx.isExcluded).length);
+  keywordSpecialCount = computed(() => this.keywordResults().filter(tx => tx.isExcluded && (tx.category !== 'TRANSFER' || (tx.anomalyReason && tx.anomalyReason.trim() !== ''))).length);
+  keywordManualCount = computed(() => this.keywordResults().filter(tx => tx.isExcluded && (tx.category === 'TRANSFER' && (!tx.anomalyReason || tx.anomalyReason.trim() === ''))).length);
+
   // Loading states
   isLoadingAccounts = signal<boolean>(false);
   isLoadingDocuments = signal<boolean>(false);
@@ -387,6 +404,81 @@ export class Dashboard implements OnInit {
           this.refreshAllDashboardData(doc.id);
           this.massActionSuccessMsg.set(`Berhasil ${isExcluded ? 'mengecualikan' : 'membatalkan pengecualian'} kategori ${category}`);
           setTimeout(() => this.massActionSuccessMsg.set(''), 3000);
+        } else {
+          alert('Gagal melakukan aksi massal.');
+        }
+      },
+      error: () => {
+        this.isMassActionLoading.set(false);
+        alert('Terjadi kesalahan pada server.');
+      }
+    });
+  }
+
+  clearKeywordResults() {
+    this.keywordResults.set([]);
+    this.showKeywordResults.set(false);
+  }
+
+  onSearchInput(event: any) {
+    const val = event.target.value;
+    if (!val || val.trim() === '') {
+      this.clearKeywordResults();
+    }
+  }
+
+  onSearchKeyword() {
+    const doc = this.selectedDocument();
+    const keyword = this.customKeyword().trim();
+    if (!doc || !keyword) {
+      this.clearKeywordResults();
+      return;
+    }
+
+    this.isSearchingKeyword.set(true);
+    this.dashboardService.searchKeyword(doc.id, keyword).subscribe({
+      next: (res) => {
+        this.isSearchingKeyword.set(false);
+        if (res.success) {
+          this.keywordResults.set(res.data || []);
+          this.showKeywordResults.set(true);
+        }
+      },
+      error: () => {
+        this.isSearchingKeyword.set(false);
+        alert('Gagal melakukan pencarian.');
+      }
+    });
+  }
+
+  massToggleKeyword(isExcluded: boolean) {
+    const doc = this.selectedDocument();
+    const keyword = this.customKeyword().trim();
+    if (!doc || !keyword) return;
+
+    const total = this.keywordResults().length;
+    const active = this.keywordActiveCount();
+    const special = this.keywordSpecialCount();
+    const manual = this.keywordManualCount();
+
+    let confirmMsg = '';
+    if (isExcluded) {
+      // Skenario: Sembunyikan Semua
+      confirmMsg = `Ditemukan ${total} data. Sembunyikan ${active} data yang masih aktif? (${special + manual} data lainnya sudah tersembunyi).`;
+    } else {
+      // Skenario: Tampilkan Kembali
+      confirmMsg = `Ditemukan ${total} data. Tampilkan kembali ${manual} data yang sebelumnya Anda sembunyikan? (${special} data kategori khusus/anomali akan TETAP tersembunyi demi keamanan).`;
+    }
+
+    if (!window.confirm(confirmMsg)) return;
+
+    this.isMassActionLoading.set(true);
+    this.dashboardService.massToggleKeyword(doc.id, keyword, isExcluded).subscribe({
+      next: (res) => {
+        this.isMassActionLoading.set(false);
+        if (res.success) {
+          this.refreshAllDashboardData(doc.id);
+          this.onSearchKeyword(); // Refresh the mini table
         } else {
           alert('Gagal melakukan aksi massal.');
         }

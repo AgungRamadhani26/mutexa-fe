@@ -130,4 +130,20 @@ export class DashboardService {
       isExcluded
     });
   }
+
+  // Custom Keyword Search: Cari transaksi berdasarkan keyword afiliasi
+  searchKeyword(documentId: number, keyword: string): Observable<ApiResponse<DetailTransaksi[]>> {
+    return this.http.get<ApiResponse<DetailTransaksi[]>>(`${this.apiUrl}/search-keyword`, {
+      params: { documentId: documentId.toString(), keyword }
+    });
+  }
+
+  // Custom Keyword Exclude: Mass toggle exclude/include berdasarkan keyword
+  massToggleKeyword(documentId: number, keyword: string, isExcluded: boolean): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.apiUrl}/mass-toggle-keyword`, {
+      documentId,
+      keyword,
+      isExcluded
+    });
+  }
 }

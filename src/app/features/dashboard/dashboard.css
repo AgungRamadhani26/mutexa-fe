@@ -503,6 +503,40 @@
   transform: translateY(-1px);
 }
 
+/* ---- Purple Button (Keyword Exclude) ---- */
+.btn-mu-purple {
+  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.55rem 1.4rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-mu-purple:hover {
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.35);
+  transform: translateY(-1px);
+  color: white;
+}
+
+.btn-mu-purple:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.text-mu-purple {
+  color: #7c3aed !important;
+}
+
+.bg-mu-purple-light {
+  background-color: rgba(124, 58, 237, 0.1) !important;
+}
+
 /* ---- Windress Toggle Button (Distinctive Design) ---- */
 .btn-windress {
   background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
