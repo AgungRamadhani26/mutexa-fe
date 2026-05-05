@@ -66,7 +66,48 @@ export class UserManagement implements OnInit {
     this.showAddModal.set(true);
   }
 
+  validateEmail(email: string): string | null {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return 'Format email tidak valid (contoh: nama@email.com).';
+    return null;
+  }
+
+  validatePassword(password: string): string | null {
+    const errors: string[] = [];
+    if (!password || password.length < 8) errors.push('minimal 8 karakter');
+    if (!/[A-Z]/.test(password)) errors.push('huruf besar');
+    if (!/[a-z]/.test(password)) errors.push('huruf kecil');
+    if (!/\d/.test(password)) errors.push('angka');
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) errors.push('karakter khusus');
+    
+    if (errors.length > 0) {
+      return 'Password harus: ' + errors.join(', ') + '.';
+    }
+    return null;
+  }
+
   submitRegister() {
+    if (!this.registerForm.name || this.registerForm.name.trim() === '') {
+      this.toast.warning('Nama lengkap tidak boleh kosong.');
+      return;
+    }
+    if (!this.registerForm.email || this.registerForm.email.trim() === '') {
+      this.toast.warning('Email tidak boleh kosong.');
+      return;
+    }
+    
+    const emailError = this.validateEmail(this.registerForm.email);
+    if (emailError) {
+      this.toast.warning(emailError);
+      return;
+    }
+    
+    const pwdError = this.validatePassword(this.registerForm.password);
+    if (pwdError) {
+      this.toast.warning(pwdError);
+      return;
+    }
+
     this.http.post<ApiResponse<UserItem>>('/api/auth/register', this.registerForm).subscribe({
       next: () => {
         this.showAddModal.set(false);
@@ -132,7 +173,17 @@ export class UserManagement implements OnInit {
   }
 
   submitResetPassword() {
-    if (!this.newPassword) return;
+    if (!this.newPassword) {
+      this.toast.warning('Password tidak boleh kosong.');
+      return;
+    }
+    
+    const pwdError = this.validatePassword(this.newPassword);
+    if (pwdError) {
+      this.toast.warning(pwdError);
+      return;
+    }
+
     this.http.patch<ApiResponse<UserItem>>(`/api/auth/users/${this.selectedUserId()}/reset-password`,
       { newPassword: this.newPassword }).subscribe({
         next: () => {
