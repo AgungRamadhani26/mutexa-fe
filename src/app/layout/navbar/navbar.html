@@ -11,12 +11,6 @@
 
       @if (auth.isLoggedIn()) {
 
-      <!-- Link Manajemen User (hanya ADMIN) -->
-      @if (auth.isAdmin()) {
-      <a routerLink="/admin/users" class="btn-nav-admin">
-        <i class="bi bi-people-fill me-1"></i>Manajemen User
-      </a>
-      }
 
       <!-- Dropdown User -->
       <div class="dropdown">

@@ -33,7 +33,11 @@ export class UserManagement implements OnInit {
   isLoading = signal(false);
   showAddModal = signal(false);
   showResetModal = signal(false);
+  showConfirmDeactivate = signal(false);
+  showConfirmActivate = signal(false);
   selectedUserId = signal<number | null>(null);
+  selectedUserToDeactivate = signal<UserItem | null>(null);
+  selectedUserToActivate = signal<UserItem | null>(null);
   newPassword = '';
   errorMessage = signal('');
   successMessage = signal('');
@@ -73,10 +77,44 @@ export class UserManagement implements OnInit {
   }
 
   toggleActive(user: UserItem) {
-    const endpoint = user.isActive ? 'deactivate' : 'activate';
-    this.http.patch<ApiResponse<UserItem>>(`/api/auth/users/${user.id}/${endpoint}`, {}).subscribe({
-      next: () => this.loadUsers(),
-      error: () => { }
+    if (user.isActive) {
+      // Nonaktifkan: perlu konfirmasi dulu
+      this.selectedUserToDeactivate.set(user);
+      this.showConfirmDeactivate.set(true);
+    } else {
+      // Aktifkan kembali: perlu konfirmasi juga
+      this.selectedUserToActivate.set(user);
+      this.showConfirmActivate.set(true);
+    }
+  }
+
+  confirmActivate() {
+    const user = this.selectedUserToActivate();
+    if (!user) return;
+    this.http.patch<ApiResponse<UserItem>>(`/api/auth/users/${user.id}/activate`, {}).subscribe({
+      next: () => {
+        this.showConfirmActivate.set(false);
+        this.selectedUserToActivate.set(null);
+        this.successMessage.set(`${user.name} berhasil diaktifkan kembali.`);
+        this.loadUsers();
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: () => { this.showConfirmActivate.set(false); }
+    });
+  }
+
+  confirmDeactivate() {
+    const user = this.selectedUserToDeactivate();
+    if (!user) return;
+    this.http.patch<ApiResponse<UserItem>>(`/api/auth/users/${user.id}/deactivate`, {}).subscribe({
+      next: () => {
+        this.showConfirmDeactivate.set(false);
+        this.selectedUserToDeactivate.set(null);
+        this.successMessage.set(`${user.name} berhasil dinonaktifkan.`);
+        this.loadUsers();
+        setTimeout(() => this.successMessage.set(''), 3000);
+      },
+      error: () => { this.showConfirmDeactivate.set(false); }
     });
   }
 
