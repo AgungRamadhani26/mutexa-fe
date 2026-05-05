@@ -105,9 +105,16 @@
                   </span>
                 </td>
                 <td class="text-center">
-                  <button (click)="viewDocuments(account)" class="btn btn-mu-outline btn-sm">
-                    <i class="bi bi-folder2-open me-1"></i> Lihat Dokumen
-                  </button>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button (click)="viewDocuments(account)" class="btn btn-mu-outline btn-sm">
+                      <i class="bi bi-folder2-open me-1"></i> Lihat Dokumen
+                    </button>
+                    @if (auth.isAdmin()) {
+                    <button (click)="openDeleteAccountConfirm(account)" class="btn btn-outline-danger btn-sm" title="Hapus Rekening">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                    }
+                  </div>
                 </td>
               </tr>
               } @empty {
@@ -1584,3 +1591,30 @@
     </div>
   </div>
 </div>
+
+<!-- MODAL HAPUS REKENING (ADMIN ONLY) -->
+@if (showDeleteAccountConfirm()) {
+<div class="mu-modal-overlay" (click)="showDeleteAccountConfirm.set(false)">
+  <div class="mu-modal-content" (click)="$event.stopPropagation()" style="max-width: 450px;">
+    <div class="mu-modal-header border-bottom-0 pb-0 bg-white text-dark">
+      <h5 class="fw-bold text-mu-red mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>Hapus Rekening</h5>
+      <button class="btn-close" (click)="showDeleteAccountConfirm.set(false)"></button>
+    </div>
+    <div class="mu-modal-body text-center pt-3 pb-4">
+      <p class="mb-2">Anda yakin ingin menghapus rekening ini secara permanen?</p>
+      <div class="p-3 bg-light rounded text-start mb-3 border">
+        <div class="fw-bold mb-1"><i class="bi bi-bank2 me-2 text-mu-primary"></i>{{ accountToDelete()?.bankName }}</div>
+        <div class="font-mono text-mu-dark">{{ accountToDelete()?.accountNumber }}</div>
+        <div class="small text-muted mt-1">{{ accountToDelete()?.accountName }}</div>
+      </div>
+      <p class="small text-danger fw-medium mb-0">
+        <i class="bi bi-exclamation-circle me-1"></i>Peringatan: Seluruh dokumen dan transaksi di dalamnya akan terhapus dan tidak dapat dikembalikan.
+      </p>
+    </div>
+    <div class="mu-modal-footer bg-light border-top d-flex justify-content-end gap-2 p-3">
+      <button class="btn btn-mu-back px-4" (click)="showDeleteAccountConfirm.set(false)">Batal</button>
+      <button class="btn btn-danger px-4" (click)="confirmDeleteAccount()"><i class="bi bi-trash me-2"></i>Ya, Hapus</button>
+    </div>
+  </div>
+</div>
+}

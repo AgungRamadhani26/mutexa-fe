@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../../../models/api-response.model';
+import { ToastService } from '../../../services/toast.service';
 
 interface UserItem {
   id: number;
@@ -39,12 +40,14 @@ export class UserManagement implements OnInit {
   selectedUserToDeactivate = signal<UserItem | null>(null);
   selectedUserToActivate = signal<UserItem | null>(null);
   newPassword = '';
-  errorMessage = signal('');
-  successMessage = signal('');
 
   registerForm: RegisterForm = { name: '', email: '', password: '', role: 'ANALYST' };
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private toast: ToastService
+  ) { }
 
   ngOnInit() {
     this.loadUsers();
@@ -60,7 +63,6 @@ export class UserManagement implements OnInit {
 
   openAddModal() {
     this.registerForm = { name: '', email: '', password: '', role: 'ANALYST' };
-    this.errorMessage.set('');
     this.showAddModal.set(true);
   }
 
@@ -68,11 +70,12 @@ export class UserManagement implements OnInit {
     this.http.post<ApiResponse<UserItem>>('/api/auth/register', this.registerForm).subscribe({
       next: () => {
         this.showAddModal.set(false);
-        this.successMessage.set('User baru berhasil ditambahkan.');
+        this.toast.success('User baru berhasil ditambahkan.');
         this.loadUsers();
-        setTimeout(() => this.successMessage.set(''), 3000);
       },
-      error: (err) => this.errorMessage.set(err?.error?.message ?? 'Gagal menambahkan user.')
+      error: (err) => {
+        this.toast.error(err?.error?.message ?? 'Gagal menambahkan user.');
+      }
     });
   }
 
@@ -95,11 +98,13 @@ export class UserManagement implements OnInit {
       next: () => {
         this.showConfirmActivate.set(false);
         this.selectedUserToActivate.set(null);
-        this.successMessage.set(`${user.name} berhasil diaktifkan kembali.`);
+        this.toast.success(`${user.name} berhasil diaktifkan kembali.`);
         this.loadUsers();
-        setTimeout(() => this.successMessage.set(''), 3000);
       },
-      error: () => { this.showConfirmActivate.set(false); }
+      error: () => {
+        this.showConfirmActivate.set(false);
+        this.toast.error('Gagal mengaktifkan user.');
+      }
     });
   }
 
@@ -110,11 +115,13 @@ export class UserManagement implements OnInit {
       next: () => {
         this.showConfirmDeactivate.set(false);
         this.selectedUserToDeactivate.set(null);
-        this.successMessage.set(`${user.name} berhasil dinonaktifkan.`);
+        this.toast.success(`${user.name} berhasil dinonaktifkan.`);
         this.loadUsers();
-        setTimeout(() => this.successMessage.set(''), 3000);
       },
-      error: () => { this.showConfirmDeactivate.set(false); }
+      error: () => {
+        this.showConfirmDeactivate.set(false);
+        this.toast.error('Gagal menonaktifkan user.');
+      }
     });
   }
 
@@ -130,10 +137,11 @@ export class UserManagement implements OnInit {
       { newPassword: this.newPassword }).subscribe({
         next: () => {
           this.showResetModal.set(false);
-          this.successMessage.set('Password berhasil direset.');
-          setTimeout(() => this.successMessage.set(''), 3000);
+          this.toast.success('Password berhasil direset.');
         },
-        error: () => { }
+        error: () => {
+          this.toast.error('Gagal mereset password.');
+        }
       });
   }
 

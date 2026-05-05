@@ -36,4 +36,9 @@ export class DocumentService {
   uploadDocument(formData: FormData): Observable<ApiResponse<DocumentUploadResponse>> {
     return this.http.post<ApiResponse<DocumentUploadResponse>>(`${this.apiUrl}/upload`, formData);
   }
+
+  // Endpoint: Hapus rekening bank (Hanya Admin)
+  deleteAccount(accountId: number): Observable<ApiResponse<string>> {
+    return this.http.delete<ApiResponse<string>>(`${this.apiUrl}/account/${accountId}`);
+  }
 }

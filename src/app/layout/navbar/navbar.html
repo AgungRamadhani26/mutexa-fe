@@ -1,10 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm"
+  style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
   <div class="container-fluid px-4">
     <a class="navbar-brand d-flex align-items-center" routerLink="/">
       <i class="bi bi-bank2 me-2 fs-4" style="color: #00d2ff;"></i>
       <div>
         <span class="fw-bold fs-5 text-white">MUTEXA</span>
-        <small class="d-block text-white-50" style="font-size: 0.65rem; letter-spacing: 1.5px;">MUTATION & EXPENSE ANALYZER</small>
+        <small class="d-block text-white-50" style="font-size: 0.65rem; letter-spacing: 1.5px;">MUTATION & EXPENSE
+          ANALYZER</small>
       </div>
     </a>
     <div class="d-flex align-items-center gap-2">
@@ -27,8 +29,11 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow border-0">
           @if (auth.isAdmin()) {
-          <li><a class="dropdown-item small" routerLink="/admin/users"><i class="bi bi-people me-2"></i>Manajemen User</a></li>
-          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item small" routerLink="/admin/users"><i class="bi bi-people me-2"></i>Manajemen
+              User</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
           }
           <li>
             <a class="dropdown-item small text-danger" href="#" (click)="$event.preventDefault(); auth.logout()">

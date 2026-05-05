@@ -12,6 +12,8 @@ import { DetailTransaksi } from '../../models/detail-transaksi.model';
 import { RingkasanSaldo } from '../../models/ringkasan-saldo.model';
 import { TopFreq } from '../../models/top-freq.model';
 import { ApiResponse } from '../../models/api-response.model';
+import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 /**
  * Komponen utama tampilan Dashboard mutasi.
@@ -28,6 +30,37 @@ export class Dashboard implements OnInit {
   private documentService = inject(DocumentService);
   private dashboardService = inject(DashboardService);
   private platformId = inject(PLATFORM_ID);
+  auth = inject(AuthService);
+  toast = inject(ToastService);
+
+  // ==========================================
+  // METODE UNTUK HAPUS REKENING (ADMIN ONLY)
+  // ==========================================
+  openDeleteAccountConfirm(account: BankAccount) {
+    console.log('Delete button clicked for:', account.accountNumber);
+    console.log('Is Admin?', this.auth.isAdmin());
+    if (!this.auth.isAdmin()) return;
+    this.accountToDelete.set(account);
+    this.showDeleteAccountConfirm.set(true);
+  }
+
+  confirmDeleteAccount() {
+    const acc = this.accountToDelete();
+    if (!acc || !this.auth.isAdmin()) return;
+
+    this.documentService.deleteAccount(acc.id).subscribe({
+      next: (res) => {
+        this.showDeleteAccountConfirm.set(false);
+        this.accountToDelete.set(null);
+        this.toast.success(res.message || 'Rekening berhasil dihapus.');
+        this.fetchAccounts(); // Refresh daftar rekening
+      },
+      error: (err) => {
+        this.toast.error(err.error?.message || 'Gagal menghapus rekening.');
+        this.showDeleteAccountConfirm.set(false);
+      }
+    });
+  }
 
   // ==========================================
   // STATE MACHINE (PENGATUR TAMPILAN)
@@ -44,6 +77,8 @@ export class Dashboard implements OnInit {
   showMassExcludeModal = signal<boolean>(false);
   isMassActionLoading = signal<boolean>(false);
   massActionSuccessMsg = signal<string>('');
+  showDeleteAccountConfirm = signal<boolean>(false);
+  accountToDelete = signal<BankAccount | null>(null);
 
   // Custom Keyword Exclude State
   customKeyword = signal<string>('');
@@ -403,14 +438,14 @@ export class Dashboard implements OnInit {
         if (res.success) {
           this.refreshAllDashboardData(doc.id);
           this.massActionSuccessMsg.set(`Berhasil ${isExcluded ? 'mengecualikan' : 'membatalkan pengecualian'} kategori ${category}`);
-          setTimeout(() => this.massActionSuccessMsg.set(''), 3000);
+          this.toast.success(`Berhasil ${isExcluded ? 'mengecualikan' : 'membatalkan pengecualian'} kategori ${category}`);
         } else {
-          alert('Gagal melakukan aksi massal.');
+          this.toast.error('Gagal melakukan aksi massal.');
         }
       },
       error: () => {
         this.isMassActionLoading.set(false);
-        alert('Terjadi kesalahan pada server.');
+        this.toast.error('Terjadi kesalahan pada server.');
       }
     });
   }
@@ -446,7 +481,7 @@ export class Dashboard implements OnInit {
       },
       error: () => {
         this.isSearchingKeyword.set(false);
-        alert('Gagal melakukan pencarian.');
+        this.toast.error('Gagal melakukan pencarian.');
       }
     });
   }
@@ -479,13 +514,14 @@ export class Dashboard implements OnInit {
         if (res.success) {
           this.refreshAllDashboardData(doc.id);
           this.onSearchKeyword(); // Refresh the mini table
+          this.toast.success(`Berhasil ${isExcluded ? 'mengecualikan' : 'membatalkan pengecualian'} transaksi berdasarkan keyword`);
         } else {
-          alert('Gagal melakukan aksi massal.');
+          this.toast.error('Gagal melakukan aksi massal.');
         }
       },
       error: () => {
         this.isMassActionLoading.set(false);
-        alert('Terjadi kesalahan pada server.');
+        this.toast.error('Terjadi kesalahan pada server.');
       }
     });
   }
@@ -552,7 +588,7 @@ export class Dashboard implements OnInit {
 
   submitUpload() {
     if (!this.uploadForm.file || !this.uploadForm.bankName) {
-      alert("Lengkapi data!"); return;
+      this.toast.warning("Lengkapi data!"); return;
     }
     this.isUploading.set(true);
     const formData = new FormData();
@@ -565,7 +601,7 @@ export class Dashboard implements OnInit {
     this.documentService.uploadDocument(formData).subscribe({
       next: (res: ApiResponse<any>) => {
         if (res.success) {
-          alert('Berhasil!'); this.showUploadForm.set(false); this.fetchAccounts();
+          this.toast.success('Berhasil!'); this.showUploadForm.set(false); this.fetchAccounts();
         }
         this.isUploading.set(false);
       },
