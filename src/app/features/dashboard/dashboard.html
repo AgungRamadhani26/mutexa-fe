@@ -1111,15 +1111,18 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="section-title mb-0"><i class="bi bi-person-badge me-2 text-mu-purple"></i>Pendeteksi Afiliasi &
           Exclude Massal</div>
-        <span class="badge bg-mu-purple-light text-mu-purple px-3 py-2 rounded-pill small">Fitur Windressing</span>
+        <div class="d-flex gap-2 align-items-center">
+          <button class="btn btn-outline-secondary btn-sm" (click)="openMassExcludeModal()">
+            <i class="bi bi-gear me-2"></i>Atur Exclude Kategori
+          </button>
+        </div>
       </div>
 
       <div class="search-keyword-container p-3 bg-white rounded-3 border shadow-sm">
         <div class="row g-2">
           <div class="col-md-9">
             <div class="input-group">
-              <span class="input-group-text bg-light border-end-0"><i
-                  class="bi bi-search text-mu-purple"></i></span>
+              <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-mu-purple"></i></span>
               <input type="text" class="form-control border-start-0 ps-0"
                 placeholder="Cari nama afiliasi, direksi, atau nomor rekening untuk di-exclude massal..."
                 [(ngModel)]="customKeyword" (keyup.enter)="onSearchKeyword()" (input)="onSearchInput($event)">
@@ -1147,10 +1150,14 @@
               Ditemukan <strong>{{ keywordResults().length }}</strong> transaksi dengan kata kunci
               <strong>"{{ customKeyword() }}"</strong>.
               <div class="mt-1 small d-flex flex-wrap gap-2">
-                <span class="badge bg-white text-dark border shadow-xs">Total: <strong>{{ keywordResults().length }}</strong></span>
-                <span class="badge bg-success-subtle text-success border border-success-subtle">Aktif: <strong>{{ keywordActiveCount() }}</strong></span>
-                <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Kategori Khusus/Anomali: <strong>{{ keywordSpecialCount() }}</strong></span>
-                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Manual Exclude: <strong>{{ keywordManualCount() }}</strong></span>
+                <span class="badge bg-white text-dark border shadow-xs">Total: <strong>{{ keywordResults().length
+                    }}</strong></span>
+                <span class="badge bg-success-subtle text-success border border-success-subtle">Aktif: <strong>{{
+                    keywordActiveCount() }}</strong></span>
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Kategori Khusus/Anomali:
+                  <strong>{{ keywordSpecialCount() }}</strong></span>
+                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Manual Exclude:
+                  <strong>{{ keywordManualCount() }}</strong></span>
               </div>
             </div>
             <div class="btn-group btn-group-sm shadow-sm">
@@ -1172,6 +1179,7 @@
                 <tr>
                   <th>Tanggal</th>
                   <th>Keterangan</th>
+                  <th class="text-center">Flag</th>
                   <th class="text-end">Nominal</th>
                   <th class="text-center">Status</th>
                 </tr>
@@ -1181,8 +1189,18 @@
                 <tr [class.text-muted]="tx.isExcluded">
                   <td class="small">{{ tx.tanggal }}</td>
                   <td class="small text-truncate" style="max-width: 250px;">{{ tx.keterangan }}</td>
-                  <td class="small text-end fw-bold"
-                    [ngClass]="tx.flag === 'CR' ? 'text-mu-green' : 'text-mu-red'">
+                  <td class="text-center">
+                    @if (tx.flag === 'CR') {
+                    <span class="flag-cr" style="font-size: 0.75rem;" [class.text-muted]="tx.isExcluded">
+                      <i class="bi bi-plus-circle me-1"></i>CR
+                    </span>
+                    } @else {
+                    <span class="flag-db" style="font-size: 0.75rem;" [class.text-muted]="tx.isExcluded">
+                      <i class="bi bi-dash-circle me-1"></i>DB
+                    </span>
+                    }
+                  </td>
+                  <td class="small text-end fw-bold" [ngClass]="tx.flag === 'CR' ? 'text-mu-green' : 'text-mu-red'">
                     {{ formatCurrency(tx.jumlah) }}
                   </td>
                   <td class="text-center">
@@ -1218,16 +1236,6 @@
         <div class="d-flex justify-content-between align-items-center">
           <div class="section-title mb-0"><i class="bi bi-list-columns-reverse me-2"></i>12. Detail Semua Transaksi
             (Bisa Exclude)</div>
-          <div class="d-flex gap-2 align-items-center">
-            <button class="btn btn-outline-secondary" (click)="openMassExcludeModal()">
-              <i class="bi bi-gear me-2"></i>Atur Exclude Kategori
-            </button>
-            <button class="btn btn-windress" [class.btn-windress-active]="isWindressActive()" (click)="applyWindress()">
-              <i class="bi bi-stars me-2"></i>
-              {{ isWindressActive() ? 'Matikan Windress' : 'Terapkan Windress' }}
-              <span class="windress-dot" [class.active]="isWindressActive()"></span>
-            </button>
-          </div>
         </div>
 
         <div class="d-flex flex-wrap align-items-center gap-3 bg-light p-2 rounded border">
@@ -1353,6 +1361,23 @@
         </div>
         }
       </div>
+    </div>
+
+    <!-- FINAL ACTION AREA: TERAPKAN HASIL ANALISA (POSISI PALING BAWAH) -->
+    <div class="mt-4 p-4 bg-white rounded-3 border shadow-sm d-flex justify-content-between align-items-center" 
+         style="border-left: 5px solid #1e293b; background: linear-gradient(to right, #ffffff, #f8fafc);">
+      <div style="max-width: 65%;">
+        <h6 class="mb-1 text-mu-darker fw-bold"><i class="bi bi-check-all me-2 text-mu-purple"></i>Selesaikan Analisa Transaksi</h6>
+        <div class="small text-muted">
+          Gunakan tombol ini sebagai <strong>langkah final</strong> setelah Anda selesai melakukan pengecekan keyword maupun filter kategori. Dashboard akan diperbarui dengan data transaksi yang sudah bersih.
+        </div>
+      </div>
+      <button class="btn btn-windress" [class.btn-windress-active]="isWindressActive()" (click)="applyWindress()"
+        style="padding: 1rem 2.5rem; font-size: 1.1rem; border-radius: 15px; min-width: 300px; box-shadow: 0 4px 12px rgba(30, 41, 59, 0.15);">
+        <i class="bi bi-stars me-2"></i>
+        {{ isWindressActive() ? 'Matikan Filter Windress' : 'Terapkan Hasil Analisa' }}
+        <span class="windress-dot ms-2" [class.active]="isWindressActive()"></span>
+      </button>
     </div>
   </div>
   }
