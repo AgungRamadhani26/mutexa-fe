@@ -1,7 +1,11 @@
 <div class="app-layout d-flex flex-column min-vh-100">
+  @if (!isLoginPage()) {
   <app-navbar></app-navbar>
+  }
   <main class="flex-grow-1">
     <router-outlet></router-outlet>
   </main>
+  @if (!isLoginPage()) {
   <app-footer></app-footer>
+  }
 </div>

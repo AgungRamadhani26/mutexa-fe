@@ -1,0 +1,138 @@
+<div class="um-page">
+  <div class="um-header">
+    <div>
+      <button class="btn-back" (click)="goBack()">
+        <i class="bi bi-arrow-left me-2"></i>Kembali ke Dashboard
+      </button>
+      <h1 class="um-title"><i class="bi bi-people-fill me-2"></i>Manajemen User</h1>
+      <p class="um-subtitle">Kelola akun analis yang memiliki akses ke sistem Mutexa.</p>
+    </div>
+    <button class="btn-add" (click)="openAddModal()">
+      <i class="bi bi-person-plus-fill me-2"></i>Tambah User
+    </button>
+  </div>
+
+  @if (successMessage()) {
+  <div class="alert-success fade-in">
+    <i class="bi bi-check-circle-fill me-2"></i>{{ successMessage() }}
+  </div>
+  }
+
+  <div class="um-card">
+    @if (isLoading()) {
+    <div class="text-center py-5"><span class="spinner-border text-primary"></span></div>
+    } @else {
+    <div class="table-responsive">
+      <table class="um-table">
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th class="text-center">Status</th>
+            <th>Bergabung</th>
+            <th class="text-center">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users(); track user.id) {
+          <tr [class.row-inactive]="!user.isActive">
+            <td class="fw-semibold">{{ user.name }}</td>
+            <td class="text-muted-sm">{{ user.email }}</td>
+            <td>
+              <span class="role-badge" [class.role-admin]="user.role === 'ADMIN'" [class.role-analyst]="user.role === 'ANALYST'">
+                <i class="bi" [class.bi-shield-fill]="user.role === 'ADMIN'" [class.bi-person-fill]="user.role === 'ANALYST'"></i>
+                {{ user.role }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span class="status-badge" [class.status-active]="user.isActive" [class.status-inactive]="!user.isActive">
+                {{ user.isActive ? 'Aktif' : 'Nonaktif' }}
+              </span>
+            </td>
+            <td class="text-muted-sm">{{ user.createdAt | date:'dd MMM yyyy' }}</td>
+            <td class="text-center">
+              <div class="action-group">
+                <button class="btn-action btn-reset" (click)="openResetModal(user.id)" title="Reset Password">
+                  <i class="bi bi-key"></i>
+                </button>
+                <button class="btn-action" [class.btn-deactivate]="user.isActive" [class.btn-activate]="!user.isActive"
+                  (click)="toggleActive(user)" [title]="user.isActive ? 'Nonaktifkan' : 'Aktifkan'">
+                  <i class="bi" [class.bi-person-slash]="user.isActive" [class.bi-person-check]="!user.isActive"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- Modal Tambah User -->
+@if (showAddModal()) {
+<div class="modal-overlay" (click)="showAddModal.set(false)">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5><i class="bi bi-person-plus me-2"></i>Tambah User Baru</h5>
+      <button class="btn-close-modal" (click)="showAddModal.set(false)">×</button>
+    </div>
+    <div class="modal-body">
+      @if (errorMessage()) {
+      <div class="alert-error-sm">{{ errorMessage() }}</div>
+      }
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input type="text" class="modal-input" [(ngModel)]="registerForm.name" placeholder="Nama analis">
+      </div>
+      <div class="form-group mt-3">
+        <label>Email</label>
+        <input type="email" class="modal-input" [(ngModel)]="registerForm.email" placeholder="email@mutexa.com">
+      </div>
+      <div class="form-group mt-3">
+        <label>Password</label>
+        <input type="password" class="modal-input" [(ngModel)]="registerForm.password" placeholder="Min. 8 karakter">
+      </div>
+      <div class="form-group mt-3">
+        <label>Role</label>
+        <select class="modal-input" [(ngModel)]="registerForm.role">
+          <option value="ANALYST">ANALYST</option>
+          <option value="ADMIN">ADMIN</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="showAddModal.set(false)">Batal</button>
+      <button class="btn-submit" (click)="submitRegister()">
+        <i class="bi bi-person-plus me-1"></i>Tambahkan
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal Reset Password -->
+@if (showResetModal()) {
+<div class="modal-overlay" (click)="showResetModal.set(false)">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5><i class="bi bi-key me-2"></i>Reset Password</h5>
+      <button class="btn-close-modal" (click)="showResetModal.set(false)">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Password Baru</label>
+        <input type="password" class="modal-input" [(ngModel)]="newPassword" placeholder="Masukkan password baru">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="showResetModal.set(false)">Batal</button>
+      <button class="btn-submit" (click)="submitResetPassword()">
+        <i class="bi bi-check2 me-1"></i>Reset
+      </button>
+    </div>
+  </div>
+</div>
+}

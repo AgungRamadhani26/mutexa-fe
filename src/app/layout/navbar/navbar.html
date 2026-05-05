@@ -7,20 +7,44 @@
         <small class="d-block text-white-50" style="font-size: 0.65rem; letter-spacing: 1.5px;">MUTATION & EXPENSE ANALYZER</small>
       </div>
     </a>
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center gap-2">
+
+      @if (auth.isLoggedIn()) {
+
+      <!-- Link Manajemen User (hanya ADMIN) -->
+      @if (auth.isAdmin()) {
+      <a routerLink="/admin/users" class="btn-nav-admin">
+        <i class="bi bi-people-fill me-1"></i>Manajemen User
+      </a>
+      }
+
+      <!-- Dropdown User -->
       <div class="dropdown">
-        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-          <div class="rounded-circle bg-primary bg-opacity-25 d-flex align-items-center justify-content-center me-2" style="width: 36px; height: 36px;">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+          data-bs-toggle="dropdown">
+          <div class="rounded-circle bg-primary bg-opacity-25 d-flex align-items-center justify-content-center me-2"
+            style="width: 36px; height: 36px;">
             <i class="bi bi-person-fill text-info"></i>
           </div>
-          <span class="fw-medium small">Admin</span>
+          <div>
+            <span class="fw-medium small d-block">{{ auth.userName() }}</span>
+            <small class="text-white-50" style="font-size: 0.65rem;">{{ auth.userRole() }}</small>
+          </div>
         </a>
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow border-0">
-          <li><a class="dropdown-item small" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+          @if (auth.isAdmin()) {
+          <li><a class="dropdown-item small" routerLink="/admin/users"><i class="bi bi-people me-2"></i>Manajemen User</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item small text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Sign out</a></li>
+          }
+          <li>
+            <a class="dropdown-item small text-danger" href="#" (click)="$event.preventDefault(); auth.logout()">
+              <i class="bi bi-box-arrow-right me-2"></i>Keluar
+            </a>
+          </li>
         </ul>
       </div>
+
+      }
     </div>
   </div>
 </nav>

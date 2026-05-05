@@ -1,6 +1,16 @@
-.navbar {
-  min-height: 60px;
+.btn-nav-admin {
+  background: rgba(124, 58, 237, 0.2);
+  border: 1px solid rgba(124, 58, 237, 0.4);
+  color: #c4b5fd;
+  border-radius: 20px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
 }
-.navbar-brand:hover {
-  opacity: 0.9;
+
+.btn-nav-admin:hover {
+  background: rgba(124, 58, 237, 0.35);
+  color: #fff;
 }
