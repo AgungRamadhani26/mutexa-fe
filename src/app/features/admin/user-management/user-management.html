@@ -47,9 +47,9 @@
             <td class="text-muted-sm">{{ user.createdAt | date:'dd MMM yyyy' }}</td>
             <td class="text-center">
               <div class="action-group">
-                <button class="btn-action btn-reset" (click)="openResetModal(user.id)" title="Reset Password">
-                  <i class="bi bi-key"></i>
-                </button>
+                 <button class="btn-action btn-reset" (click)="openEditModal(user)" title="Edit User">
+                   <i class="bi bi-pencil-square"></i>
+                 </button>
                 <button class="btn-action" [class.btn-deactivate]="user.isActive" [class.btn-activate]="!user.isActive"
                   (click)="toggleActive(user)" [title]="user.isActive ? 'Nonaktifkan' : 'Aktifkan'">
                   <i class="bi" [class.bi-person-slash]="user.isActive" [class.bi-person-check]="!user.isActive"></i>
@@ -105,28 +105,43 @@
 </div>
 }
 
-@if (showResetModal()) {
-<div class="modal-overlay" (click)="showResetModal.set(false)">
-  <div class="modal-box" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h5><i class="bi bi-key me-2"></i>Reset Password</h5>
-      <button class="btn-close-modal" (click)="showResetModal.set(false)">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Password Baru</label>
-        <input type="password" class="modal-input" [(ngModel)]="newPassword" placeholder="Masukkan password baru">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" (click)="showResetModal.set(false)">Batal</button>
-      <button class="btn-submit" (click)="submitResetPassword()">
-        <i class="bi bi-check2 me-1"></i>Reset
-      </button>
-    </div>
-  </div>
-</div>
-}
+ @if (showEditModal()) {
+ <div class="modal-overlay" (click)="showEditModal.set(false)">
+   <div class="modal-box" (click)="$event.stopPropagation()">
+     <div class="modal-header">
+       <h5><i class="bi bi-pencil-square me-2"></i>Edit User</h5>
+       <button class="btn-close-modal" (click)="showEditModal.set(false)">×</button>
+     </div>
+     <div class="modal-body">
+       <div class="form-group">
+         <label>Nama Lengkap</label>
+         <input type="text" class="modal-input" [(ngModel)]="editForm.name" placeholder="Nama analis">
+       </div>
+       <div class="form-group mt-3">
+         <label>Email</label>
+         <input type="email" class="modal-input" [(ngModel)]="editForm.email" placeholder="email@mutexa.com">
+       </div>
+       <div class="form-group mt-3">
+         <label>Password (Kosongkan jika tidak mau ubah)</label>
+         <input type="password" class="modal-input" [(ngModel)]="editForm.password" placeholder="Min. 8 karakter">
+       </div>
+       <div class="form-group mt-3">
+         <label>Role</label>
+         <select class="modal-input" [(ngModel)]="editForm.role">
+           <option value="ANALYST">ANALYST</option>
+           <option value="ADMIN">ADMIN</option>
+         </select>
+       </div>
+     </div>
+     <div class="modal-footer">
+       <button class="btn-cancel" (click)="showEditModal.set(false)">Batal</button>
+       <button class="btn-submit" (click)="submitEditUser()">
+         <i class="bi bi-check2 me-1"></i>Simpan Perubahan
+       </button>
+     </div>
+   </div>
+ </div>
+ }
 
 <!-- Modal Konfirmasi Nonaktifkan User -->
 @if (showConfirmDeactivate()) {

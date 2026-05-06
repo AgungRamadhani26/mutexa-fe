@@ -33,15 +33,15 @@ export class UserManagement implements OnInit {
   users = signal<UserItem[]>([]);
   isLoading = signal(false);
   showAddModal = signal(false);
-  showResetModal = signal(false);
+  showEditModal = signal(false);
   showConfirmDeactivate = signal(false);
   showConfirmActivate = signal(false);
   selectedUserId = signal<number | null>(null);
   selectedUserToDeactivate = signal<UserItem | null>(null);
   selectedUserToActivate = signal<UserItem | null>(null);
-  newPassword = '';
 
   registerForm: RegisterForm = { name: '', email: '', password: '', role: 'ANALYST' };
+  editForm: RegisterForm = { name: '', email: '', password: '', role: 'ANALYST' };
 
   constructor(
     private http: HttpClient, 
@@ -166,34 +166,52 @@ export class UserManagement implements OnInit {
     });
   }
 
-  openResetModal(userId: number) {
-    this.selectedUserId.set(userId);
-    this.newPassword = '';
-    this.showResetModal.set(true);
+  openEditModal(user: UserItem) {
+    this.selectedUserId.set(user.id);
+    this.editForm = { 
+      name: user.name, 
+      email: user.email, 
+      password: '', // Kosongkan jika tidak mau ubah
+      role: user.role 
+    };
+    this.showEditModal.set(true);
   }
 
-  submitResetPassword() {
-    if (!this.newPassword) {
-      this.toast.warning('Password tidak boleh kosong.');
+  submitEditUser() {
+    if (!this.editForm.name || this.editForm.name.trim() === '') {
+      this.toast.warning('Nama lengkap tidak boleh kosong.');
+      return;
+    }
+    if (!this.editForm.email || this.editForm.email.trim() === '') {
+      this.toast.warning('Email tidak boleh kosong.');
       return;
     }
     
-    const pwdError = this.validatePassword(this.newPassword);
-    if (pwdError) {
-      this.toast.warning(pwdError);
+    const emailError = this.validateEmail(this.editForm.email);
+    if (emailError) {
+      this.toast.warning(emailError);
       return;
     }
 
-    this.http.patch<ApiResponse<UserItem>>(`/api/auth/users/${this.selectedUserId()}/reset-password`,
-      { newPassword: this.newPassword }).subscribe({
-        next: () => {
-          this.showResetModal.set(false);
-          this.toast.success('Password berhasil direset.');
-        },
-        error: () => {
-          this.toast.error('Gagal mereset password.');
-        }
-      });
+    // Jika password diisi, validasi kekuatannya
+    if (this.editForm.password && this.editForm.password.trim() !== '') {
+      const pwdError = this.validatePassword(this.editForm.password);
+      if (pwdError) {
+        this.toast.warning(pwdError);
+        return;
+      }
+    }
+
+    this.http.put<ApiResponse<UserItem>>(`/api/auth/users/${this.selectedUserId()}`, this.editForm).subscribe({
+      next: () => {
+        this.showEditModal.set(false);
+        this.toast.success('Data user berhasil diperbarui.');
+        this.loadUsers();
+      },
+      error: (err) => {
+        this.toast.error(err?.error?.message ?? 'Gagal memperbarui data user.');
+      }
+    });
   }
 
   goBack() {
