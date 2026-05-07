@@ -1,8 +1,9 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
+import { EncryptionService } from '../core/services/encryption.service';
 
 export interface AuthUser {
   name: string;
@@ -17,6 +18,7 @@ export interface AuthUser {
 export class AuthService {
   private apiUrl = '/api/auth';
   private readonly STORAGE_KEY = 'mutexa_auth';
+  private encryptionService = inject(EncryptionService);
 
   // Signal untuk state user yang sedang login
   currentUser = signal<AuthUser | null>(this.loadFromStorage());
@@ -33,7 +35,9 @@ export class AuthService {
       tap(response => {
         if (response.data) {
           this.currentUser.set(response.data);
-          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(response.data));
+          // Simpan data dalam bentuk terenkripsi
+          const encryptedData = this.encryptionService.encrypt(response.data);
+          localStorage.setItem(this.STORAGE_KEY, encryptedData);
         }
       })
     );
@@ -52,7 +56,10 @@ export class AuthService {
   private loadFromStorage(): AuthUser | null {
     try {
       const raw = localStorage.getItem(this.STORAGE_KEY);
-      return raw ? JSON.parse(raw) : null;
+      if (!raw) return null;
+      
+      // Dekripsi data saat load
+      return this.encryptionService.decrypt<AuthUser>(raw);
     } catch {
       return null;
     }

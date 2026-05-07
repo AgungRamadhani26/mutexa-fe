@@ -1411,3 +1411,38 @@
   to { transform: translateY(0); opacity: 1; }
 }
 
+/* Custom styles for Improved Delete Account Modal */
+.account-info-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.account-icon-box {
+  width: 42px;
+  height: 42px;
+  background: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
+}
+
+.label-tiny {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+}
+
+.warning-box-simple {
+  background: rgba(220, 38, 38, 0.05);
+  border-left: 3px solid #ef4444;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+}
+

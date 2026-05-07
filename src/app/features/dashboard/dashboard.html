@@ -1600,16 +1600,44 @@
       <h5 class="fw-bold text-mu-red mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>Hapus Rekening</h5>
       <button class="btn-close" (click)="showDeleteAccountConfirm.set(false)"></button>
     </div>
-    <div class="mu-modal-body text-center pt-3 pb-4">
-      <p class="mb-2">Anda yakin ingin menghapus rekening ini secara permanen?</p>
-      <div class="p-3 bg-light rounded text-start mb-3 border">
-        <div class="fw-bold mb-1"><i class="bi bi-bank2 me-2 text-mu-primary"></i>{{ accountToDelete()?.bankName }}</div>
-        <div class="font-mono text-mu-dark">{{ accountToDelete()?.accountNumber }}</div>
-        <div class="small text-muted mt-1">{{ accountToDelete()?.accountName }}</div>
+    <div class="mu-modal-body text-center pt-3 pb-4 px-4">
+      <p class="mb-3 text-mu-dark">Anda yakin ingin menghapus rekening ini secara permanen?</p>
+      
+      <!-- Improved Account Info Card -->
+      <div class="account-info-card p-3 text-start mb-4 shadow-sm">
+        <div class="d-flex align-items-center mb-3">
+          <div class="account-icon-box me-3">
+            <i class="bi bi-bank2 text-mu-primary fs-5"></i>
+          </div>
+          <div>
+            <div class="label-tiny">Bank</div>
+            <div class="fw-bold text-mu-darker">{{ accountToDelete()?.bankName }}</div>
+          </div>
+        </div>
+        
+        <div class="row g-0 border-top pt-3">
+          <div class="col-6 border-end pe-3">
+            <div class="label-tiny mb-1">No. Rekening</div>
+            <div class="font-mono text-mu-dark fw-bold">{{ accountToDelete()?.accountNumber }}</div>
+          </div>
+          <div class="col-6 ps-3">
+            <div class="label-tiny mb-1">Nama Pemilik</div>
+            <div class="text-mu-dark small fw-medium text-truncate" [title]="accountToDelete()?.accountName || ''">
+              {{ accountToDelete()?.accountName }}
+            </div>
+          </div>
+        </div>
       </div>
-      <p class="small text-danger fw-medium mb-0">
-        <i class="bi bi-exclamation-circle me-1"></i>Peringatan: Seluruh dokumen dan transaksi di dalamnya akan terhapus dan tidak dapat dikembalikan.
-      </p>
+
+      <!-- Improved Warning Box -->
+      <div class="warning-box-simple text-start">
+        <div class="d-flex align-items-start">
+          <i class="bi bi-exclamation-triangle-fill text-danger me-2 mt-1"></i>
+          <p class="small text-danger fw-medium mb-0">
+            <strong>Peringatan:</strong> Seluruh dokumen dan transaksi di dalamnya akan terhapus secara permanen dan tidak dapat dikembalikan.
+          </p>
+        </div>
+      </div>
     </div>
     <div class="mu-modal-footer bg-light border-top d-flex justify-content-end gap-2 p-3">
       <button class="btn btn-mu-back px-4" (click)="showDeleteAccountConfirm.set(false)">Batal</button>
