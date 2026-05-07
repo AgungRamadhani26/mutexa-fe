@@ -602,7 +602,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (cr of top10Credit(); track cr.keterangan + cr.tanggal) {
+                  @for (cr of top10Credit(); track $index) {
                   <tr [class.text-muted]="isWindressActive() && cr.isExcluded">
                     <td class="small" [class.text-decoration-line-through]="isWindressActive() && cr.isExcluded">{{
                       cr.keterangan }}</td>
@@ -632,7 +632,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (cr of top10CreditCleaned(); track cr.keterangan + cr.tanggal) {
+                  @for (cr of top10CreditCleaned(); track $index) {
                   <tr>
                     <td class="small">{{ cr.keterangan }}</td>
                     <td class="text-end fw-bold text-mu-green text-nowrap">{{ formatCurrency(cr.jumlah) }}</td>
@@ -669,7 +669,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (db of top10Debit(); track db.keterangan + db.tanggal) {
+                  @for (db of top10Debit(); track $index) {
                   <tr [class.text-muted]="isWindressActive() && db.isExcluded">
                     <td class="small" [class.text-decoration-line-through]="isWindressActive() && db.isExcluded">{{
                       db.keterangan }}</td>
@@ -699,7 +699,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (db of top10DebitCleaned(); track db.keterangan + db.tanggal) {
+                  @for (db of top10DebitCleaned(); track $index) {
                   <tr>
                     <td class="small">{{ db.keterangan }}</td>
                     <td class="text-end fw-bold text-mu-red text-nowrap">{{ formatCurrency(db.jumlah) }}</td>
@@ -872,7 +872,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for (an of pagedAnomalyCredit(); track an.tanggal + an.keterangan + an.jumlah) {
+                @for (an of pagedAnomalyCredit(); track $index) {
                 <tr>
                   <td class="text-break">{{ an.keterangan }}</td>
                   <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
@@ -921,7 +921,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for (an of pagedAnomalyDebit(); track an.tanggal + an.keterangan + an.jumlah) {
+                @for (an of pagedAnomalyDebit(); track $index) {
                 <tr>
                   <td class="text-break">{{ an.keterangan }}</td>
                   <td class="fw-semibold text-nowrap text-mu-dark">{{ formatCurrency(an.jumlah) }}</td>
@@ -1412,7 +1412,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (cr of top10CreditCleaned(); track cr.keterangan + cr.tanggal) {
+            @for (cr of top10CreditCleaned(); track $index) {
             <tr>
               <td>{{ cr.keterangan }}</td>
               <td class="text-end fw-bold text-mu-green">{{ formatCurrency(cr.jumlah) }}</td>
@@ -1444,7 +1444,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (db of top10DebitCleaned(); track db.keterangan + db.tanggal) {
+            @for (db of top10DebitCleaned(); track $index) {
             <tr>
               <td>{{ db.keterangan }}</td>
               <td class="text-end fw-bold text-mu-red">{{ formatCurrency(db.jumlah) }}</td>
