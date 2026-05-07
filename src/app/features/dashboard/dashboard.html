@@ -110,7 +110,8 @@
                       <i class="bi bi-folder2-open me-1"></i> Lihat Dokumen
                     </button>
                     @if (auth.isAdmin()) {
-                    <button (click)="openDeleteAccountConfirm(account)" class="btn btn-outline-danger btn-sm" title="Hapus Rekening">
+                    <button (click)="openDeleteAccountConfirm(account)" class="btn btn-outline-danger btn-sm"
+                      title="Hapus Rekening">
                       <i class="bi bi-trash"></i>
                     </button>
                     }
@@ -1371,12 +1372,14 @@
     </div>
 
     <!-- FINAL ACTION AREA: TERAPKAN HASIL ANALISA (POSISI PALING BAWAH) -->
-    <div class="mt-4 p-4 bg-white rounded-3 border shadow-sm d-flex justify-content-between align-items-center" 
-         style="border-left: 5px solid #1e293b; background: linear-gradient(to right, #ffffff, #f8fafc);">
+    <div class="mt-4 p-4 bg-white rounded-3 border shadow-sm d-flex justify-content-between align-items-center"
+      style="border-left: 5px solid #1e293b; background: linear-gradient(to right, #ffffff, #f8fafc);">
       <div style="max-width: 65%;">
-        <h6 class="mb-1 text-mu-darker fw-bold"><i class="bi bi-check-all me-2 text-mu-purple"></i>Selesaikan Analisa Transaksi</h6>
+        <h6 class="mb-1 text-mu-darker fw-bold"><i class="bi bi-check-all me-2 text-mu-purple"></i>Selesaikan Analisa
+          Transaksi</h6>
         <div class="small text-muted">
-          Gunakan tombol ini sebagai <strong>langkah final</strong> setelah Anda selesai melakukan pengecekan keyword maupun filter kategori. Dashboard akan diperbarui dengan data transaksi yang sudah bersih.
+          Gunakan tombol ini sebagai <strong>langkah final</strong> setelah Anda selesai melakukan pengecekan keyword
+          maupun filter kategori. Dashboard akan diperbarui dengan data transaksi yang sudah bersih.
         </div>
       </div>
       <button class="btn btn-windress" [class.btn-windress-active]="isWindressActive()" (click)="applyWindress()"
@@ -1602,7 +1605,7 @@
     </div>
     <div class="mu-modal-body text-center pt-3 pb-4 px-4">
       <p class="mb-3 text-mu-dark">Anda yakin ingin menghapus rekening ini secara permanen?</p>
-      
+
       <!-- Improved Account Info Card -->
       <div class="account-info-card p-3 text-start mb-4 shadow-sm">
         <div class="d-flex align-items-center mb-3">
@@ -1614,7 +1617,7 @@
             <div class="fw-bold text-mu-darker">{{ accountToDelete()?.bankName }}</div>
           </div>
         </div>
-        
+
         <div class="row g-0 border-top pt-3">
           <div class="col-6 border-end pe-3">
             <div class="label-tiny mb-1">No. Rekening</div>
@@ -1634,14 +1637,16 @@
         <div class="d-flex align-items-start">
           <i class="bi bi-exclamation-triangle-fill text-danger me-2 mt-1"></i>
           <p class="small text-danger fw-medium mb-0">
-            <strong>Peringatan:</strong> Seluruh dokumen dan transaksi di dalamnya akan terhapus secara permanen dan tidak dapat dikembalikan.
+            <strong>Peringatan:</strong> Seluruh dokumen dan transaksi di dalamnya akan terhapus secara permanen dan
+            tidak dapat dikembalikan.
           </p>
         </div>
       </div>
     </div>
     <div class="mu-modal-footer bg-light border-top d-flex justify-content-end gap-2 p-3">
       <button class="btn btn-mu-back px-4" (click)="showDeleteAccountConfirm.set(false)">Batal</button>
-      <button class="btn btn-danger px-4" (click)="confirmDeleteAccount()"><i class="bi bi-trash me-2"></i>Ya, Hapus</button>
+      <button class="btn btn-danger px-4" (click)="confirmDeleteAccount()"><i class="bi bi-trash me-2"></i>Ya,
+        Hapus</button>
     </div>
   </div>
 </div>
