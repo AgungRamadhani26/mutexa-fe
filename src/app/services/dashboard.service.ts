@@ -6,6 +6,7 @@ import { SummaryPerbulan } from '../models/summary-perbulan.model';
 import { DetailTransaksi } from '../models/detail-transaksi.model';
 import { RingkasanSaldo } from '../models/ringkasan-saldo.model';
 import { TopFreq } from '../models/top-freq.model';
+import { Pengendapan } from '../models/pengendapan.model';
 /**
  * Service untuk mengambil data dashboard dari backend.
  * Prinsip SOLID:
@@ -145,5 +146,11 @@ export class DashboardService {
       keyword,
       isExcluded
     });
+  }
+
+  // Mengambil data perhitungan Pengendapan per bulan
+  getPengendapan(documentId: number): Observable<ApiResponse<Pengendapan>> {
+    const params = new HttpParams().set('documentId', documentId.toString());
+    return this.http.get<ApiResponse<Pengendapan>>(`${this.apiUrl}/pengendapan`, { params });
   }
 }

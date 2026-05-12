@@ -1446,3 +1446,188 @@
   border-radius: 8px;
 }
 
+/* ---- Section II: Pengendapan - Modern Analytics Style ---- */
+.pengendapan-month-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(99, 102, 241, 0.1); /* Indigo tint */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pengendapan-month-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.1), 0 10px 10px -6px rgba(99, 102, 241, 0.05);
+}
+
+.pengendapan-month-header {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); /* Indigo gradient */
+  color: white;
+  position: relative;
+}
+
+.pengendapan-month-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pengendapan-month-subtitle {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+}
+
+.pengendapan-month-body {
+  padding: 0;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.modern-table thead th {
+  padding: 1rem 1.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  border-bottom: 1px solid #f1f5f9;
+  background: #f8fafc;
+  text-align: left;
+}
+
+.modern-table tbody td {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.78rem;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.2s ease;
+}
+
+.modern-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.modern-table tbody tr:hover td {
+  background: #fdfeff;
+  color: #6366f1;
+}
+
+.modern-table .text-right { text-align: right; }
+.modern-table .text-center { text-align: center; }
+
+.day-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+.hari-pill {
+  background: #eef2ff;
+  color: #6366f1;
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+/* Custom total/avg section inside card body */
+.pengendapan-footer {
+  padding: 1.25rem 1.5rem;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+}
+
+.footer-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.footer-stat:last-child {
+  margin-bottom: 0;
+}
+
+.footer-stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.footer-stat-value {
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.value-indigo { color: #6366f1; }
+.value-teal { color: #0d9488; }
+
+/* Wrapper to allow internal scroll while keeping card looking nice */
+.table-scroll-container {
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+/* Card for Overall Average in Section II */
+.pengendapan-summary-hero {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 16px;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.hero-icon {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #0284c7;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.hero-content h4 {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #0369a1;
+}
+
+.hero-content .hero-value {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #0c4a6e;
+  margin-top: 0.1rem;
+}
+
+.border-dashed {
+  border: 2px dashed #e2e8f0 !important;
+}
+

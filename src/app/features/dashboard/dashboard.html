@@ -836,13 +836,95 @@
         </div>
       </div>
     </div>
+
+    <hr class="mu-divider mt-5">
+    <h5 class="section-group-title"><i class="bi bi-graph-up-arrow me-2"></i>II. PENGENDAPAN DAN PEMAKAIAN</h5>
+
+    @if (pengendapanData().bulanList.length > 0) {
+    <!-- Hero Summary for Section II -->
+    <div class="pengendapan-summary-hero">
+      <div class="hero-icon">
+        <i class="bi bi-safe2"></i>
+      </div>
+      <div class="hero-content">
+        <h4>Rata-rata Pengendapan Keseluruhan</h4>
+        <div class="hero-value">{{ formatCurrency(pengendapanData().rataRataPengendapan) }}</div>
+      </div>
+    </div>
+
+    <!-- Monthly Analytics Cards -->
+    <div class="row g-4">
+      @for (bulan of pengendapanData().bulanList; track bulan.periode) {
+      <div class="col-xl-4 col-lg-6">
+        <div class="pengendapan-month-card">
+          <div class="pengendapan-month-header">
+            <h5 class="pengendapan-month-title">
+              <i class="bi bi-calendar-check me-1"></i> {{ bulan.periode }}
+            </h5>
+            <p class="pengendapan-month-subtitle">Detail mutasi harian dan durasi pengendapan</p>
+          </div>
+          
+          <div class="pengendapan-month-body">
+            <div class="table-scroll-container">
+              <table class="modern-table">
+                <thead>
+                  <tr>
+                    <th class="text-center" style="width: 60px;">Tgl</th>
+                    <th>Saldo</th>
+                    <th class="text-center">Hari</th>
+                    <th class="text-right">Pengendapan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (row of bulan.rows; track row.tanggal) {
+                  <tr>
+                    <td class="text-center">
+                      <span class="day-circle">{{ row.tanggal }}</span>
+                    </td>
+                    <td>{{ formatCurrency(row.saldo) }}</td>
+                    <td class="text-center">
+                      <span class="hari-pill">{{ row.hari }}</span>
+                    </td>
+                    <td class="text-right fw-bold text-mu-dark">
+                      {{ formatCurrency(row.pengendapan) }}
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="pengendapan-footer">
+            <div class="footer-stat">
+              <span class="footer-stat-label">Total Pengendapan</span>
+              <span class="footer-stat-value value-indigo">{{ formatCurrency(bulan.totalPengendapan) }}</span>
+            </div>
+            <div class="footer-stat mt-2 pt-2 border-top">
+              <span class="footer-stat-label">Pengendapan / Bulan</span>
+              <span class="footer-stat-value value-teal">{{ formatCurrency(bulan.pengendapanPerBulan) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="mu-card p-4 text-center border-dashed">
+      <div class="py-5">
+        <i class="bi bi-layout-text-window-reverse fs-1 text-mu-slate-lighter mb-3 d-block"></i>
+        <h6 class="text-mu-slate">Belum Ada Data Pengendapan</h6>
+        <p class="text-mu-slate-light small">Data akan muncul setelah dokumen mutasi dipilih.</p>
+      </div>
+    </div>
+    }
   </div>
   }
 
   <!-- BAGIAN II: ANOMALI & PENGELUARAN KHUSUS -->
   @if (activeTab() === 'anomali') {
   <div class="analytics-section fade-in">
-    <h5 class="section-group-title text-mu-amber"><i class="bi bi-exclamation-octagon me-2"></i>II. ANOMALI &
+    <h5 class="section-group-title text-mu-amber"><i class="bi bi-exclamation-octagon me-2"></i>III. ANOMALI &
       PENGELUARAN KHUSUS</h5>
 
     <!-- 7 & 8. Anomali -->
@@ -1102,7 +1184,7 @@
   <!-- BAGIAN III: DATA TRANSAKSI LENGKAP -->
   @if (activeTab() === 'log') {
   <div class="analytics-section fade-in">
-    <h5 class="section-group-title text-mu-primary"><i class="bi bi-database me-2"></i>III. DATA TRANSAKSI LENGKAP
+    <h5 class="section-group-title text-mu-primary"><i class="bi bi-database me-2"></i>IV. DATA TRANSAKSI LENGKAP
     </h5>
 
     <!-- PENDETEKSI AFILIASI / CUSTOM EXCLUDE -->
@@ -1361,8 +1443,11 @@
         }
       </div>
     </div>
+  </div>
+}
 
     <!-- FINAL ACTION AREA: TERAPKAN HASIL ANALISA (POSISI PALING BAWAH) -->
+    @if (activeTab() !== 'ringkasan') {
     <div class="mt-4 p-4 bg-white rounded-3 border shadow-sm d-flex justify-content-between align-items-center"
       style="border-left: 5px solid #1e293b; background: linear-gradient(to right, #ffffff, #f8fafc);">
       <div style="max-width: 65%;">
@@ -1380,13 +1465,12 @@
         <span class="windress-dot ms-2" [class.active]="isWindressActive()"></span>
       </button>
     </div>
+    }
   </div>
   }
 </div>
-}
+</div>
 
-</div>
-</div>
 
 <!-- MODAL AFTER CREDIT -->
 <div class="mu-modal-overlay" *ngIf="showAfterCreditModal()" (click)="showAfterCreditModal.set(false)">

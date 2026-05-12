@@ -11,6 +11,7 @@ import { SummaryPerbulan } from '../../models/summary-perbulan.model';
 import { DetailTransaksi } from '../../models/detail-transaksi.model';
 import { RingkasanSaldo } from '../../models/ringkasan-saldo.model';
 import { TopFreq } from '../../models/top-freq.model';
+import { Pengendapan } from '../../models/pengendapan.model';
 import { ApiResponse } from '../../models/api-response.model';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
@@ -304,6 +305,8 @@ export class Dashboard implements OnInit {
   top10CreditCleaned = signal<DetailTransaksi[]>([]);
   top10DebitCleaned = signal<DetailTransaksi[]>([]);
 
+  pengendapanData = signal<Pengendapan>({ bulanList: [], rataRataPengendapan: 0 });
+
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.fetchAccounts();
@@ -370,6 +373,7 @@ export class Dashboard implements OnInit {
     this.dashboardService.getTop10DebitAmountCleaned(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10DebitCleaned.set(res.data); });
     this.dashboardService.getTop10CreditFreqCleaned(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10CreditFreqCleaned.set(res.data); });
     this.dashboardService.getTop10DebitFreqCleaned(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.top10DebitFreqCleaned.set(res.data); });
+    this.dashboardService.getPengendapan(documentId).subscribe((res: ApiResponse<any>) => { if (res.success) this.pengendapanData.set(res.data); });
 
     this.dashboardService.getDetailSemuaTransaksi(documentId).subscribe({
       next: (res: ApiResponse<any>) => {
