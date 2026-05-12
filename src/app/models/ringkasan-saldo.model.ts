@@ -8,7 +8,7 @@ export interface RingkasanSaldo {
   avgCredit: number;
   avgDebit: number;
   jumlahBulan: number;
-  avgDailyBalance: number;
+
 
   // Added for Windress
   cleanedTotalCredit?: number;

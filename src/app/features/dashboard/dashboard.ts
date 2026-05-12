@@ -298,7 +298,7 @@ export class Dashboard implements OnInit {
   anomalyDebitTransactions = signal<DetailTransaksi[]>([]);
 
   ringkasanSaldo = signal<RingkasanSaldo>({
-    totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0, avgDailyBalance: 0
+    totalCredit: 0, totalDebit: 0, avgCredit: 0, avgDebit: 0, jumlahBulan: 0
   });
 
   top10CreditCleaned = signal<DetailTransaksi[]>([]);
