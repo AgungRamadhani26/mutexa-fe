@@ -1450,16 +1450,13 @@
 .pengendapan-month-card {
   background: #ffffff;
   border-radius: 20px;
-  border: 1px solid rgba(99, 102, 241, 0.1); /* Indigo tint */
+  border: 1px solid rgba(99, 102, 241, 0.1);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   height: 100%;
+  display: flex;
+  flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.pengendapan-month-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.1), 0 10px 10px -6px rgba(99, 102, 241, 0.05);
 }
 
 .pengendapan-month-header {
@@ -1486,6 +1483,15 @@
 
 .pengendapan-month-body {
   padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-scroll-container {
+  flex: 1;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .modern-table {
@@ -1495,8 +1501,8 @@
 }
 
 .modern-table thead th {
-  padding: 1rem 1.25rem;
-  font-size: 0.7rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1507,8 +1513,8 @@
 }
 
 .modern-table tbody td {
-  padding: 0.75rem 1.25rem;
-  font-size: 0.78rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
   color: #334155;
   border-bottom: 1px solid #f1f5f9;
   transition: background 0.2s ease;
@@ -1530,101 +1536,130 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   background: #f1f5f9;
   border-radius: 50%;
   font-weight: 700;
-  font-size: 0.75rem;
+  font-size: 0.62rem;
   color: #475569;
 }
 
 .hari-pill {
   background: #eef2ff;
   color: #6366f1;
-  padding: 0.2rem 0.6rem;
-  border-radius: 100px;
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
   font-weight: 600;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
 }
 
 /* Custom total/avg section inside card body */
 .pengendapan-footer {
-  padding: 1.25rem 1.5rem;
+  padding: 1rem 1.25rem;
   background: #f8fafc;
   border-top: 1px solid #f1f5f9;
 }
 
-.footer-stat {
+/* Footer Row Styles */
+.footer-row-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  padding: 0.15rem 0;
 }
 
-.footer-stat:last-child {
-  margin-bottom: 0;
+.stat-group {
+  display: flex;
+  flex-direction: column;
 }
 
-.footer-stat-label {
-  font-size: 0.75rem;
+.stat-label {
+  font-size: 0.6rem;
   font-weight: 600;
   color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
-.footer-stat-value {
-  font-size: 0.85rem;
+.stat-value {
+  font-size: 0.8rem;
   font-weight: 800;
 }
 
 .value-indigo { color: #6366f1; }
 .value-teal { color: #0d9488; }
+.value-red { color: #dc2626; }
 
-/* Wrapper to allow internal scroll while keeping card looking nice */
-.table-scroll-container {
-  max-height: 380px;
-  overflow-y: auto;
-}
-
-/* Card for Overall Average in Section II */
-.pengendapan-summary-hero {
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border: 1px solid #bae6fd;
-  border-radius: 16px;
+/* Full Width Hero Bar */
+.pengendapan-summary-hero-full {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
   padding: 0.75rem 1.5rem;
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin-bottom: 1.25rem;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-.hero-icon {
-  width: 40px;
-  height: 40px;
-  background: white;
-  border-radius: 10px;
+.hero-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hero-icon-box {
+  width: 36px;
+  height: 36px;
+  background: #f0f9ff;
+  color: #0284c7;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
-  color: #0284c7;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.hero-content h4 {
-  margin: 0;
-  font-size: 0.75rem;
+.hero-icon-box-red {
+  background: #fff5f5;
+  color: #dc2626;
+}
+
+.hero-divider-v {
+  width: 1px;
+  height: 30px;
+  background: #e2e8f0;
+}
+
+.hero-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-label {
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #0369a1;
+  color: #64748b;
+  letter-spacing: 0.05em;
 }
 
-.hero-content .hero-value {
-  font-size: 1.4rem;
-  font-weight: 900;
-  color: #0c4a6e;
-  margin-top: 0.1rem;
+.hero-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+/* Pemakaian row highlight */
+.row-pemakaian {
+  background-color: #fff5f5;
+}
+
+.day-circle-red {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
 }
 
 .border-dashed {

@@ -305,7 +305,7 @@ export class Dashboard implements OnInit {
   top10CreditCleaned = signal<DetailTransaksi[]>([]);
   top10DebitCleaned = signal<DetailTransaksi[]>([]);
 
-  pengendapanData = signal<Pengendapan>({ bulanList: [], rataRataPengendapan: 0 });
+  pengendapanData = signal<Pengendapan>({ bulanList: [], rataRataPengendapan: 0, rataRataPemakaian: 0 });
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {

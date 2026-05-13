@@ -841,14 +841,26 @@
     <h5 class="section-group-title"><i class="bi bi-graph-up-arrow me-2"></i>II. PENGENDAPAN DAN PEMAKAIAN</h5>
 
     @if (pengendapanData().bulanList.length > 0) {
-    <!-- Hero Summary for Section II -->
-    <div class="pengendapan-summary-hero">
-      <div class="hero-icon">
-        <i class="bi bi-safe2"></i>
+    <!-- Hero Summary for Section II - Full Width Row -->
+    <div class="pengendapan-summary-hero-full">
+      <div class="hero-item">
+        <div class="hero-icon-box">
+          <i class="bi bi-safe2"></i>
+        </div>
+        <div class="hero-details">
+          <span class="hero-label">Rata-rata Pengendapan</span>
+          <span class="hero-value">{{ formatCurrency(pengendapanData().rataRataPengendapan) }}</span>
+        </div>
       </div>
-      <div class="hero-content">
-        <h4>Rata-rata Pengendapan Keseluruhan</h4>
-        <div class="hero-value">{{ formatCurrency(pengendapanData().rataRataPengendapan) }}</div>
+      <div class="hero-divider-v"></div>
+      <div class="hero-item">
+        <div class="hero-icon-box">
+          <i class="bi bi-arrow-down-circle"></i>
+        </div>
+        <div class="hero-details">
+          <span class="hero-label">Rata-rata Pemakaian</span>
+          <span class="hero-value">{{ formatCurrency(pengendapanData().rataRataPemakaian) }}</span>
+        </div>
       </div>
     </div>
 
@@ -861,18 +873,19 @@
             <h5 class="pengendapan-month-title">
               <i class="bi bi-calendar-check me-1"></i> {{ bulan.periode }}
             </h5>
-            <p class="pengendapan-month-subtitle">Detail mutasi harian dan durasi pengendapan</p>
+            <p class="pengendapan-month-subtitle">Pengendapan dan Pemakaian</p>
           </div>
-          
+
           <div class="pengendapan-month-body">
             <div class="table-scroll-container">
               <table class="modern-table">
                 <thead>
                   <tr>
-                    <th class="text-center" style="width: 60px;">Tgl</th>
+                    <th class="text-center" style="width: 50px;">Tgl</th>
                     <th>Saldo</th>
                     <th class="text-center">Hari</th>
                     <th class="text-right">Pengendapan</th>
+                    <th class="text-right">Pemakaian</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -886,7 +899,10 @@
                       <span class="hari-pill">{{ row.hari }}</span>
                     </td>
                     <td class="text-right fw-bold text-mu-dark">
-                      {{ formatCurrency(row.pengendapan) }}
+                      @if (row.pengendapan !== 0) { {{ formatCurrency(row.pengendapan) }} } @else { — }
+                    </td>
+                    <td class="text-right fw-bold text-mu-dark">
+                      @if (row.pemakaian !== 0) { {{ formatCurrency(row.pemakaian) }} } @else { — }
                     </td>
                   </tr>
                   }
@@ -896,13 +912,27 @@
           </div>
 
           <div class="pengendapan-footer">
-            <div class="footer-stat">
-              <span class="footer-stat-label">Total Pengendapan</span>
-              <span class="footer-stat-value value-indigo">{{ formatCurrency(bulan.totalPengendapan) }}</span>
+            <!-- Row based footer stats -->
+            <div class="footer-row-item">
+              <div class="stat-group">
+                <span class="stat-label">Total Pengendapan</span>
+                <span class="stat-value text-mu-purple">{{ formatCurrency(bulan.totalPengendapan) }}</span>
+              </div>
+              <div class="stat-group text-end">
+                <span class="stat-label">Pengendapan / Bulan</span>
+                <span class="stat-value text-mu-teal">{{ formatCurrency(bulan.pengendapanPerBulan) }}</span>
+              </div>
             </div>
-            <div class="footer-stat mt-2 pt-2 border-top">
-              <span class="footer-stat-label">Pengendapan / Bulan</span>
-              <span class="footer-stat-value value-teal">{{ formatCurrency(bulan.pengendapanPerBulan) }}</span>
+
+            <div class="footer-row-item border-top mt-2 pt-2">
+              <div class="stat-group">
+                <span class="stat-label">Total Pemakaian</span>
+                <span class="stat-value text-mu-purple">{{ formatCurrency(bulan.totalPemakaian) }}</span>
+              </div>
+              <div class="stat-group text-end">
+                <span class="stat-label">Pemakaian / Bulan</span>
+                <span class="stat-value text-mu-teal">{{ formatCurrency(bulan.pemakaianPerBulan) }}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -1444,30 +1474,30 @@
       </div>
     </div>
   </div>
-}
+  }
 
-    <!-- FINAL ACTION AREA: TERAPKAN HASIL ANALISA (POSISI PALING BAWAH) -->
-    @if (activeTab() !== 'ringkasan') {
-    <div class="mt-4 p-4 bg-white rounded-3 border shadow-sm d-flex justify-content-between align-items-center"
-      style="border-left: 5px solid #1e293b; background: linear-gradient(to right, #ffffff, #f8fafc);">
-      <div style="max-width: 65%;">
-        <h6 class="mb-1 text-mu-darker fw-bold"><i class="bi bi-check-all me-2 text-mu-purple"></i>Selesaikan Analisa
-          Transaksi</h6>
-        <div class="small text-muted">
-          Gunakan tombol ini sebagai <strong>langkah final</strong> setelah Anda selesai melakukan pengecekan keyword
-          maupun filter kategori. Dashboard akan diperbarui dengan data transaksi yang sudah bersih.
-        </div>
+  <!-- FINAL ACTION AREA: TERAPKAN HASIL ANALISA (POSISI PALING BAWAH) -->
+  @if (activeTab() !== 'ringkasan') {
+  <div class="mt-4 p-4 bg-white rounded-3 border shadow-sm d-flex justify-content-between align-items-center"
+    style="border-left: 5px solid #1e293b; background: linear-gradient(to right, #ffffff, #f8fafc);">
+    <div style="max-width: 65%;">
+      <h6 class="mb-1 text-mu-darker fw-bold"><i class="bi bi-check-all me-2 text-mu-purple"></i>Selesaikan Analisa
+        Transaksi</h6>
+      <div class="small text-muted">
+        Gunakan tombol ini sebagai <strong>langkah final</strong> setelah Anda selesai melakukan pengecekan keyword
+        maupun filter kategori. Dashboard akan diperbarui dengan data transaksi yang sudah bersih.
       </div>
-      <button class="btn btn-windress" [class.btn-windress-active]="isWindressActive()" (click)="applyWindress()"
-        style="padding: 1rem 2.5rem; font-size: 1.1rem; border-radius: 15px; min-width: 300px; box-shadow: 0 4px 12px rgba(30, 41, 59, 0.15);">
-        <i class="bi bi-stars me-2"></i>
-        {{ isWindressActive() ? 'Matikan Filter Windress' : 'Terapkan Hasil Analisa' }}
-        <span class="windress-dot ms-2" [class.active]="isWindressActive()"></span>
-      </button>
     </div>
-    }
+    <button class="btn btn-windress" [class.btn-windress-active]="isWindressActive()" (click)="applyWindress()"
+      style="padding: 1rem 2.5rem; font-size: 1.1rem; border-radius: 15px; min-width: 300px; box-shadow: 0 4px 12px rgba(30, 41, 59, 0.15);">
+      <i class="bi bi-stars me-2"></i>
+      {{ isWindressActive() ? 'Matikan Filter Windress' : 'Terapkan Hasil Analisa' }}
+      <span class="windress-dot ms-2" [class.active]="isWindressActive()"></span>
+    </button>
   </div>
   }
+</div>
+}
 </div>
 </div>
 

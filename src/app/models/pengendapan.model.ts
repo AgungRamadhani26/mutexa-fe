@@ -3,6 +3,7 @@ export interface PengendapanRow {
   saldo: number;
   hari: number;
   pengendapan: number;
+  pemakaian: number;
 }
 
 export interface PengendapanBulan {
@@ -11,9 +12,12 @@ export interface PengendapanBulan {
   totalHari: number;
   totalPengendapan: number;
   pengendapanPerBulan: number;
+  totalPemakaian: number;
+  pemakaianPerBulan: number;
 }
 
 export interface Pengendapan {
   bulanList: PengendapanBulan[];
   rataRataPengendapan: number;
+  rataRataPemakaian: number;
 }
