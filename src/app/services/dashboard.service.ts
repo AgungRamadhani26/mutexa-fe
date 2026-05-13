@@ -118,6 +118,24 @@ export class DashboardService {
     return `${this.apiUrl}/export-excel?documentId=${documentId}`;
   }
 
+  // Menghasilkan URL download File Excel untuk data Pengendapan & Pemakaian
+  exportPengendapanUrl(documentId: number, accountName?: string): string {
+    let url = `${this.apiUrl}/export-pengendapan?documentId=${documentId}`;
+    if (accountName) {
+      url += `&accountName=${encodeURIComponent(accountName)}`;
+    }
+    return url;
+  }
+
+  // Mengambil data file excel sebagai Blob agar bisa menyertakan JWT Token
+  downloadPengendapanExcel(documentId: number, accountName?: string): Observable<Blob> {
+    let url = `${this.apiUrl}/export-pengendapan?documentId=${documentId}`;
+    if (accountName) {
+      url += `&accountName=${encodeURIComponent(accountName)}`;
+    }
+    return this.http.get(url, { responseType: 'blob' });
+  }
+
   // Toggle status pengecualian transaksi
   toggleExclude(transactionId: number): Observable<ApiResponse<string>> {
     return this.http.post<ApiResponse<string>>(`${this.apiUrl}/toggle-exclude/${transactionId}`, {});

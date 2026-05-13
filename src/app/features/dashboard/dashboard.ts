@@ -405,6 +405,31 @@ export class Dashboard implements OnInit {
     }
   }
 
+  exportPengendapanExcel() {
+    const doc = this.selectedDocument();
+    const account = this.selectedAccount();
+    if (doc) {
+      this.dashboardService.downloadPengendapanExcel(doc.id, account?.accountName).subscribe({
+        next: (blob: Blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          // Generate filename
+          const period = this.formatPeriod(doc.periodStart, doc.periodEnd).replace(/\//g, '-');
+          const accName = account?.accountName || 'Unknown';
+          a.download = `Pengendapan_Pemakaian_${accName}_${period}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        },
+        error: (err) => {
+          this.toast.show('Gagal mendownload file Excel. Pastikan Anda memiliki akses.', 'danger');
+        }
+      });
+    }
+  }
+
   toggleExclude(tx: DetailTransaksi) {
     if (!tx.id) return;
     const oldStatus = tx.isExcluded;

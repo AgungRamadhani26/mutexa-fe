@@ -838,7 +838,9 @@
     </div>
 
     <hr class="mu-divider mt-5">
-    <h5 class="section-group-title"><i class="bi bi-graph-up-arrow me-2"></i>II. PENGENDAPAN DAN PEMAKAIAN</h5>
+    <h5 class="section-group-title mb-4" style="color: #4338ca; font-weight: 700;">
+      <i class="bi bi-graph-up-arrow me-2"></i>II. PENGENDAPAN DAN PEMAKAIAN
+    </h5>
 
     @if (pengendapanData().bulanList.length > 0) {
     <!-- Hero Summary for Section II - Full Width Row -->
@@ -862,6 +864,13 @@
           <span class="hero-value">{{ formatCurrency(pengendapanData().rataRataPemakaian) }}</span>
         </div>
       </div>
+
+      <!-- Relocated Export Button inside the Hero Card -->
+      <button class="btn btn-success btn-sm ms-auto d-flex align-items-center gap-2 shadow-sm"
+        (click)="exportPengendapanExcel()" style="border-radius: 8px; padding: 0.6rem 1.2rem; font-weight: 600;">
+        <i class="bi bi-file-earmark-excel-fill"></i>
+        <span>Export Pengendapan/Pemakaian</span>
+      </button>
     </div>
 
     <!-- Monthly Analytics Cards -->
