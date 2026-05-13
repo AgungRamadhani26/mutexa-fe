@@ -424,7 +424,7 @@ export class Dashboard implements OnInit {
           document.body.removeChild(a);
         },
         error: (err) => {
-          this.toast.show('Gagal mendownload file Excel. Pastikan Anda memiliki akses.', 'danger');
+          this.toast.show('Gagal mendownload file Excel. Pastikan Anda memiliki akses.', 'error');
         }
       });
     }
